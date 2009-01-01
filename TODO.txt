@@ -1,0 +1,13 @@
+Tasks
+-----
+* cleanup the import mess
+* move curses functions into "curses.py"
+* understand and do something about signal() calls
+* understand and implement saving the game
+* understand and fix slurp()
+
+Bugs
+----
+* an arrow can be thrown into a wall
+* endless loop after zap if there's no monster
+* IndexError in level.py:288
