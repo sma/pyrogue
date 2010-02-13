@@ -187,7 +187,7 @@ def check_xeroc(monster):
     if monster.ichar == 'X' and monster.identified:
         wake_up(monster)
         monster.identified = 0
-        mvaddch(monster.row, monster.col, get_room_char(screen[moster.row][monster.col], moster.row, moster.col))
+        mvaddch(monster.row, monster.col, get_room_char(screen[monster.row][monster.col], monster.row, monster.col))
         check_message()
         message("wait, that's a %s!" % monster_name(monster), 1)
         return 1

@@ -43,8 +43,8 @@ def win():
     mvaddstr(17, 11, "Congratulations,  you have  been admitted  to  the")
     mvaddstr(18, 11, "Fighter's Guild.   You return home,  sell all your")
     mvaddstr(19, 11, "treasures at great profit and retire into comfort.")
-    message("", 0);
-    message("", 0);
+    message("", 0)
+    message("", 0)
     id_all()
     sell_pack()
     score(None, WIN)
@@ -176,8 +176,8 @@ def sell_pack():
             rogue.gold += val
             
             if rows < SROWS:
-                mvadstr(row, 0, "%5d      %s" % (val, get_description(obj)))
-                row += 1
+                mvaddstr(rows, 0, "%5d      %s" % (val, get_description(obj)))
+                rows += 1
         obj = obj.next_object
     refresh()
     message("", 0)

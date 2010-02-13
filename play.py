@@ -52,7 +52,7 @@ def play_level():
             elif ch == 'I':
                 single_inventory()
             elif ch == '\022':
-                wrefresh(curscr)
+                refresh()
             elif ch == 'T':
                 take_off()
             elif ch == 'W' or ch == 'P':

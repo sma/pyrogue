@@ -275,7 +275,7 @@ def sleep_scroll():
     ##sleep(1)
     i = get_rand(4, 10)
     while i:
-        move_monsters();
+        move_monsters()
         i -= 1
     ##sleep(1)
     message("you can move again", 0)

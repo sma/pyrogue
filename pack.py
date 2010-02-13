@@ -233,7 +233,7 @@ def call_it():
         return
     id_table = get_id_table(obj)
     
-    buf = get_input_line(id_table[obj.which_kind].title)
+    buf = get_input_line(id_table[obj.which_kind].title, False)
     if buf:
         id_table[obj.which_kind].id_status = CALLED
         id_table[obj.which_kind].title = buf

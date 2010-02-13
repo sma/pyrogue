@@ -364,12 +364,13 @@ class g:
     player_name = ""
     cant_int = 0
     did_int = 0
+    exc = None
 
     # level.py
     current_level = 0
     max_level = 1
     hunger_str = ""
-    g.party_room = 0
+    party_room = 0
 
     # message.py
     message_cleared = 1 # todo used only in message.py

@@ -88,7 +88,7 @@ def clean_up(estr):
     refresh()
     stop_window()
     print estr
-    if hasattr(g, 'exc') and g.exc[0] != SystemExit:
+    if g.exc and g.exc[0] != SystemExit:
         import traceback
         print >>sys.stderr, "---------"
         traceback.print_exception(*g.exc)
