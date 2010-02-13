@@ -354,59 +354,53 @@ rooms = [room() for i in range(MAXROOMS)]
 
 
 # all global variables are collected in `g` so that I don't have to use "global"
-class G:
-    pass
+class g:
+    # hit.py
+    fight_monster = None # todo used only in hit.py
+    detect_monster = 0
+    hit_message = ""
 
-g = G()
+    # init.py
+    player_name = ""
+    cant_int = 0
+    did_int = 0
 
-del G
+    # level.py
+    current_level = 0
+    max_level = 1
+    hunger_str = ""
+    g.party_room = 0
 
-# hit.py
-g.fight_monster = None # todo used only in hit.py
-g.detect_monster = 0
-g.hit_message = ""
+    # message.py
+    message_cleared = 1 # todo used only in message.py
+    message_line = ""   # todo used only in message.py
+    message_col = 0     # todo used only in message.py
 
-# init.py
-g.player_name = ""
-g.cant_int = 0
-g.did_int = 0
+    # monster.py
+    level_monsters = objholder()
 
-# level.py
-g.current_level = 0
-g.max_level = 1
-g.hunger_str = ""
-g.party_room = 0
+    # object.py
+    level_objects = objholder()
+    has_amulet = 0
+    foods = 0 # todo used only in object.py
 
-# message.py
-g.message_cleared = 1 # todo used only in message.py
-g.message_line = ""   # todo used only in message.py
-g.message_col = 0     # todo used only in message.py
+    # pack.py
+    ichars = [0] * 26
 
-# monster.py
-g.level_monsters = objholder()
+    # play.py
+    interrupted = 0
 
-# object.py
-g.level_objects = objholder()
-g.has_amulet = 0
-g.foods = 0 # todo used only in object.py
+    # room.py
+    current_room = 0
 
-# pack.py
-g.ichars = [0] * 26
+    # special_hit.py
+    being_held = 0
 
-# play.py
-g.interrupted = 0
-
-# room.py
-g.current_room = 0
-
-# special_hit.py
-g.being_held = 0
-
-# use.py
-g.halluc = 0
-g.blind = 0
-g.confused = 0
-g.detect_monster = 0
+    # use.py
+    halluc = 0
+    blind = 0
+    confused = 0
+    detect_monster = 0
 
 # random.c
 import random
