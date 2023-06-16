@@ -230,7 +230,7 @@ def teleport():
         mvaddch(rogue.row, rogue.col, get_room_char(screen[rogue.row][rogue.col], rogue.row, rogue.col))
     put_player()
     light_up_room()
-    g.being_hold = 0
+    g.being_held = 0
     
 def hallucinate():
     if g.blind:
