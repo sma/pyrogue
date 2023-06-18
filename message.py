@@ -38,8 +38,31 @@ def check_message():
     refresh()
     g.message_cleared = 1
 
-def get_input_line(buf, if_cancelled):
-    raise
+def get_input_line(prompt, echo):
+    message(prompt, 0)
+    buf = ""
+    n = len(prompt)
+    while True:
+        ch = getchar()
+        if ch == CANCEL:
+            buf = ""
+            break
+        if ch == '\n' or ch == '\r':
+            break
+        if ch == '\b' or ch == '\177':
+            if len(buf) > 0:
+                buf = buf[:-1]
+                if echo:
+                    addch('\b')
+                    addch(' ')
+                    addch('\b')
+        if ch >= ' ' and ch <= '~':
+            buf += ch
+            if echo:
+                addch(ch)
+        refresh()
+    check_message()
+    return ""
 
 def slurp():
     # todo doesn't work
