@@ -93,7 +93,7 @@ def steal_item(monster):
         
         for i in range(n + 1):
             obj = obj.next_object
-            while not obj or obj == rogue.armor or obj == rogue.armor:
+            while not obj or obj == rogue.armor or obj == rogue.weapon:
                 if not obj:
                     obj = rogue.pack.next_object
                 else:
