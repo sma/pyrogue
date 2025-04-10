@@ -106,7 +106,7 @@ class UI with ChangeNotifier {
   // Clean up resources
   @override
   void dispose() {
-    _keyController.close();
+    unawaited(_keyController.close());
     super.dispose();
   }
 }

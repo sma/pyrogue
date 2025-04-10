@@ -85,3 +85,9 @@ After using `event.character` which is fine for normal characters (arrow keys, f
 Keyboard handling still doesn't work 100%. Keys are ignored and while I can move with `hjkl`, I cannot open the inventory with `i`, for example. The `TerminalWidget` and the `ui` code seems to work.
 
 Okay, the `inventory` function is run, however, the `waitForAck` function isn't await for, so it doesn't wait for displaying the inventory. This seems to be a general problem and the complete source code isn't correctly adapted to `async` flow. Therefore, Claude eventually failed to do what it was told to do.
+
+- I changed `waitForAck` to return `Future<void>` and added `await` to all calls.
+- Now `inventory` needs to be async and all calls need an `await`.
+- Because `message` uses `waitForAck`, I added `await` to 120+ calls to `message`.
+- Now 40+ more functions like `registerMove` needs `await` which causes more functions to become `async`.
+- And 100+ `await`s later, it finally works!

@@ -24,7 +24,7 @@ bool isDirection(String ch) {
       ch == cancel;
 }
 
-void monsterHit(GameObject monster, String? other) {
+Future<void> monsterHit(GameObject monster, String? other) async {
   if (g.fightMonster != null && monster != g.fightMonster) {
     g.fightMonster = null;
   }
@@ -43,7 +43,7 @@ void monsterHit(GameObject monster, String? other) {
   if (!randPercent(hitChance)) {
     if (g.fightMonster == null) {
       g.hitMessage += "the ${other ?? mn} misses";
-      message(g.hitMessage, 0);
+      await message(g.hitMessage, 0);
       g.hitMessage = "";
     }
     return;
@@ -51,7 +51,7 @@ void monsterHit(GameObject monster, String? other) {
 
   if (g.fightMonster == null) {
     g.hitMessage += "the ${other ?? mn} hit";
-    message(g.hitMessage, 0);
+    await message(g.hitMessage, 0);
     g.hitMessage = "";
   }
 
@@ -66,14 +66,14 @@ void monsterHit(GameObject monster, String? other) {
   }
 
   if (damage > 0) {
-    rogueDamage(damage, monster);
+    await rogueDamage(damage, monster);
   }
 
-  specialHit(monster);
+  await specialHit(monster);
 }
 
-void rogueHit(GameObject monster) {
-  if (checkXeroc(monster)) {
+Future<void> rogueHit(GameObject monster) async {
+  if (await checkXeroc(monster)) {
     return;
   }
 
@@ -88,7 +88,7 @@ void rogueHit(GameObject monster) {
   }
 
   int damage = getWeaponDamage(rogue.weapon);
-  if (monsterDamage(monster, damage)) {
+  if (await monsterDamage(monster, damage)) {
     // still alive?
     if (g.fightMonster == null) {
       g.hitMessage = "you hit  ";
@@ -99,11 +99,11 @@ void rogueHit(GameObject monster) {
   wakeUp(monster);
 }
 
-void rogueDamage(int d, GameObject monster) {
+Future<void> rogueDamage(int d, GameObject monster) async {
   if (d >= rogue.hpCurrent) {
     rogue.hpCurrent = 0;
     printStats();
-    killedBy(monster, DeathCause.hypothermia);
+    await killedBy(monster, DeathCause.hypothermia);
   }
   rogue.hpCurrent -= d;
   printStats();
@@ -187,7 +187,7 @@ int damageForStrength(int s) {
   return 8;
 }
 
-bool monsterDamage(GameObject monster, int damage) {
+Future<bool> monsterDamage(GameObject monster, int damage) async {
   monster.quantity -= damage;
 
   if (monster.quantity <= 0) {
@@ -201,9 +201,9 @@ bool monsterDamage(GameObject monster, int damage) {
     g.fightMonster = null;
     coughUp(monster);
     g.hitMessage += "defeated the ${monsterName(monster)}";
-    message(g.hitMessage, 1);
+    await message(g.hitMessage, 1);
     g.hitMessage = "";
-    addExp(monster.killExp);
+    await addExp(monster.killExp);
     printStats();
     removeFromPack(monster, g.levelMonsters);
 
@@ -223,7 +223,7 @@ Future<void> fight(bool toTheDeath) async {
   while (!isDirection(ch)) {
     ui.beep();
     if (firstMiss == 1) {
-      message("direction?", 0);
+      await message("direction?", 0);
       firstMiss = 0;
     }
     ch = await ui.getchar();
@@ -241,14 +241,14 @@ Future<void> fight(bool toTheDeath) async {
   if (!(screen[row][col] & Cell.monster != 0) ||
       g.blind != 0 ||
       hidingXeroc(row, col)) {
-    message("I see no monster there", 0);
+    await message("I see no monster there", 0);
     return;
   }
 
   g.fightMonster = objectAt(g.levelMonsters, row, col);
   if (g.fightMonster!.mFlags & MonsterFlags.isInvis != 0 &&
       g.detectMonster == 0) {
-    message("I see no monster there", 0);
+    await message("I see no monster there", 0);
     return;
   }
 

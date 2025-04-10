@@ -20,7 +20,7 @@ Future<void> throwItem() async {
   while (!isDirection(dir)) {
     ui.beep();
     if (firstMiss != 0) {
-      message("direction? ", 0);
+      await message("direction? ", 0);
       firstMiss = 0;
     }
     dir = await ui.getchar();
@@ -41,24 +41,24 @@ Future<void> throwItem() async {
 
   GameObject? weapon = getLetterObject(wch);
   if (weapon == null) {
-    message("no such item.", 0);
+    await message("no such item.", 0);
     return;
   }
 
   if (weapon.whatIs != Cell.weapon) {
     int k = getRand(0, 2);
     if (k == 0) {
-      message("if you don't want it, drop it!", 0);
+      await message("if you don't want it, drop it!", 0);
     } else if (k == 1) {
-      message("throwing that would do noone any good", 0);
+      await message("throwing that would do noone any good", 0);
     } else {
-      message("why would you want to throw that?", 0);
+      await message("why would you want to throw that?", 0);
     }
     return;
   }
 
   if (weapon == rogue.weapon && weapon.isCursed != 0) {
-    message("you can't, it appears to be cursed", 0);
+    await message("you can't, it appears to be cursed", 0);
     return;
   }
 
@@ -80,17 +80,17 @@ Future<void> throwItem() async {
     wakeUp(monster);
     checkOrc(monster);
 
-    if (!throwAtMonster(monster, weapon)) {
-      flopWeapon(weapon, row, col);
+    if (!await throwAtMonster(monster, weapon)) {
+      await flopWeapon(weapon, row, col);
     }
   } else {
-    flopWeapon(weapon, row, col);
+    await flopWeapon(weapon, row, col);
   }
 
-  vanish(weapon, true);
+  await vanish(weapon, true);
 }
 
-bool throwAtMonster(GameObject monster, GameObject weapon) {
+Future<bool> throwAtMonster(GameObject monster, GameObject weapon) async {
   int hitChance = getHitChance(weapon);
   int t = weapon.quantity;
   weapon.quantity = 1;
@@ -114,7 +114,7 @@ bool throwAtMonster(GameObject monster, GameObject weapon) {
     damage = damage * 2 ~/ 3;
   }
 
-  monsterDamage(monster, damage);
+  await monsterDamage(monster, damage);
   return true;
 }
 
@@ -169,7 +169,7 @@ Future<Tuple3<GameObject?, int, int>> getThrownAtMonster(
   return Tuple3(null, row, col);
 }
 
-bool flopWeapon(GameObject weapon, int row, int col) {
+Future<bool> flopWeapon(GameObject weapon, int row, int col) async {
   int inc1 = getRand(0, 1) != 0 ? 1 : -1;
   int inc2 = getRand(0, 1) != 0 ? 1 : -1;
 
@@ -216,7 +216,7 @@ bool flopWeapon(GameObject weapon, int row, int col) {
     weapon.quantity = 1;
     String msg = "the ${nameOf(weapon)}vanishes as it hits the ground";
     weapon.quantity = t;
-    message(msg, 0);
+    await message(msg, 0);
   }
 
   return found;

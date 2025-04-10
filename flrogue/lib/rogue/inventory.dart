@@ -74,7 +74,7 @@ void initItems() {
   makeScrollTitles();
 }
 
-void inventory(ObjectHolder pack, int mask) {
+Future<void> inventory(ObjectHolder pack, int mask) async {
   int i = 0;
   int maxlen = 27;
   List<String> descriptions = List.filled(maxPackCount + 1, "");
@@ -110,7 +110,7 @@ void inventory(ObjectHolder pack, int mask) {
   }
 
   ui.refresh();
-  waitForAck("");
+  await waitForAck("");
 
   ui.move(0, 0);
   ui.clearToEndOfLine();
@@ -170,9 +170,9 @@ Future<void> singleInventory() async {
 
   GameObject? obj = getLetterObject(ch);
   if (obj == null) {
-    message("No such item.", 0);
+    await message("No such item.", 0);
     return;
   }
 
-  message("$ch) ${getDescription(obj)}", 0);
+  await message("$ch) ${getDescription(obj)}", 0);
 }

@@ -62,7 +62,7 @@ Future<Tuple2<GameObject?, int>> pickUp(int row, int col) async {
   if (obj!.whatIs == Cell.scroll &&
       obj.whichKind == ScrollType.scareMonster.index &&
       obj.pickedUp > 0) {
-    message("the scroll turns to dust as you pick it up", 1);
+    await message("the scroll turns to dust as you pick it up", 1);
     removeFromPack(obj, g.levelObjects);
     removeMask(row, col, Cell.scroll);
     status = 0;
@@ -79,7 +79,7 @@ Future<Tuple2<GameObject?, int>> pickUp(int row, int col) async {
   }
 
   if (getPackCount(obj) >= maxPackCount) {
-    message("Pack too full", 1);
+    await message("Pack too full", 1);
     return Tuple2(null, status);
   }
 
@@ -96,12 +96,12 @@ Future<Tuple2<GameObject?, int>> pickUp(int row, int col) async {
 
 Future<void> drop() async {
   if (screen[rogue.row][rogue.col] & Cell.isObject != 0) {
-    message("There's already something there", 0);
+    await message("There's already something there", 0);
     return;
   }
 
   if (rogue.pack.nextObject == null) {
-    message("You have nothing to drop", 0);
+    await message("You have nothing to drop", 0);
     return;
   }
 
@@ -112,19 +112,19 @@ Future<void> drop() async {
 
   GameObject? obj = getLetterObject(ch);
   if (obj == null) {
-    message("No such item.", 0);
+    await message("No such item.", 0);
     return;
   }
 
   if (obj == rogue.weapon) {
     if (obj.isCursed != 0) {
-      message(curseMessage, 0);
+      await message(curseMessage, 0);
       return;
     }
     rogue.weapon = null;
   } else if (obj == rogue.armor) {
     if (obj.isCursed != 0) {
-      message(curseMessage, 0);
+      await message(curseMessage, 0);
       return;
     }
     rogue.armor = null;
@@ -143,8 +143,8 @@ Future<void> drop() async {
 
     addToPack(obj, g.levelObjects, false);
     addMask(rogue.row, rogue.col, obj.whatIs);
-    message("dropped ${getDescription(obj)}", 0);
-    registerMove();
+    await message("dropped ${getDescription(obj)}", 0);
+    await registerMove();
     return;
   }
 
@@ -157,8 +157,8 @@ Future<void> drop() async {
 
   addToPack(obj, g.levelObjects, false);
   addMask(rogue.row, rogue.col, obj.whatIs);
-  message("dropped ${getDescription(obj)}", 0);
-  registerMove();
+  await message("dropped ${getDescription(obj)}", 0);
+  await registerMove();
 }
 
 GameObject? checkDuplicate(GameObject obj, ObjectHolder pack) {
@@ -201,7 +201,7 @@ void makeAvailIchar(String ch) {
 
 Future<String> getPackLetter(String prompt, int mask) async {
   int firstMiss = 1;
-  message(prompt, 0);
+  await message(prompt, 0);
   String ch = await ui.getchar();
 
   while (true) {
@@ -211,7 +211,7 @@ Future<String> getPackLetter(String prompt, int mask) async {
       }
 
       if (firstMiss != 0) {
-        message(prompt, 0);
+        await message(prompt, 0);
         firstMiss = 0;
       }
 
@@ -220,7 +220,7 @@ Future<String> getPackLetter(String prompt, int mask) async {
 
     if (ch == list) {
       checkMessage();
-      inventory(rogue.pack, mask);
+      await inventory(rogue.pack, mask);
       firstMiss = 1;
       ch = '';
       continue;
@@ -236,23 +236,23 @@ Future<String> getPackLetter(String prompt, int mask) async {
 Future<void> takeOff() async {
   if (rogue.armor != null) {
     if (rogue.armor!.isCursed != 0) {
-      message(curseMessage, 0);
+      await message(curseMessage, 0);
     } else {
-      mvAquatars();
+      await mvAquatars();
       GameObject obj = rogue.armor!;
       rogue.armor = null;
-      message("was wearing ${getDescription(obj)}", 0);
+      await message("was wearing ${getDescription(obj)}", 0);
       printStats();
-      registerMove();
+      await registerMove();
     }
   } else {
-    message("not wearing any", 0);
+    await message("not wearing any", 0);
   }
 }
 
 Future<void> wear() async {
   if (rogue.armor != null) {
-    message("your already wearing some", 0);
+    await message("your already wearing some", 0);
     return;
   }
 
@@ -263,25 +263,25 @@ Future<void> wear() async {
 
   GameObject? obj = getLetterObject(ch);
   if (obj == null) {
-    message("No such item.", 0);
+    await message("No such item.", 0);
     return;
   }
 
   if (obj.whatIs != Cell.armor) {
-    message("You can't wear that", 0);
+    await message("You can't wear that", 0);
     return;
   }
 
   rogue.armor = obj;
   obj.identified = 1;
-  message(getDescription(obj), 0);
+  await message(getDescription(obj), 0);
   printStats();
-  registerMove();
+  await registerMove();
 }
 
 Future<void> wield() async {
   if (rogue.weapon != null && rogue.weapon!.isCursed != 0) {
-    message(curseMessage, 0);
+    await message(curseMessage, 0);
     return;
   }
 
@@ -292,21 +292,21 @@ Future<void> wield() async {
 
   GameObject? obj = getLetterObject(ch);
   if (obj == null) {
-    message("No such item.", 0);
+    await message("No such item.", 0);
     return;
   }
 
   if (obj.whatIs != Cell.weapon) {
-    message("You can't wield that", 0);
+    await message("You can't wield that", 0);
     return;
   }
 
   if (obj == rogue.weapon) {
-    message("in use", 0);
+    await message("in use", 0);
   } else {
     rogue.weapon = obj;
-    message(getDescription(obj), 0);
-    registerMove();
+    await message(getDescription(obj), 0);
+    await registerMove();
   }
 }
 
@@ -321,12 +321,12 @@ Future<void> callIt() async {
 
   GameObject? obj = getLetterObject(ch);
   if (obj == null) {
-    message("No such item.", 0);
+    await message("No such item.", 0);
     return;
   }
 
   if (!(obj.whatIs & (Cell.scroll | Cell.potion | Cell.wand) != 0)) {
-    message("surely you already know what that's called", 0);
+    await message("surely you already know what that's called", 0);
     return;
   }
 

@@ -21,7 +21,7 @@ Future<void> playLevel() async {
   while (true) {
     g.interrupted = 0;
     if (g.hitMessage.isNotEmpty) {
-      message(g.hitMessage, 0);
+      await message(g.hitMessage, 0);
       g.hitMessage = "";
     }
 
@@ -34,9 +34,9 @@ Future<void> playLevel() async {
     while (true) {
       // for "goto CH"
       if (ch == '.') {
-        rest(count > 0 ? count : 1);
+        await rest(count > 0 ? count : 1);
       } else if (ch == 'i') {
-        inventory(rogue.pack, Cell.isObject);
+        await inventory(rogue.pack, Cell.isObject);
       } else if (ch == 'f') {
         await fight(false);
       } else if (ch == 'F') {
@@ -56,17 +56,17 @@ Future<void> playLevel() async {
       } else if (ch == 'd') {
         await drop();
       } else if (ch == '\x10') {
-        remessage();
+        await remessage();
       } else if (ch == '>') {
-        if (checkDown()) {
+        if (await checkDown()) {
           return;
         }
       } else if (ch == '<') {
-        if (checkUp()) {
+        if (await checkUp()) {
           return;
         }
       } else if (ch == 'I') {
-        singleInventory();
+        await singleInventory();
       } else if (ch == '\x12') {
         ui.refresh();
       } else if (ch == 'T') {
@@ -86,7 +86,7 @@ Future<void> playLevel() async {
       } else if (ch == '!') {
         shell();
       } else if (ch == 'v') {
-        message("pyrogue: Version 1.0 (dart port)", 0);
+        await message("pyrogue: Version 1.0 (dart port)", 0);
       } else if (ch == 'Q') {
         await quit();
       } else if ('0123456789'.contains(ch)) {
@@ -100,7 +100,7 @@ Future<void> playLevel() async {
       } else if (ch == ' ') {
         // Do nothing
       } else {
-        message("unknown command");
+        await message("unknown command");
       }
       break;
     }

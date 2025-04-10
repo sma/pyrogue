@@ -6,7 +6,7 @@ import 'object.dart';
 
 const String scoreFile = "scores";
 
-void killedBy(GameObject? monster, DeathCause other) {
+Future<void> killedBy(GameObject? monster, DeathCause other) async {
   if (other != DeathCause.quit) {
     rogue.gold = rogue.gold * 9 ~/ 10;
   }
@@ -31,14 +31,14 @@ void killedBy(GameObject? monster, DeathCause other) {
   }
 
   buf += " with ${rogue.gold} gold";
-  message(buf, 0);
-  message("", 0);
-  score(monster, other);
+  await message(buf, 0);
+  await message("", 0);
+  await score(monster, other);
 
   exit(0);
 }
 
-void win() {
+Future<void> win() async {
   rogue.armor = null;
   rogue.weapon = null;
 
@@ -60,17 +60,17 @@ void win() {
   ui.move(19, 11);
   ui.write("treasures at great profit and retire into comfort.");
 
-  message("", 0);
-  message("", 0);
+  await message("", 0);
+  await message("", 0);
   idAll();
-  sellPack();
-  score(null, DeathCause.win);
+  await sellPack();
+  await score(null, DeathCause.win);
 
   exit(0);
 }
 
 Future<void> quit() async {
-  message("really quit?", 1);
+  await message("really quit?", 1);
   String ch = await ui.getchar();
   if (ch != 'y') {
     checkMessage();
@@ -78,14 +78,14 @@ Future<void> quit() async {
   }
 
   checkMessage();
-  killedBy(null, DeathCause.quit);
+  await killedBy(null, DeathCause.quit);
 }
 
-void score(GameObject? monster, DeathCause other) {
-  putScores(monster, other);
+Future<void> score(GameObject? monster, DeathCause other) async {
+  await putScores(monster, other);
 }
 
-void putScores(GameObject? monster, DeathCause other) {
+Future<void> putScores(GameObject? monster, DeathCause other) async {
   List<String> scores = List.filled(10, "");
 
   File f;
@@ -95,7 +95,7 @@ void putScores(GameObject? monster, DeathCause other) {
       f.createSync();
     }
   } catch (e) {
-    message("Cannot access score file: $e", 1);
+    await message("Cannot access score file: $e", 1);
     return;
   }
 
@@ -109,7 +109,7 @@ void putScores(GameObject? monster, DeathCause other) {
       scores[i] = lines[i];
 
       if (scores[i].length < 18) {
-        message("error in score file format", 1);
+        await message("error in score file format", 1);
         cleanUp("sorry, score file is out of order");
       }
 
@@ -176,10 +176,10 @@ void putScores(GameObject? monster, DeathCause other) {
 
     ui.refresh();
   } catch (e) {
-    message("Error processing scores: $e", 1);
+    await message("Error processing scores: $e", 1);
   }
 
-  waitForAck("");
+  await waitForAck("");
   cleanUp("");
 }
 
@@ -253,7 +253,7 @@ void idAll() {
   }
 }
 
-void sellPack() {
+Future<void> sellPack() async {
   int rows = 2;
 
   ui.clearScreen();
@@ -279,7 +279,7 @@ void sellPack() {
   }
 
   ui.refresh();
-  message("", 0);
+  await message("", 0);
 }
 
 int getValue(GameObject obj) {

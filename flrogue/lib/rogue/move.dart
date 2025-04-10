@@ -32,7 +32,7 @@ Future<int> singleMoveRogue(String dirch, int pickup) async {
     col = pos.item2;
 
     if (!(screen[row][col] & Cell.monster != 0)) {
-      message("you are being held", 1);
+      await message("you are being held", 1);
       return moveFailed;
     }
   }
@@ -49,8 +49,8 @@ Future<int> singleMoveRogue(String dirch, int pickup) async {
   col = pos.item2;
 
   if (screen[row][col] & Cell.monster != 0) {
-    rogueHit(objectAt(g.levelMonsters, row, col)!);
-    registerMove();
+    await rogueHit(objectAt(g.levelMonsters, row, col)!);
+    await registerMove();
     return moveFailed;
   }
 
@@ -93,12 +93,12 @@ Future<int> singleMoveRogue(String dirch, int pickup) async {
       if (obj != null) {
         String description = getDescription(obj);
         if (obj.whatIs == Cell.gold) {
-          message(description, 1);
-          registerMove();
+          await message(description, 1);
+          await registerMove();
           return stoppedOnSomething;
         }
       } else if (status == 0) {
-        if (registerMove()) {
+        if (await registerMove()) {
           // fainted from hunger
           return stoppedOnSomething;
         }
@@ -106,26 +106,26 @@ Future<int> singleMoveRogue(String dirch, int pickup) async {
       } else {
         GameObject obj = objectAt(g.levelObjects, row, col)!;
         String description = "moved onto ${getDescription(obj)}";
-        message(description, 1);
-        registerMove();
+        await message(description, 1);
+        await registerMove();
         return stoppedOnSomething;
       }
     } else {
       GameObject obj = objectAt(g.levelObjects, row, col)!;
       String description = "moved onto ${getDescription(obj)}";
-      message(description, 1);
-      registerMove();
+      await message(description, 1);
+      await registerMove();
       return stoppedOnSomething;
     }
   }
 
   if (screen[row][col] & Cell.door != 0 ||
       screen[row][col] & Cell.stairs != 0) {
-    registerMove();
+    await registerMove();
     return stoppedOnSomething;
   }
 
-  if (registerMove()) {
+  if (await registerMove()) {
     // fainted from hunger
     return stoppedOnSomething;
   }
@@ -246,7 +246,7 @@ Future<void> moveOnto() async {
   while (!isDirection(ch)) {
     ui.beep();
     if (firstMiss != 0) {
-      message("direction? ", 0);
+      await message("direction? ", 0);
       firstMiss = 0;
     }
     ch = await ui.getchar();
@@ -265,25 +265,25 @@ bool isPackLetter(String c) {
       c == list;
 }
 
-bool checkHunger() {
+Future<bool> checkHunger() async {
   bool fainted = false;
 
   if (rogue.movesLeft == hungry) {
     g.hungerStr = "hungry";
-    message(g.hungerStr, 0);
+    await message(g.hungerStr, 0);
     printStats();
   }
 
   if (rogue.movesLeft == weak) {
     g.hungerStr = "weak";
-    message(g.hungerStr, 0);
+    await message(g.hungerStr, 0);
     printStats();
   }
 
   if (rogue.movesLeft <= faint) {
     if (rogue.movesLeft == faint) {
       g.hungerStr = "faint";
-      message(g.hungerStr, 1);
+      await message(g.hungerStr, 1);
       printStats();
     }
 
@@ -291,34 +291,34 @@ bool checkHunger() {
     if (n > 0) {
       fainted = true;
       if (randPercent(40)) rogue.movesLeft += 1;
-      message("you faint", 1);
+      await message("you faint", 1);
 
       for (int i = 0; i < n; i++) {
         if (randPercent(50)) {
-          moveMonsters();
+          await moveMonsters();
         }
       }
 
-      message("you can move again", 1);
+      await message("you can move again", 1);
     }
   }
 
   if (rogue.movesLeft <= starve) {
-    killedBy(null, DeathCause.starvation);
+    await killedBy(null, DeathCause.starvation);
   }
 
   rogue.movesLeft -= 1;
   return fainted;
 }
 
-bool registerMove() {
+Future<bool> registerMove() async {
   bool fainted = false;
 
   if (rogue.movesLeft <= hungry && g.hasAmulet == 0) {
-    fainted = checkHunger();
+    fainted = checkHunger() as bool;
   }
 
-  moveMonsters();
+  await moveMonsters();
 
   _moves += 1;
   if (_moves >= 80) {
@@ -329,7 +329,7 @@ bool registerMove() {
   if (g.halluc != 0) {
     g.halluc -= 1;
     if (g.halluc == 0) {
-      unhallucinate();
+      await unhallucinate();
     } else {
       hallucinate();
     }
@@ -338,14 +338,14 @@ bool registerMove() {
   if (g.blind != 0) {
     g.blind -= 1;
     if (g.blind == 0) {
-      unblind();
+      await unblind();
     }
   }
 
   if (g.confused != 0) {
     g.confused -= 1;
     if (g.confused == 0) {
-      unconfuse();
+      await unconfuse();
     }
   }
 
@@ -354,12 +354,12 @@ bool registerMove() {
   return fainted;
 }
 
-void rest(int count) {
+Future<void> rest(int count) async {
   for (int i = 0; i < count; i++) {
     if (g.interrupted != 0) {
       break;
     }
-    registerMove();
+    await registerMove();
   }
 }
 

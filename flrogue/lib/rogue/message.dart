@@ -3,7 +3,7 @@ import 'package:flrogue/rogue/init.dart';
 import 'globals.dart';
 import 'ui.dart';
 
-void message(String msg, [int intrpt = 0]) {
+Future<void> message(String msg, [int intrpt = 0]) async {
   if (intrpt != 0) {
     g.interrupted = 1;
   }
@@ -14,7 +14,7 @@ void message(String msg, [int intrpt = 0]) {
     ui.move(minRow - 1, g.messageCol);
     ui.write(more);
     ui.refresh();
-    waitForAck("");
+    await waitForAck("");
     checkMessage();
   }
 
@@ -27,14 +27,14 @@ void message(String msg, [int intrpt = 0]) {
   g.messageCol = msg.length;
 
   if (g.didInt != 0) {
-    onintr();
+    await onintr();
   }
   g.cantInt = 0;
 }
 
-void remessage() {
+Future<void> remessage() async {
   if (g.messageLine.isNotEmpty) {
-    message(g.messageLine, 0);
+    await message(g.messageLine, 0);
   }
 }
 
@@ -50,7 +50,7 @@ void checkMessage() {
 }
 
 Future<String> getInputLine(String prompt, bool echo) async {
-  message(prompt, 0);
+  await message(prompt, 0);
   String buf = "";
   // ignore: unused_local_variable
   int n = prompt.length;
@@ -97,7 +97,7 @@ void slurp() {
   // In our async implementation, this isn't necessary
 }
 
-void waitForAck(String prompt) async {
+Future<void> waitForAck(String prompt) async {
   if (prompt.isNotEmpty) {
     ui.write(more);
   }

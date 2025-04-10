@@ -13,28 +13,28 @@ import 'object.dart';
 import 'pack.dart';
 import 'use.dart';
 
-void specialHit(GameObject monster) {
+Future<void> specialHit(GameObject monster) async {
   String k = monster.ichar;
   if (k == 'A') {
-    rust(monster);
+    await rust(monster);
   } else if (k == 'F') {
     g.beingHeld = 1;
   } else if (k == 'I') {
-    freeze(monster);
+    await freeze(monster);
   } else if (k == 'L') {
-    stealGold(monster);
+    await stealGold(monster);
   } else if (k == 'N') {
-    stealItem(monster);
+    await stealItem(monster);
   } else if (k == 'R') {
-    sting(monster);
+    await sting(monster);
   } else if (k == 'V') {
-    drainLife();
+    await drainLife();
   } else if (k == 'W') {
-    drainLevel();
+    await drainLevel();
   }
 }
 
-void rust(GameObject monster) {
+Future<void> rust(GameObject monster) async {
   if (rogue.armor == null ||
       getArmorClass(rogue.armor) <= 1 ||
       rogue.armor!.whichKind == ArmorType.leather.index) {
@@ -43,17 +43,17 @@ void rust(GameObject monster) {
 
   if (rogue.armor!.isProtected != 0) {
     if (monster.identified == 0) {
-      message("the rust vanishes instantly", 0);
+      await message("the rust vanishes instantly", 0);
       monster.identified = 1;
     }
   } else {
     rogue.armor!.damageEnchantment -= 1;
-    message("your armor weakens", 0);
+    await message("your armor weakens", 0);
     printStats();
   }
 }
 
-void freeze(GameObject monster) {
+Future<void> freeze(GameObject monster) async {
   if (!randPercent(12)) return;
 
   int freezePercent = 99;
@@ -64,26 +64,26 @@ void freeze(GameObject monster) {
 
   if (freezePercent > 10) {
     monster.identified = 1;
-    message("you are frozen", 1);
+    await message("you are frozen", 1);
 
     int n = getRand(5, 9);
     for (int i = 0; i < n; i++) {
-      moveMonsters();
+      await moveMonsters();
     }
 
     if (randPercent(freezePercent)) {
       for (int i = 0; i < 50; i++) {
-        moveMonsters();
+        await moveMonsters();
       }
-      killedBy(null, DeathCause.hypothermia);
+      await killedBy(null, DeathCause.hypothermia);
     }
 
-    message("you can move again", 1);
+    await message("you can move again", 1);
     monster.identified = 0;
   }
 }
 
-void stealGold(GameObject monster) {
+Future<void> stealGold(GameObject monster) async {
   if (!randPercent(15)) return;
 
   int amount;
@@ -102,14 +102,14 @@ void stealGold(GameObject monster) {
 
   if (amount > 0) {
     rogue.gold -= amount;
-    message("your purse feels lighter", 0);
+    await message("your purse feels lighter", 0);
     printStats();
   }
 
   disappear(monster);
 }
 
-void stealItem(GameObject monster) {
+Future<void> stealItem(GameObject monster) async {
   if (!randPercent(15)) return;
 
   bool hasSomething = false;
@@ -138,13 +138,13 @@ void stealItem(GameObject monster) {
       }
     }
 
-    message("she stole ${getDescription(obj!)}", 0);
+    await message("she stole ${getDescription(obj!)}", 0);
 
     if (obj.whatIs == Cell.amulet) {
       g.hasAmulet = 0;
     }
 
-    vanish(obj, false);
+    await vanish(obj, false);
   }
 
   disappear(monster);
@@ -222,7 +222,7 @@ bool tryToCough(int row, int col, GameObject obj) {
   return false;
 }
 
-bool orcGold(GameObject monster) {
+Future<bool> orcGold(GameObject monster) async {
   if (monster.identified != 0) {
     return false;
   }
@@ -251,7 +251,7 @@ bool orcGold(GameObject monster) {
 
         monster.identified = 1;
         monster.mFlags |= MonsterFlags.canGo;
-        mvMonster(monster, i, j);
+        await mvMonster(monster, i, j);
         monster.mFlags &= ~MonsterFlags.canGo;
         monster.identified = 0;
         return true;
@@ -268,7 +268,7 @@ void checkOrc(GameObject monster) {
   }
 }
 
-bool checkXeroc(GameObject monster) {
+Future<bool> checkXeroc(GameObject monster) async {
   if (monster.ichar == 'X' && monster.identified != 0) {
     wakeUp(monster);
     monster.identified = 0;
@@ -277,7 +277,7 @@ bool checkXeroc(GameObject monster) {
       getRoomChar(screen[monster.row][monster.col], monster.row, monster.col),
     );
     checkMessage();
-    message("wait, that's a ${monsterName(monster)}!", 1);
+    await message("wait, that's a ${monsterName(monster)}!", 1);
     return true;
   }
   return false;
@@ -294,7 +294,7 @@ bool hidingXeroc(int row, int col) {
   return monster.ichar == 'X' && monster.identified != 0;
 }
 
-void sting(GameObject monster) {
+Future<void> sting(GameObject monster) async {
   if (rogue.strengthCurrent < 5) return;
 
   int stingChance = 35;
@@ -309,28 +309,28 @@ void sting(GameObject monster) {
   stingChance = stingChance < 1 ? 1 : stingChance;
 
   if (randPercent(stingChance)) {
-    message("the ${monsterName(monster)}'s bite has weakened you", 0);
+    await message("the ${monsterName(monster)}'s bite has weakened you", 0);
     rogue.strengthCurrent -= 1;
     printStats();
   }
 }
 
-void drainLevel() {
+Future<void> drainLevel() async {
   if (!randPercent(20) || rogue.exp < 8) {
     return;
   }
 
   rogue.expPoints = levelPoints[rogue.exp - 2] - getRand(10, 50);
   rogue.exp -= 2;
-  addExp(1);
+  await addExp(1);
 }
 
-void drainLife() {
+Future<void> drainLife() async {
   if (!randPercent(25) || rogue.hpMax <= 30 || rogue.hpCurrent < 10) {
     return;
   }
 
-  message("you feel weaker", 0);
+  await message("you feel weaker", 0);
   rogue.hpMax -= 1;
   rogue.hpCurrent -= 1;
 
@@ -346,7 +346,7 @@ void drainLife() {
   printStats();
 }
 
-bool mConfuse(GameObject monster) {
+Future<bool> mConfuse(GameObject monster) async {
   if (monster.identified != 0) {
     return false;
   }
@@ -362,7 +362,10 @@ bool mConfuse(GameObject monster) {
 
   if (randPercent(55)) {
     monster.identified = 1;
-    message("the gaze of the ${monsterName(monster)} has confused you", 1);
+    await message(
+      "the gaze of the ${monsterName(monster)} has confused you",
+      1,
+    );
     confuse();
     return true;
   }
@@ -370,7 +373,7 @@ bool mConfuse(GameObject monster) {
   return false;
 }
 
-bool flameBroil(GameObject monster) {
+Future<bool> flameBroil(GameObject monster) async {
   if (!randPercent(50)) {
     return false;
   }
@@ -419,7 +422,7 @@ bool flameBroil(GameObject monster) {
     }
   }
 
-  monsterHit(monster, "flame");
+  await monsterHit(monster, "flame");
   return true;
 }
 

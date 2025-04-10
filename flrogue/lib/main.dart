@@ -50,7 +50,7 @@ class _RogueGameState extends State<RogueGame> {
     super.initState();
     // Start the game after the widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _startGame();
+      unawaited(_startGame());
     });
   }
 

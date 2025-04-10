@@ -95,11 +95,11 @@ void byebye() {
   cleanUp("Okay, bye bye!");
 }
 
-void onintr() {
+Future<void> onintr() async {
   if (g.cantInt != 0) {
     g.didInt = 1;
   } else {
     checkMessage();
-    message("interrupt", 1);
+    await message("interrupt", 1);
   }
 }

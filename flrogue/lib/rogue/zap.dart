@@ -18,7 +18,7 @@ Future<void> zapp() async {
   while (!isDirection(dir)) {
     ui.beep();
     if (firstMiss != 0) {
-      message("direction? ", 0);
+      await message("direction? ", 0);
       firstMiss = 0;
     }
     dir = await ui.getchar();
@@ -37,28 +37,28 @@ Future<void> zapp() async {
 
   GameObject? wand = getLetterObject(wch);
   if (wand == null) {
-    message("no such item.", 0);
+    await message("no such item.", 0);
     return;
   }
 
   if (wand.whatIs != Cell.wand) {
-    message("you can't zap with that", 0);
+    await message("you can't zap with that", 0);
     return;
   }
 
   if (wand.clasz <= 0) {
-    message("nothing happens", 0);
+    await message("nothing happens", 0);
   } else {
     wand.clasz -= 1;
 
     GameObject? monster = getZappedMonster(dir, rogue.row, rogue.col);
     if (monster != null) {
       wakeUp(monster);
-      zapMonster(monster, wand.whichKind);
+      await zapMonster(monster, wand.whichKind);
     }
   }
 
-  registerMove();
+  await registerMove();
 }
 
 GameObject? getZappedMonster(String dir, int row, int col) {
@@ -84,7 +84,7 @@ GameObject? getZappedMonster(String dir, int row, int col) {
   }
 }
 
-void zapMonster(GameObject monster, int kind) {
+Future<void> zapMonster(GameObject monster, int kind) async {
   int row = monster.row;
   int col = monster.col;
 
@@ -107,7 +107,7 @@ void zapMonster(GameObject monster, int kind) {
     teleportAway(monster);
   } else if (kind == WandType.killMonster.index) {
     rogue.expPoints -= monster.killExp;
-    monsterDamage(monster, monster.quantity);
+    await monsterDamage(monster, monster.quantity);
   } else if (kind == WandType.invisibility.index) {
     monster.mFlags |= MonsterFlags.isInvis;
     ui.move(row, col);
@@ -147,7 +147,7 @@ void zapMonster(GameObject monster, int kind) {
     monster.mFlags |= MonsterFlags.isAsleep;
     monster.mFlags &= ~MonsterFlags.wakens;
   } else if (kind == WandType.doNothing.index) {
-    message("nothing happens", 0);
+    await message("nothing happens", 0);
   }
 
   // Set wand as identified

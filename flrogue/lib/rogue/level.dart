@@ -520,27 +520,27 @@ void putPlayer() {
   }
 }
 
-bool checkDown() {
+Future<bool> checkDown() async {
   if (screen[rogue.row][rogue.col] & Cell.stairs != 0) {
     return true;
   }
-  message("I see no way down", 0);
+  await message("I see no way down", 0);
   return false;
 }
 
-bool checkUp() {
+Future<bool> checkUp() async {
   if (!(screen[rogue.row][rogue.col] & Cell.stairs != 0)) {
-    message("I see no way up", 0);
+    await message("I see no way up", 0);
     return false;
   }
 
   if (g.hasAmulet == 0) {
-    message("your way is magically blocked", 0);
+    await message("your way is magically blocked", 0);
     return false;
   }
 
   if (g.currentLevel == 1) {
-    win();
+    await win();
     return true;
   } else {
     g.currentLevel -= 2;
@@ -548,13 +548,13 @@ bool checkUp() {
   }
 }
 
-void addExp(int e) {
+Future<void> addExp(int e) async {
   rogue.expPoints += e;
 
   if (rogue.expPoints >= levelPoints[rogue.exp - 1]) {
     int newExp = getExpLevel(rogue.expPoints);
     for (int i = rogue.exp + 1; i <= newExp; i++) {
-      message("welcome to level $i", 0);
+      await message("welcome to level $i", 0);
       int hp = getRand(3, 10);
       rogue.hpCurrent += hp;
       rogue.hpMax += hp;
