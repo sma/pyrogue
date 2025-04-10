@@ -6,9 +6,9 @@ import 'ui.dart';
 import 'monster.dart';
 
 void lightUpRoom() {
-  if (g.blind != 0) return;
+  if (blind != 0) return;
 
-  Room r = rooms[g.currentRoom];
+  Room r = rooms[currentRoom];
 
   for (int i = r.topRow; i <= r.bottomRow; i++) {
     for (int j = r.leftCol; j <= r.rightCol; j++) {
@@ -22,7 +22,7 @@ void lightUpRoom() {
 }
 
 void lightPassage(int row, int col) {
-  if (g.blind != 0) return;
+  if (blind != 0) return;
 
   int iEnd = row < ui.rows - 2 ? 1 : 0;
   int jEnd = col < ui.cols - 1 ? 1 : 0;
@@ -40,14 +40,14 @@ void lightPassage(int row, int col) {
 }
 
 void darkenRoom(int rn) {
-  if (g.blind != 0) return;
+  if (blind != 0) return;
 
   Room r = rooms[rn];
 
   for (int i = r.topRow + 1; i < r.bottomRow; i++) {
     for (int j = r.leftCol + 1; j < r.rightCol; j++) {
       if (!isObject(i, j) &&
-          !(g.detectMonster != 0 && screen[i][j] & Cell.monster != 0)) {
+          !(detectMonster != 0 && screen[i][j] & Cell.monster != 0)) {
         if (!hidingXeroc(i, j)) {
           ui.move(i, j);
           ui.write(' ');

@@ -74,18 +74,18 @@ class _RogueGameState extends State<RogueGame> {
           lightUpRoom();
           printStats();
           await playLevel();
-          g.levelObjects.nextObject = null;
-          g.levelMonsters.nextObject = null;
+          levelObjects.nextObject = null;
+          levelMonsters.nextObject = null;
           ui.clearScreen();
         } catch (e) {
           print("Level error: $e");
-          g.exc = e as Exception;
+          exc = e as Exception;
           break;
         }
       }
     } catch (e) {
       print("Game error: $e");
-      g.exc = e as Exception;
+      exc = e as Exception;
       cleanUp("Game error occurred");
     } finally {
       setState(() {
@@ -107,7 +107,7 @@ class _RogueGameState extends State<RogueGame> {
               color: Colors.red,
               width: double.infinity,
               child: Text(
-                'Game ended${g.exc != null ? ': ${g.exc.toString()}' : ''}',
+                'Game ended${exc != null ? ': ${exc.toString()}' : ''}',
                 style: const TextStyle(color: Colors.white),
                 textAlign: TextAlign.center,
               ),
@@ -121,8 +121,8 @@ class _RogueGameState extends State<RogueGame> {
 // Simplified version for testing
 void cleanUp(String msg) {
   print("Game cleanup: $msg");
-  if (g.exc != null) {
-    print("Exception: ${g.exc.toString()}");
+  if (exc != null) {
+    print("Exception: ${exc.toString()}");
   }
   exit(0);
 }

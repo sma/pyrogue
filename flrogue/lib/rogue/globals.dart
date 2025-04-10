@@ -661,50 +661,45 @@ bool randPercent(int percentage) {
   return getRand(1, 100) <= percentage;
 }
 
-// Game state class
-class G {
-  GameObject? fightMonster;
-  int detectMonster = 0;
-  String hitMessage = "";
-
-  String playerName = "";
-  int cantInt = 0;
-  int didInt = 0;
-  Exception? exc;
-
-  int currentLevel = 0;
-  int maxLevel = 1;
-  String hungerStr = "";
-  int partyRoom = 0;
-
-  int messageCleared = 1;
-  String messageLine = "";
-  int messageCol = 0;
-
-  ObjectHolder levelMonsters = ObjectHolder();
-
-  ObjectHolder levelObjects = ObjectHolder();
-  int hasAmulet = 0;
-  int foods = 0;
-
-  List<int> ichars = List.filled(26, 0);
-
-  int interrupted = 0;
-
-  int currentRoom = 0;
-
-  int beingHeld = 0;
-
-  int halluc = 0;
-  int blind = 0;
-  int confused = 0;
-}
-
 // Global game state
-G g = G();
+GameObject? fightMonster;
+int detectMonster = 0;
+String hitMessage = "";
+
+String playerName = "";
+int cantInt = 0;
+int didInt = 0;
+Exception? exc;
+
+int currentLevel = 0;
+int maxLevel = 1;
+String hungerStr = "";
+int partyRoom = 0;
+
+int messageCleared = 1;
+String messageLine = "";
+int messageCol = 0;
+
+ObjectHolder levelMonsters = ObjectHolder();
+
+ObjectHolder levelObjects = ObjectHolder();
+int hasAmulet = 0;
+int foods = 0;
+
+List<int> ichars = List.filled(26, 0);
+
+int interrupted = 0;
+
+int currentRoom = 0;
+
+int beingHeld = 0;
+
+int halluc = 0;
+int blind = 0;
+int confused = 0;
 
 // Level points for experience progression
-List<int> levelPoints = [
+const levelPoints = [
   10,
   20,
   40,

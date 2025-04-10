@@ -18,7 +18,7 @@ Future<void> specialHit(GameObject monster) async {
   if (k == 'A') {
     await rust(monster);
   } else if (k == 'F') {
-    g.beingHeld = 1;
+    beingHeld = 1;
   } else if (k == 'I') {
     await freeze(monster);
   } else if (k == 'L') {
@@ -94,7 +94,7 @@ Future<void> stealGold(GameObject monster) async {
     amount = rogue.gold ~/ 2;
   }
 
-  amount += (getRand(0, 2) - 1) * (rogue.exp + g.currentLevel);
+  amount += (getRand(0, 2) - 1) * (rogue.exp + currentLevel);
 
   if (amount <= 0 && rogue.gold > 0) {
     amount = rogue.gold;
@@ -141,7 +141,7 @@ Future<void> stealItem(GameObject monster) async {
     await message("she stole ${getDescription(obj!)}", 0);
 
     if (obj.whatIs == Cell.amulet) {
-      g.hasAmulet = 0;
+      hasAmulet = 0;
     }
 
     await vanish(obj, false);
@@ -160,11 +160,11 @@ void disappear(GameObject monster) {
     ui.write(getRoomChar(screen[row][col], row, col));
   }
 
-  removeFromPack(monster, g.levelMonsters);
+  removeFromPack(monster, levelMonsters);
 }
 
 void coughUp(GameObject monster) {
-  if (g.currentLevel < g.maxLevel) return;
+  if (currentLevel < maxLevel) return;
 
   GameObject obj;
 
@@ -284,13 +284,13 @@ Future<bool> checkXeroc(GameObject monster) async {
 }
 
 bool hidingXeroc(int row, int col) {
-  if (g.currentLevel < xeroc1 ||
-      g.currentLevel > xeroc2 ||
+  if (currentLevel < xeroc1 ||
+      currentLevel > xeroc2 ||
       !(screen[row][col] & Cell.monster != 0)) {
     return false;
   }
 
-  GameObject monster = objectAt(g.levelMonsters, row, col)!;
+  GameObject monster = objectAt(levelMonsters, row, col)!;
   return monster.ichar == 'X' && monster.identified != 0;
 }
 

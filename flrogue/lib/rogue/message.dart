@@ -5,48 +5,48 @@ import 'ui.dart';
 
 Future<void> message(String msg, [int intrpt = 0]) async {
   if (intrpt != 0) {
-    g.interrupted = 1;
+    interrupted = 1;
   }
-  g.cantInt = 1;
+  cantInt = 1;
   slurp();
 
-  if (g.messageCleared == 0) {
-    ui.move(minRow - 1, g.messageCol);
+  if (messageCleared == 0) {
+    ui.move(minRow - 1, messageCol);
     ui.write(more);
     ui.refresh();
     await waitForAck("");
     checkMessage();
   }
 
-  g.messageLine = msg;
+  messageLine = msg;
   ui.move(minRow - 1, 0);
   ui.write(msg);
   ui.write(' ');
   ui.refresh();
-  g.messageCleared = 0;
-  g.messageCol = msg.length;
+  messageCleared = 0;
+  messageCol = msg.length;
 
-  if (g.didInt != 0) {
+  if (didInt != 0) {
     await onintr();
   }
-  g.cantInt = 0;
+  cantInt = 0;
 }
 
 Future<void> remessage() async {
-  if (g.messageLine.isNotEmpty) {
-    await message(g.messageLine, 0);
+  if (messageLine.isNotEmpty) {
+    await message(messageLine, 0);
   }
 }
 
 void checkMessage() {
-  if (g.messageCleared != 0) {
+  if (messageCleared != 0) {
     return;
   }
   ui.move(minRow - 1, 0);
   ui.clearToEndOfLine();
   ui.move(rogue.row, rogue.col);
   ui.refresh();
-  g.messageCleared = 1;
+  messageCleared = 1;
 }
 
 Future<String> getInputLine(String prompt, bool echo) async {

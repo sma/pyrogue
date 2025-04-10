@@ -19,7 +19,7 @@ void putMonsters() {
       wakeUp(monster);
     }
     putMonsterRandLocation(monster);
-    addToPack(monster, g.levelMonsters, false);
+    addToPack(monster, levelMonsters, false);
   }
 }
 
@@ -29,8 +29,8 @@ GameObject getRandMonster() {
   int mn;
   while (true) {
     mn = getRand(0, monsterCount - 1);
-    if (g.currentLevel >= monsterTab[mn].isProtected &&
-        g.currentLevel <= monsterTab[mn].isCursed) {
+    if (currentLevel >= monsterTab[mn].isProtected &&
+        currentLevel <= monsterTab[mn].isCursed) {
       break;
     }
   }
@@ -42,7 +42,7 @@ GameObject getRandMonster() {
     monster.identified = getRandObjChar().codeUnitAt(0);
   }
 
-  if (g.currentLevel > amuletLevel + 2) {
+  if (currentLevel > amuletLevel + 2) {
     monster.mFlags |= MonsterFlags.hasted;
   }
 
@@ -51,7 +51,7 @@ GameObject getRandMonster() {
 }
 
 Future<void> moveMonsters() async {
-  GameObject? monster = g.levelMonsters.nextObject;
+  GameObject? monster = levelMonsters.nextObject;
 
   while (monster != null) {
     if (monster.mFlags & MonsterFlags.hasted != 0) {
@@ -97,10 +97,10 @@ void fillRoomWithMonsters(int rn, int n) {
 }
 
 String getMonsterCharRowCol(int row, int col) {
-  GameObject monster = objectAt(g.levelMonsters, row, col)!;
+  GameObject monster = objectAt(levelMonsters, row, col)!;
 
-  if ((g.detectMonster == 0 && monster.mFlags & MonsterFlags.isInvis != 0) ||
-      g.blind != 0) {
+  if ((detectMonster == 0 && monster.mFlags & MonsterFlags.isInvis != 0) ||
+      blind != 0) {
     return getRoomChar(screen[row][col] & ~Cell.monster, row, col);
   }
 
@@ -112,8 +112,8 @@ String getMonsterCharRowCol(int row, int col) {
 }
 
 String getMonsterChar(GameObject monster) {
-  if ((g.detectMonster == 0 && monster.mFlags & MonsterFlags.isInvis != 0) ||
-      g.blind != 0) {
+  if ((detectMonster == 0 && monster.mFlags & MonsterFlags.isInvis != 0) ||
+      blind != 0) {
     return getRoomChar(
       screen[monster.row][monster.col] & ~Cell.monster,
       monster.row,
@@ -254,17 +254,17 @@ void moveMonsterTo(GameObject monster, int row, int col) {
     );
   }
 
-  if (g.blind == 0 && (g.detectMonster != 0 || canSee(row, col))) {
-    if (monster.mFlags & MonsterFlags.isInvis == 0 || g.detectMonster != 0) {
+  if (blind == 0 && (detectMonster != 0 || canSee(row, col))) {
+    if (monster.mFlags & MonsterFlags.isInvis == 0 || detectMonster != 0) {
       ui.move(row, col);
       ui.write(getMonsterChar(monster));
     }
   }
 
   if (screen[row][col] & Cell.door != 0 &&
-      getRoomNumber(row, col) != g.currentRoom &&
+      getRoomNumber(row, col) != currentRoom &&
       screen[monster.row][monster.col] == Cell.floor) {
-    if (g.blind == 0) {
+    if (blind == 0) {
       ui.move(monster.row, monster.col);
       ui.write(' ');
     }
@@ -315,7 +315,7 @@ bool monsterCanGo(GameObject monster, int row, int col) {
   }
 
   if (screen[row][col] & Cell.scroll != 0) {
-    GameObject obj = objectAt(g.levelObjects, row, col)!;
+    GameObject obj = objectAt(levelObjects, row, col)!;
     if (obj.whichKind == ScrollType.scareMonster.index) {
       return false;
     }
@@ -329,13 +329,13 @@ void wakeUp(GameObject monster) {
 }
 
 void wakeRoom(int rn, bool entering, int row, int col) {
-  int wakePercent_ = rn == g.partyRoom ? partyWakePercent : wakePercent;
+  int wakePercent_ = rn == partyRoom ? partyWakePercent : wakePercent;
 
-  GameObject? monster = g.levelMonsters.nextObject;
+  GameObject? monster = levelMonsters.nextObject;
   while (monster != null) {
-    if ((monster.mFlags & MonsterFlags.wakens != 0 || rn == g.partyRoom) &&
+    if ((monster.mFlags & MonsterFlags.wakens != 0 || rn == partyRoom) &&
         rn == getRoomNumber(monster.row, monster.col)) {
-      if (monster.ichar == 'X' && rn == g.partyRoom) {
+      if (monster.ichar == 'X' && rn == partyRoom) {
         monster.mFlags |= MonsterFlags.wakens;
       }
 
@@ -358,12 +358,12 @@ void wakeRoom(int rn, bool entering, int row, int col) {
 }
 
 String monsterName(GameObject monster) {
-  if (g.blind != 0 ||
-      (monster.mFlags & MonsterFlags.isInvis != 0 && g.detectMonster == 0)) {
+  if (blind != 0 ||
+      (monster.mFlags & MonsterFlags.isInvis != 0 && detectMonster == 0)) {
     return "something";
   }
 
-  if (g.halluc != 0) {
+  if (halluc != 0) {
     return monsterNames[getRand(0, 25)];
   }
 
@@ -402,9 +402,9 @@ void startWanderer() {
 }
 
 void showMonsters() {
-  if (g.blind != 0) return;
+  if (blind != 0) return;
 
-  GameObject? monster = g.levelMonsters.nextObject;
+  GameObject? monster = levelMonsters.nextObject;
   while (monster != null) {
     ui.move(monster.row, monster.col);
     ui.write(monster.ichar);
@@ -463,12 +463,12 @@ void putMonsterAt(int row, int col, GameObject monster) {
   monster.row = row;
   monster.col = col;
   addMask(row, col, Cell.monster);
-  addToPack(monster, g.levelMonsters, false);
+  addToPack(monster, levelMonsters, false);
 }
 
 bool canSee(int row, int col) {
-  return g.blind == 0 &&
-      (getRoomNumber(row, col) == g.currentRoom || rogueIsAround(row, col));
+  return blind == 0 &&
+      (getRoomNumber(row, col) == currentRoom || rogueIsAround(row, col));
 }
 
 bool flit(GameObject monster) {
@@ -532,7 +532,7 @@ bool noRoomForMonster(int rn) {
 Future<void> aggravate() async {
   await message("you hear a high pitched humming noise");
 
-  GameObject? monster = g.levelMonsters.nextObject;
+  GameObject? monster = levelMonsters.nextObject;
   while (monster != null) {
     wakeUp(monster);
     if (monster.ichar == 'X') {
@@ -553,7 +553,7 @@ bool monsterCanSee(GameObject monster, int row, int col) {
 }
 
 Future<void> mvAquatars() async {
-  GameObject? monster = g.levelMonsters.nextObject;
+  GameObject? monster = levelMonsters.nextObject;
   while (monster != null) {
     if (monster.ichar == 'A') {
       await mvMonster(monster, rogue.row, rogue.col);

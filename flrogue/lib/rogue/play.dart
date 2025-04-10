@@ -19,10 +19,10 @@ Future<void> playLevel() async {
   int count = 0;
 
   while (true) {
-    g.interrupted = 0;
-    if (g.hitMessage.isNotEmpty) {
-      await message(g.hitMessage, 0);
-      g.hitMessage = "";
+    interrupted = 0;
+    if (hitMessage.isNotEmpty) {
+      await message(hitMessage, 0);
+      hitMessage = "";
     }
 
     ui.move(rogue.row, rogue.col);

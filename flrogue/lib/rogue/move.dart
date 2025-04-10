@@ -26,7 +26,7 @@ Future<int> singleMoveRogue(String dirch, int pickup) async {
   int row = rogue.row;
   int col = rogue.col;
 
-  if (g.beingHeld != 0) {
+  if (beingHeld != 0) {
     var pos = getDirRc(dirch, row, col);
     row = pos.item1;
     col = pos.item2;
@@ -40,7 +40,7 @@ Future<int> singleMoveRogue(String dirch, int pickup) async {
   row = rogue.row;
   col = rogue.col;
 
-  if (g.confused != 0) {
+  if (confused != 0) {
     dirch = getRandDir();
   }
 
@@ -49,7 +49,7 @@ Future<int> singleMoveRogue(String dirch, int pickup) async {
   col = pos.item2;
 
   if (screen[row][col] & Cell.monster != 0) {
-    await rogueHit(objectAt(g.levelMonsters, row, col)!);
+    await rogueHit(objectAt(levelMonsters, row, col)!);
     await registerMove();
     return moveFailed;
   }
@@ -59,19 +59,19 @@ Future<int> singleMoveRogue(String dirch, int pickup) async {
   }
 
   if (screen[row][col] & Cell.door != 0) {
-    if (g.currentRoom == passage) {
-      g.currentRoom = getRoomNumber(row, col);
+    if (currentRoom == passage) {
+      currentRoom = getRoomNumber(row, col);
       lightUpRoom();
-      wakeRoom(g.currentRoom, true, row, col);
+      wakeRoom(currentRoom, true, row, col);
     } else {
       lightPassage(row, col);
     }
   } else if (screen[rogue.row][rogue.col] & Cell.door != 0 &&
       screen[row][col] & Cell.tunnel != 0) {
     lightPassage(row, col);
-    wakeRoom(g.currentRoom, false, row, col);
-    darkenRoom(g.currentRoom);
-    g.currentRoom = passage;
+    wakeRoom(currentRoom, false, row, col);
+    darkenRoom(currentRoom);
+    currentRoom = passage;
   } else if (screen[row][col] & Cell.tunnel != 0) {
     lightPassage(row, col);
   }
@@ -102,16 +102,16 @@ Future<int> singleMoveRogue(String dirch, int pickup) async {
           // fainted from hunger
           return stoppedOnSomething;
         }
-        return g.confused != 0 ? stoppedOnSomething : moved;
+        return confused != 0 ? stoppedOnSomething : moved;
       } else {
-        GameObject obj = objectAt(g.levelObjects, row, col)!;
+        GameObject obj = objectAt(levelObjects, row, col)!;
         String description = "moved onto ${getDescription(obj)}";
         await message(description, 1);
         await registerMove();
         return stoppedOnSomething;
       }
     } else {
-      GameObject obj = objectAt(g.levelObjects, row, col)!;
+      GameObject obj = objectAt(levelObjects, row, col)!;
       String description = "moved onto ${getDescription(obj)}";
       await message(description, 1);
       await registerMove();
@@ -130,7 +130,7 @@ Future<int> singleMoveRogue(String dirch, int pickup) async {
     return stoppedOnSomething;
   }
 
-  return g.confused != 0 ? stoppedOnSomething : moved;
+  return confused != 0 ? stoppedOnSomething : moved;
 }
 
 Future<void> multipleMoveRogue(String dirch) async {
@@ -144,7 +144,7 @@ Future<void> multipleMoveRogue(String dirch) async {
         1,
       );
 
-      if (m == moveFailed || m == stoppedOnSomething || g.interrupted != 0) {
+      if (m == moveFailed || m == stoppedOnSomething || interrupted != 0) {
         break;
       }
 
@@ -153,7 +153,7 @@ Future<void> multipleMoveRogue(String dirch) async {
       }
     }
   } else if ("HJKLBYUN".contains(dirch)) {
-    while (g.interrupted == 0 &&
+    while (interrupted == 0 &&
         await singleMoveRogue(
               String.fromCharCode(dirch.codeUnitAt(0) + 32),
               1,
@@ -174,11 +174,11 @@ bool isPassable(int row, int col) {
 }
 
 bool nextToSomething(int drow, int dcol) {
-  if (g.confused != 0) {
+  if (confused != 0) {
     return true;
   }
 
-  if (g.blind != 0) {
+  if (blind != 0) {
     return false;
   }
 
@@ -269,21 +269,21 @@ Future<bool> checkHunger() async {
   bool fainted = false;
 
   if (rogue.movesLeft == hungry) {
-    g.hungerStr = "hungry";
-    await message(g.hungerStr, 0);
+    hungerStr = "hungry";
+    await message(hungerStr, 0);
     printStats();
   }
 
   if (rogue.movesLeft == weak) {
-    g.hungerStr = "weak";
-    await message(g.hungerStr, 0);
+    hungerStr = "weak";
+    await message(hungerStr, 0);
     printStats();
   }
 
   if (rogue.movesLeft <= faint) {
     if (rogue.movesLeft == faint) {
-      g.hungerStr = "faint";
-      await message(g.hungerStr, 1);
+      hungerStr = "faint";
+      await message(hungerStr, 1);
       printStats();
     }
 
@@ -314,7 +314,7 @@ Future<bool> checkHunger() async {
 Future<bool> registerMove() async {
   bool fainted = false;
 
-  if (rogue.movesLeft <= hungry && g.hasAmulet == 0) {
+  if (rogue.movesLeft <= hungry && hasAmulet == 0) {
     fainted = checkHunger() as bool;
   }
 
@@ -326,25 +326,25 @@ Future<bool> registerMove() async {
     startWanderer();
   }
 
-  if (g.halluc != 0) {
-    g.halluc -= 1;
-    if (g.halluc == 0) {
+  if (halluc != 0) {
+    halluc -= 1;
+    if (halluc == 0) {
       await unhallucinate();
     } else {
       hallucinate();
     }
   }
 
-  if (g.blind != 0) {
-    g.blind -= 1;
-    if (g.blind == 0) {
+  if (blind != 0) {
+    blind -= 1;
+    if (blind == 0) {
       await unblind();
     }
   }
 
-  if (g.confused != 0) {
-    g.confused -= 1;
-    if (g.confused == 0) {
+  if (confused != 0) {
+    confused -= 1;
+    if (confused == 0) {
       await unconfuse();
     }
   }
@@ -356,7 +356,7 @@ Future<bool> registerMove() async {
 
 Future<void> rest(int count) async {
   for (int i = 0; i < count; i++) {
-    if (g.interrupted != 0) {
+    if (interrupted != 0) {
       break;
     }
     await registerMove();

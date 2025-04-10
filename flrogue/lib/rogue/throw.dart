@@ -94,15 +94,15 @@ Future<bool> throwAtMonster(GameObject monster, GameObject weapon) async {
   int hitChance = getHitChance(weapon);
   int t = weapon.quantity;
   weapon.quantity = 1;
-  g.hitMessage = "the ${nameOf(weapon)}";
+  hitMessage = "the ${nameOf(weapon)}";
   weapon.quantity = t;
 
   if (!randPercent(hitChance)) {
-    g.hitMessage += "misses  ";
+    hitMessage += "misses  ";
     return false;
   }
 
-  g.hitMessage += "hit  ";
+  hitMessage += "hit  ";
   int damage = getWeaponDamage(weapon);
 
   if ((weapon.whichKind == WeaponType.arrow.index &&
@@ -155,7 +155,7 @@ Future<Tuple3<GameObject?, int, int>> getThrownAtMonster(
 
     if (screen[row][col] & Cell.monster != 0) {
       if (!hidingXeroc(row, col)) {
-        return Tuple3(objectAt(g.levelMonsters, row, col), row, col);
+        return Tuple3(objectAt(levelMonsters, row, col), row, col);
       }
     }
 
@@ -205,7 +205,7 @@ Future<bool> flopWeapon(GameObject weapon, int row, int col) async {
     newWeapon.row = r;
     newWeapon.col = c;
     addMask(r, c, Cell.weapon);
-    addToPack(newWeapon, g.levelObjects, false);
+    addToPack(newWeapon, levelObjects, false);
 
     if (canSee(r, c)) {
       ui.move(r, c);

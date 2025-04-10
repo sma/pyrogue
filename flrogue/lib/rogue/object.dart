@@ -7,7 +7,7 @@ import 'monster.dart';
 import 'pack.dart';
 
 void putObjects() {
-  if (g.currentLevel < g.maxLevel) return;
+  if (currentLevel < maxLevel) return;
 
   int n = getRand(2, 4);
   if (randPercent(35)) n += 1;
@@ -23,7 +23,7 @@ void putObjects() {
   for (int i = 0; i < n; i++) {
     GameObject obj = getRandObject();
     putObjectRandLocation(obj);
-    addToPack(obj, g.levelObjects, false);
+    addToPack(obj, levelObjects, false);
   }
 
   putGold();
@@ -51,16 +51,16 @@ void putGoldAt(int row, int col) {
   obj.row = row;
   obj.col = col;
   obj.whatIs = Cell.gold;
-  obj.quantity = getRand(2 * g.currentLevel, 16 * g.currentLevel);
+  obj.quantity = getRand(2 * currentLevel, 16 * currentLevel);
   addMask(row, col, Cell.gold);
-  addToPack(obj, g.levelObjects, false);
+  addToPack(obj, levelObjects, false);
 }
 
 void putObjectAt(GameObject obj, int row, int col) {
   obj.row = row;
   obj.col = col;
   addMask(row, col, obj.whatIs);
-  addToPack(obj, g.levelObjects, false);
+  addToPack(obj, levelObjects, false);
 }
 
 GameObject? objectAt(ObjectHolder pack, int row, int col) {
@@ -125,7 +125,7 @@ String nameOf(GameObject obj) {
 GameObject getRandObject() {
   GameObject obj = getAnObject();
 
-  if (g.foods < g.currentLevel ~/ 2) {
+  if (foods < currentLevel ~/ 2) {
     obj.whatIs = Cell.food;
   } else {
     obj.whatIs = getRandWhatIs();
@@ -145,7 +145,7 @@ GameObject getRandObject() {
   } else if (w == Cell.wand) {
     getRandWand(obj);
   } else if (w == Cell.food) {
-    g.foods += 1;
+    foods += 1;
     getFood(obj);
   }
 
@@ -330,12 +330,12 @@ GameObject getAnObject() {
 }
 
 void makeParty() {
-  g.partyRoom = getRandRoom();
-  fillRoomWithMonsters(g.partyRoom, fillRoomWithObjects(g.partyRoom));
+  partyRoom = getRandRoom();
+  fillRoomWithMonsters(partyRoom, fillRoomWithObjects(partyRoom));
 }
 
 void showObjects() {
-  GameObject? obj = g.levelObjects.nextObject;
+  GameObject? obj = levelObjects.nextObject;
   while (obj != null) {
     ui.move(obj.row, obj.col);
     ui.write(getRoomChar(obj.whatIs, obj.row, obj.col));
@@ -347,7 +347,7 @@ void putAmulet() {
   GameObject obj = getAnObject();
   obj.whatIs = Cell.amulet;
   putObjectRandLocation(obj);
-  addToPack(obj, g.levelObjects, false);
+  addToPack(obj, levelObjects, false);
 }
 
 void putObjectRandLocation(GameObject obj) {

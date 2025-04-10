@@ -29,14 +29,14 @@ final List<int> levelPoints = [
 ];
 
 void makeLevel() {
-  g.partyRoom = -1;
+  partyRoom = -1;
 
-  if (g.currentLevel < 126) {
-    g.currentLevel += 1;
+  if (currentLevel < 126) {
+    currentLevel += 1;
   }
 
-  if (g.currentLevel > g.maxLevel) {
-    g.maxLevel = g.currentLevel;
+  if (currentLevel > maxLevel) {
+    maxLevel = currentLevel;
   }
 
   int mustExists1, mustExists2;
@@ -66,7 +66,7 @@ void makeLevel() {
 
   addDeadEnds();
 
-  if (g.hasAmulet == 0 && g.currentLevel >= amuletLevel) {
+  if (hasAmulet == 0 && currentLevel >= amuletLevel) {
     putAmulet();
   }
 }
@@ -236,13 +236,13 @@ void clearLevel() {
     }
   }
 
-  g.detectMonster = 0;
-  g.beingHeld = 0;
+  detectMonster = 0;
+  beingHeld = 0;
 }
 
 void printStats() {
   String m =
-      "Level: ${g.currentLevel}  Gold: ${rogue.gold}  Hp: ${rogue.hpCurrent}(${rogue.hpMax})  Str: ${rogue.strengthCurrent}(${rogue.strengthMax})  Arm: ${getArmorClass(rogue.armor)}  Exp: ${rogue.exp}/${rogue.expPoints} ${g.hungerStr}";
+      "Level: $currentLevel  Gold: ${rogue.gold}  Hp: ${rogue.hpCurrent}(${rogue.hpMax})  Str: ${rogue.strengthCurrent}(${rogue.strengthMax})  Arm: ${getArmorClass(rogue.armor)}  Exp: ${rogue.exp}/${rogue.expPoints} $hungerStr";
 
   ui.move(ui.rows - 1, 0);
   ui.write(m);
@@ -358,10 +358,10 @@ bool onSameCol(int room1, int room2) {
 }
 
 void addDeadEnds() {
-  if (g.currentLevel <= 2) return;
+  if (currentLevel <= 2) return;
 
   int start = getRand(0, maxRooms - 1);
-  int deadEndPercent = 12 + g.currentLevel * 2;
+  int deadEndPercent = 12 + currentLevel * 2;
 
   for (int i = 0; i < maxRooms; i++) {
     int j = (start + i) % maxRooms;
@@ -513,8 +513,8 @@ void putPlayer() {
     rogue.row = pos.item1;
     rogue.col = pos.item2;
 
-    g.currentRoom = getRoomNumber(rogue.row, rogue.col);
-    if (g.currentRoom != g.partyRoom) {
+    currentRoom = getRoomNumber(rogue.row, rogue.col);
+    if (currentRoom != partyRoom) {
       break;
     }
   }
@@ -534,16 +534,16 @@ Future<bool> checkUp() async {
     return false;
   }
 
-  if (g.hasAmulet == 0) {
+  if (hasAmulet == 0) {
     await message("your way is magically blocked", 0);
     return false;
   }
 
-  if (g.currentLevel == 1) {
+  if (currentLevel == 1) {
     await win();
     return true;
   } else {
-    g.currentLevel -= 2;
+    currentLevel -= 2;
     return true;
   }
 }

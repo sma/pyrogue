@@ -25,8 +25,8 @@ bool isDirection(String ch) {
 }
 
 Future<void> monsterHit(GameObject monster, String? other) async {
-  if (g.fightMonster != null && monster != g.fightMonster) {
-    g.fightMonster = null;
+  if (fightMonster != null && monster != fightMonster) {
+    fightMonster = null;
   }
   monster.trow = -1;
 
@@ -34,25 +34,25 @@ Future<void> monsterHit(GameObject monster, String? other) async {
   hitChance -= rogue.exp + rogue.exp;
   if (hitChance < 0) hitChance = 0;
 
-  if (g.fightMonster == null) {
-    g.interrupted = 1;
+  if (fightMonster == null) {
+    interrupted = 1;
   }
 
   String mn = monsterName(monster);
 
   if (!randPercent(hitChance)) {
-    if (g.fightMonster == null) {
-      g.hitMessage += "the ${other ?? mn} misses";
-      await message(g.hitMessage, 0);
-      g.hitMessage = "";
+    if (fightMonster == null) {
+      hitMessage += "the ${other ?? mn} misses";
+      await message(hitMessage, 0);
+      hitMessage = "";
     }
     return;
   }
 
-  if (g.fightMonster == null) {
-    g.hitMessage += "the ${other ?? mn} hit";
-    await message(g.hitMessage, 0);
-    g.hitMessage = "";
+  if (fightMonster == null) {
+    hitMessage += "the ${other ?? mn} hit";
+    await message(hitMessage, 0);
+    hitMessage = "";
   }
 
   int damage;
@@ -79,8 +79,8 @@ Future<void> rogueHit(GameObject monster) async {
 
   int hitChance = getHitChance(rogue.weapon);
   if (!randPercent(hitChance)) {
-    if (g.fightMonster == null) {
-      g.hitMessage = "you miss  ";
+    if (fightMonster == null) {
+      hitMessage = "you miss  ";
     }
     checkOrc(monster);
     wakeUp(monster);
@@ -90,8 +90,8 @@ Future<void> rogueHit(GameObject monster) async {
   int damage = getWeaponDamage(rogue.weapon);
   if (await monsterDamage(monster, damage)) {
     // still alive?
-    if (g.fightMonster == null) {
-      g.hitMessage = "you hit  ";
+    if (fightMonster == null) {
+      hitMessage = "you hit  ";
     }
   }
 
@@ -198,17 +198,17 @@ Future<bool> monsterDamage(GameObject monster, int damage) async {
     ui.write(getRoomChar(screen[row][col], row, col));
     ui.refresh();
 
-    g.fightMonster = null;
+    fightMonster = null;
     coughUp(monster);
-    g.hitMessage += "defeated the ${monsterName(monster)}";
-    await message(g.hitMessage, 1);
-    g.hitMessage = "";
+    hitMessage += "defeated the ${monsterName(monster)}";
+    await message(hitMessage, 1);
+    hitMessage = "";
     await addExp(monster.killExp);
     printStats();
-    removeFromPack(monster, g.levelMonsters);
+    removeFromPack(monster, levelMonsters);
 
     if (monster.ichar == 'F') {
-      g.beingHeld = 0;
+      beingHeld = 0;
     }
 
     return false;
@@ -239,28 +239,27 @@ Future<void> fight(bool toTheDeath) async {
   int col = rowCol.item2;
 
   if (!(screen[row][col] & Cell.monster != 0) ||
-      g.blind != 0 ||
+      blind != 0 ||
       hidingXeroc(row, col)) {
     await message("I see no monster there", 0);
     return;
   }
 
-  g.fightMonster = objectAt(g.levelMonsters, row, col);
-  if (g.fightMonster!.mFlags & MonsterFlags.isInvis != 0 &&
-      g.detectMonster == 0) {
+  fightMonster = objectAt(levelMonsters, row, col);
+  if (fightMonster!.mFlags & MonsterFlags.isInvis != 0 && detectMonster == 0) {
     await message("I see no monster there", 0);
     return;
   }
 
-  int possibleDamage = getDamage(g.fightMonster!.damage, 0) * 2 ~/ 3;
+  int possibleDamage = getDamage(fightMonster!.damage, 0) * 2 ~/ 3;
 
-  while (g.fightMonster != null) {
+  while (fightMonster != null) {
     await singleMoveRogue(ch, 0);
     if (!toTheDeath && rogue.hpCurrent <= possibleDamage) {
-      g.fightMonster = null;
+      fightMonster = null;
     }
-    if (!(screen[row][col] & Cell.monster != 0) || g.interrupted != 0) {
-      g.fightMonster = null;
+    if (!(screen[row][col] & Cell.monster != 0) || interrupted != 0) {
+      fightMonster = null;
     }
   }
 }

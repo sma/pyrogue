@@ -50,7 +50,7 @@ Future<void> quaff() async {
       rogue.strengthCurrent = 0;
     }
     await message("you feel very sick now", 0);
-    if (g.halluc != 0) {
+    if (halluc != 0) {
       await unhallucinate();
     }
   } else if (k == PotionType.raiseLevel.index) {
@@ -60,9 +60,9 @@ Future<void> quaff() async {
     await goBlind();
   } else if (k == PotionType.hallucination.index) {
     await message("oh wow, everything seems so cosmic", 0);
-    g.halluc += getRand(500, 800);
+    halluc += getRand(500, 800);
   } else if (k == PotionType.detectMonster.index) {
-    if (g.levelMonsters.nextObject != null) {
+    if (levelMonsters.nextObject != null) {
       showMonsters();
     } else {
       await message(
@@ -70,10 +70,10 @@ Future<void> quaff() async {
         0,
       );
     }
-    g.detectMonster = 1;
+    detectMonster = 1;
   } else if (k == PotionType.detectObjects.index) {
-    if (g.levelObjects.nextObject != null) {
-      if (g.blind == 0) {
+    if (levelObjects.nextObject != null) {
+      if (blind == 0) {
         showObjects();
       }
     } else {
@@ -84,7 +84,7 @@ Future<void> quaff() async {
     }
   } else if (k == PotionType.confusion.index) {
     await message(
-      g.halluc != 0 ? "what a trippy feeling" : "you feel confused",
+      halluc != 0 ? "what a trippy feeling" : "you feel confused",
       0,
     );
     confuse();
@@ -218,23 +218,23 @@ Future<void> potionHeal(bool extra) async {
     ].reduce((a, b) => a > b ? a : b);
   }
 
-  if (g.blind != 0) {
+  if (blind != 0) {
     await unblind();
   }
 
-  if (g.confused != 0 && extra) {
+  if (confused != 0 && extra) {
     await unconfuse();
-  } else if (g.confused != 0) {
-    g.confused = (g.confused - 9) ~/ 2;
-    if (g.confused <= 0) {
+  } else if (confused != 0) {
+    confused = (confused - 9) ~/ 2;
+    if (confused <= 0) {
       await unconfuse();
     }
   }
 
-  if (g.halluc != 0 && extra) {
+  if (halluc != 0 && extra) {
     await unhallucinate();
-  } else if (g.halluc != 0) {
-    g.halluc = g.halluc ~/ 2 + 1;
+  } else if (halluc != 0) {
+    halluc = halluc ~/ 2 + 1;
   }
 }
 
@@ -296,7 +296,7 @@ Future<void> eat() async {
 
   rogue.movesLeft ~/= 2;
   rogue.movesLeft += moves;
-  g.hungerStr = "";
+  hungerStr = "";
   printStats();
 
   await vanish(obj, true);
@@ -315,7 +315,7 @@ Future<void> holdMonster() async {
       }
 
       if (screen[row][col] & Cell.monster != 0) {
-        GameObject monster = objectAt(g.levelMonsters, row, col)!;
+        GameObject monster = objectAt(levelMonsters, row, col)!;
         monster.mFlags |= MonsterFlags.isAsleep;
         monster.mFlags &= ~MonsterFlags.wakens;
         mcount += 1;
@@ -333,8 +333,8 @@ Future<void> holdMonster() async {
 }
 
 void teleport() {
-  if (g.currentRoom >= 0) {
-    darkenRoom(g.currentRoom);
+  if (currentRoom >= 0) {
+    darkenRoom(currentRoom);
   } else {
     ui.move(rogue.row, rogue.col);
     ui.write(getRoomChar(screen[rogue.row][rogue.col], rogue.row, rogue.col));
@@ -342,15 +342,15 @@ void teleport() {
 
   putPlayer();
   lightUpRoom();
-  g.beingHeld = 0;
+  beingHeld = 0;
 }
 
 void hallucinate() {
-  if (g.blind != 0) {
+  if (blind != 0) {
     return;
   }
 
-  GameObject? obj = g.levelObjects.nextObject;
+  GameObject? obj = levelObjects.nextObject;
   while (obj != null) {
     String ch = ui.read(obj.row, obj.col, 1);
 
@@ -366,7 +366,7 @@ void hallucinate() {
     obj = obj.nextObject;
   }
 
-  obj = g.levelMonsters.nextObject;
+  obj = levelMonsters.nextObject;
   while (obj != null) {
     String ch = ui.read(obj.row, obj.col, 1);
 
@@ -383,9 +383,9 @@ void hallucinate() {
 }
 
 Future<void> unhallucinate() async {
-  g.halluc = 0;
+  halluc = 0;
 
-  if (g.currentRoom == passage) {
+  if (currentRoom == passage) {
     lightPassage(rogue.row, rogue.col);
   } else {
     lightUpRoom();
@@ -395,20 +395,20 @@ Future<void> unhallucinate() async {
 }
 
 Future<void> unblind() async {
-  g.blind = 0;
+  blind = 0;
   await message("the veil of darkness lifts", 0);
 
-  if (g.currentRoom == passage) {
+  if (currentRoom == passage) {
     lightPassage(rogue.row, rogue.col);
   } else {
     lightUpRoom();
   }
 
-  if (g.detectMonster != 0) {
+  if (detectMonster != 0) {
     showMonsters();
   }
 
-  if (g.halluc != 0) {
+  if (halluc != 0) {
     hallucinate();
   }
 }
@@ -426,14 +426,14 @@ Future<void> sleepScroll() async {
 }
 
 Future<void> goBlind() async {
-  if (g.blind == 0) {
+  if (blind == 0) {
     await message("a cloak of darkness falls around you", 0);
   }
 
-  g.blind += getRand(500, 800);
+  blind += getRand(500, 800);
 
-  if (g.currentRoom >= 0) {
-    Room r = rooms[g.currentRoom];
+  if (currentRoom >= 0) {
+    Room r = rooms[currentRoom];
 
     for (int i = r.topRow + 1; i < r.bottomRow; i++) {
       for (int j = r.leftCol + 1; j < r.rightCol; j++) {
@@ -449,20 +449,17 @@ Future<void> goBlind() async {
 }
 
 String getEnchColor() {
-  if (g.halluc != 0) {
+  if (halluc != 0) {
     return idPotions[getRand(0, PotionType.values.length - 1)].title;
   }
   return "blue ";
 }
 
 void confuse() {
-  g.confused = getRand(12, 22);
+  confused = getRand(12, 22);
 }
 
 Future<void> unconfuse() async {
-  g.confused = 0;
-  await message(
-    "you feel less ${g.halluc != 0 ? 'trippy' : 'confused'} now",
-    0,
-  );
+  confused = 0;
+  await message("you feel less ${halluc != 0 ? 'trippy' : 'confused'} now", 0);
 }

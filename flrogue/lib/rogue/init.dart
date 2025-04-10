@@ -8,19 +8,19 @@ import 'inventory.dart';
 import 'pack.dart';
 
 Future<void> init() async {
-  g.playerName = Platform.environment['USER'] ?? 'Rogue';
+  playerName = Platform.environment['USER'] ?? 'Rogue';
 
-  print("Hello ${g.playerName}, just a moment while I dig the dungeon...");
+  print("Hello $playerName, just a moment while I dig the dungeon...");
 
   for (int i = 0; i < 26; i++) {
-    g.ichars[i] = 0;
+    ichars[i] = 0;
   }
 
   srandom(DateTime.now().millisecondsSinceEpoch);
   initItems();
 
-  g.levelObjects.nextObject = null;
-  g.levelMonsters.nextObject = null;
+  levelObjects.nextObject = null;
+  levelMonsters.nextObject = null;
   playerInit();
 }
 
@@ -83,9 +83,9 @@ void cleanUp(String estr) {
   ui.refresh();
   ui.clearScreen();
   print(estr);
-  if (g.exc != null) {
+  if (exc != null) {
     print("---------");
-    print(g.exc.toString());
+    print(exc.toString());
     print("---------");
   }
   exit(0);
@@ -96,8 +96,8 @@ void byebye() {
 }
 
 Future<void> onintr() async {
-  if (g.cantInt != 0) {
-    g.didInt = 1;
+  if (cantInt != 0) {
+    didInt = 1;
   } else {
     checkMessage();
     await message("interrupt", 1);

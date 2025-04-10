@@ -56,14 +56,14 @@ void removeFromPack(GameObject obj, ObjectHolder pack) {
 }
 
 Future<Tuple2<GameObject?, int>> pickUp(int row, int col) async {
-  GameObject? obj = objectAt(g.levelObjects, row, col);
+  GameObject? obj = objectAt(levelObjects, row, col);
   int status = 1;
 
   if (obj!.whatIs == Cell.scroll &&
       obj.whichKind == ScrollType.scareMonster.index &&
       obj.pickedUp > 0) {
     await message("the scroll turns to dust as you pick it up", 1);
-    removeFromPack(obj, g.levelObjects);
+    removeFromPack(obj, levelObjects);
     removeMask(row, col, Cell.scroll);
     status = 0;
     idScrolls[ScrollType.scareMonster.index].idStatus = IdStatus.identified;
@@ -73,7 +73,7 @@ Future<Tuple2<GameObject?, int>> pickUp(int row, int col) async {
   if (obj.whatIs == Cell.gold) {
     rogue.gold += obj.quantity;
     removeMask(row, col, Cell.gold);
-    removeFromPack(obj, g.levelObjects);
+    removeFromPack(obj, levelObjects);
     printStats();
     return Tuple2(obj, status);
   }
@@ -84,11 +84,11 @@ Future<Tuple2<GameObject?, int>> pickUp(int row, int col) async {
   }
 
   if (obj.whatIs == Cell.amulet) {
-    g.hasAmulet = 1;
+    hasAmulet = 1;
   }
 
   removeMask(row, col, obj.whatIs);
-  removeFromPack(obj, g.levelObjects);
+  removeFromPack(obj, levelObjects);
   obj = addToPack(obj, rogue.pack, true);
   obj.pickedUp += 1;
   return Tuple2(obj, status);
@@ -141,7 +141,7 @@ Future<void> drop() async {
     newObj.quantity = 1;
     obj = newObj;
 
-    addToPack(obj, g.levelObjects, false);
+    addToPack(obj, levelObjects, false);
     addMask(rogue.row, rogue.col, obj.whatIs);
     await message("dropped ${getDescription(obj)}", 0);
     await registerMove();
@@ -149,13 +149,13 @@ Future<void> drop() async {
   }
 
   if (obj.whatIs == Cell.amulet) {
-    g.hasAmulet = 0;
+    hasAmulet = 0;
   }
 
   makeAvailIchar(obj.ichar);
   removeFromPack(obj, rogue.pack);
 
-  addToPack(obj, g.levelObjects, false);
+  addToPack(obj, levelObjects, false);
   addMask(rogue.row, rogue.col, obj.whatIs);
   await message("dropped ${getDescription(obj)}", 0);
   await registerMove();
@@ -187,8 +187,8 @@ GameObject? checkDuplicate(GameObject obj, ObjectHolder pack) {
 
 String nextAvailIchar() {
   for (int i = 0; i < 26; i++) {
-    if (g.ichars[i] == 0) {
-      g.ichars[i] = 1;
+    if (ichars[i] == 0) {
+      ichars[i] = 1;
       return String.fromCharCode('a'.codeUnitAt(0) + i);
     }
   }
@@ -196,7 +196,7 @@ String nextAvailIchar() {
 }
 
 void makeAvailIchar(String ch) {
-  g.ichars[ch.codeUnitAt(0) - 'a'.codeUnitAt(0)] = 0;
+  ichars[ch.codeUnitAt(0) - 'a'.codeUnitAt(0)] = 0;
 }
 
 Future<String> getPackLetter(String prompt, int mask) async {

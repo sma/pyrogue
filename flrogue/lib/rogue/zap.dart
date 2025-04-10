@@ -75,7 +75,7 @@ GameObject? getZappedMonster(String dir, int row, int col) {
 
     if (screen[r][c] & Cell.monster != 0) {
       if (!hidingXeroc(r, c)) {
-        return objectAt(g.levelMonsters, r, c);
+        return objectAt(levelMonsters, r, c);
       }
     }
 
@@ -114,11 +114,11 @@ Future<void> zapMonster(GameObject monster, int kind) async {
     ui.write(getMonsterChar(monster));
   } else if (kind == WandType.polymorph.index) {
     if (monster.ichar == 'F') {
-      g.beingHeld = 0;
+      beingHeld = 0;
     }
 
     // Find previous monster to link to new one
-    GameObject? pm = g.levelMonsters.nextObject;
+    GameObject? pm = levelMonsters.nextObject;
     while (pm != null && pm.nextObject != monster) {
       pm = pm.nextObject;
     }
@@ -127,7 +127,7 @@ Future<void> zapMonster(GameObject monster, int kind) async {
     while (true) {
       newMonster = monsterTab[getRand(0, monsterCount - 1)].copy();
       if (!(newMonster.ichar == 'X' &&
-          (g.currentLevel < xeroc1 || g.currentLevel > xeroc2))) {
+          (currentLevel < xeroc1 || currentLevel > xeroc2))) {
         break;
       }
     }
@@ -158,7 +158,7 @@ Future<void> zapMonster(GameObject monster, int kind) async {
 
 void teleportAway(GameObject monster) {
   if (monster.ichar == 'F') {
-    g.beingHeld = 0;
+    beingHeld = 0;
   }
 
   var pos = getRandRowCol(Cell.floor | Cell.tunnel | Cell.isObject);

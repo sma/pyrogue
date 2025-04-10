@@ -113,7 +113,7 @@ Future<void> putScores(GameObject? monster, DeathCause other) async {
         cleanUp("sorry, score file is out of order");
       }
 
-      if (ncmp(scores[i].substring(16), g.playerName)) {
+      if (ncmp(scores[i].substring(16), playerName)) {
         int s = int.parse(scores[i].substring(8, 16));
         if (s <= rogue.gold) {
           continue;
@@ -197,7 +197,7 @@ void insertScore(
   }
 
   String buf =
-      "${"${rank + 1}".padLeft(2)}${"      ${rogue.gold}".padLeft(7)}   ${g.playerName}: ";
+      "${"${rank + 1}".padLeft(2)}${"      ${rogue.gold}".padLeft(7)}   $playerName: ";
 
   if (other == DeathCause.hypothermia) {
     buf += "died of hypothermia";
@@ -219,8 +219,8 @@ void insertScore(
     buf += name;
   }
 
-  buf += " on level ${g.maxLevel} ";
-  if (other != DeathCause.win && g.hasAmulet != 0) {
+  buf += " on level $maxLevel ";
+  if (other != DeathCause.win && hasAmulet != 0) {
     buf += "with amulet";
   }
 
@@ -318,9 +318,9 @@ void cleanUp(String message) {
   ui.clearScreen();
   print(message);
 
-  if (g.exc != null) {
+  if (exc != null) {
     print('---------');
-    print(g.exc.toString());
+    print(exc.toString());
     print('---------');
   }
 
