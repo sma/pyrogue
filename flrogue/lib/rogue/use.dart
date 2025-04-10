@@ -1,0 +1,456 @@
+// rogue/use.dart
+
+import 'package:flrogue/rogue/move.dart';
+
+import 'globals.dart';
+import 'message.dart';
+import 'pack.dart';
+import 'object.dart';
+import 'monster.dart';
+import 'ui.dart';
+import 'room.dart';
+import 'level.dart' hide levelPoints;
+
+Future<void> quaff() async {
+  String ch = await getPackLetter("quaff what? ", Cell.potion);
+  if (ch == cancel) {
+    return;
+  }
+
+  GameObject? obj = getLetterObject(ch);
+  if (obj == null) {
+    message("no such item.", 0);
+    return;
+  }
+
+  if (obj.whatIs != Cell.potion) {
+    message("you can't drink that", 0);
+    return;
+  }
+
+  int k = obj.whichKind;
+  if (k == PotionType.increaseStrength.index) {
+    message("you feel stronger now, what bulging muscles!", 0);
+    rogue.strengthCurrent += 1;
+    if (rogue.strengthCurrent > rogue.strengthMax) {
+      rogue.strengthMax = rogue.strengthCurrent;
+    }
+  } else if (k == PotionType.restoreStrength.index) {
+    message("this tastes great, you feel warm all over", 0);
+    rogue.strengthCurrent = rogue.strengthMax;
+  } else if (k == PotionType.healing.index) {
+    message("you begin to feel better", 0);
+    potionHeal(false);
+  } else if (k == PotionType.extraHealing.index) {
+    message("you begin to feel much better", 0);
+    potionHeal(true);
+  } else if (k == PotionType.poison.index) {
+    rogue.strengthCurrent -= getRand(1, 3);
+    if (rogue.strengthCurrent < 0) {
+      rogue.strengthCurrent = 0;
+    }
+    message("you feel very sick now", 0);
+    if (g.halluc != 0) {
+      unhallucinate();
+    }
+  } else if (k == PotionType.raiseLevel.index) {
+    message("you feel more experienced", 0);
+    addExp(levelPoints[rogue.exp - 1] - rogue.expPoints + 1);
+  } else if (k == PotionType.blindness.index) {
+    goBlind();
+  } else if (k == PotionType.hallucination.index) {
+    message("oh wow, everything seems so cosmic", 0);
+    g.halluc += getRand(500, 800);
+  } else if (k == PotionType.detectMonster.index) {
+    if (g.levelMonsters.nextObject != null) {
+      showMonsters();
+    } else {
+      message("you have a strange feeling for a moment, then it passes", 0);
+    }
+    g.detectMonster = 1;
+  } else if (k == PotionType.detectObjects.index) {
+    if (g.levelObjects.nextObject != null) {
+      if (g.blind == 0) {
+        showObjects();
+      }
+    } else {
+      message("you have a strange feeling for a moment, then it passes", 0);
+    }
+  } else if (k == PotionType.confusion.index) {
+    message(g.halluc != 0 ? "what a trippy feeling" : "you feel confused", 0);
+    confuse();
+  }
+
+  printStats();
+
+  if (idPotions[k].idStatus != IdStatus.called) {
+    idPotions[k].idStatus = IdStatus.identified;
+  }
+
+  vanish(obj, true);
+}
+
+Future<void> readScroll() async {
+  String ch = await getPackLetter("read what? ", Cell.scroll);
+  if (ch == cancel) {
+    return;
+  }
+
+  GameObject? obj = getLetterObject(ch);
+  if (obj == null) {
+    message("no such item.", 0);
+    return;
+  }
+
+  if (obj.whatIs != Cell.scroll) {
+    message("you can't read that", 0);
+    return;
+  }
+
+  int k = obj.whichKind;
+  if (k == ScrollType.scareMonster.index) {
+    message("you hear a maniacal laughter in the distance", 0);
+  } else if (k == ScrollType.holdMonster.index) {
+    holdMonster();
+  } else if (k == ScrollType.enchantWeapon.index) {
+    if (rogue.weapon != null) {
+      message(
+        "your ${idWeapons[rogue.weapon!.whichKind].title}glows ${getEnchColor()} for a moment",
+        0,
+      );
+      if (getRand(0, 1) != 0) {
+        rogue.weapon!.toHitEnchantment += 1;
+      } else {
+        rogue.weapon!.damageEnchantment += 1;
+      }
+      rogue.weapon!.isCursed = 0;
+    } else {
+      message("your hands tingle", 0);
+    }
+  } else if (k == ScrollType.enchantArmor.index) {
+    if (rogue.armor != null) {
+      message("your armor glows ${getEnchColor()} for a moment", 0);
+      rogue.armor!.damageEnchantment += 1;
+      rogue.armor!.isCursed = 0;
+      printStats();
+    } else {
+      message("your skin crawls", 0);
+    }
+  } else if (k == ScrollType.identify.index) {
+    message("this is a scroll of identify", 0);
+    message("what would you like to identify?", 0);
+    obj.identified = 1;
+    idScrolls[k].idStatus = IdStatus.identified;
+    await identify();
+  } else if (k == ScrollType.teleport.index) {
+    teleport();
+  } else if (k == ScrollType.sleep.index) {
+    sleepScroll();
+  } else if (k == ScrollType.protectArmor.index) {
+    if (rogue.armor != null) {
+      message("your armor is covered by a shimmering gold shield", 0);
+      rogue.armor!.isProtected = 1;
+    } else {
+      message("your acne seems to have disappeared", 0);
+    }
+  } else if (k == ScrollType.removeCurse.index) {
+    message("you feel as though someone is watching over you", 0);
+    if (rogue.armor != null) {
+      rogue.armor!.isCursed = 0;
+    }
+    if (rogue.weapon != null) {
+      rogue.weapon!.isCursed = 0;
+    }
+  } else if (k == ScrollType.createMonster.index) {
+    createMonster();
+  } else if (k == ScrollType.aggravateMonster.index) {
+    aggravate();
+  }
+
+  if (idScrolls[k].idStatus != IdStatus.called) {
+    idScrolls[k].idStatus = IdStatus.identified;
+  }
+
+  vanish(obj, true);
+}
+
+void vanish(GameObject obj, bool rm) {
+  if (obj.quantity > 1) {
+    obj.quantity -= 1;
+  } else {
+    removeFromPack(obj, rogue.pack);
+    makeAvailIchar(obj.ichar);
+  }
+
+  if (rm) {
+    registerMove();
+  }
+}
+
+void potionHeal(bool extra) {
+  double ratio = rogue.hpCurrent / rogue.hpMax;
+
+  if (ratio >= 0.9) {
+    rogue.hpMax += extra ? 2 : 1;
+    rogue.hpCurrent = rogue.hpMax;
+  } else {
+    if (ratio < 0.33) {
+      ratio = 0.33;
+    }
+
+    if (extra) {
+      ratio += ratio;
+    }
+
+    int add = (ratio * (rogue.hpMax - rogue.hpCurrent)).toInt();
+    rogue.hpCurrent = [
+      rogue.hpCurrent + add,
+      rogue.hpMax,
+    ].reduce((a, b) => a > b ? a : b);
+  }
+
+  if (g.blind != 0) {
+    unblind();
+  }
+
+  if (g.confused != 0 && extra) {
+    unconfuse();
+  } else if (g.confused != 0) {
+    g.confused = (g.confused - 9) ~/ 2;
+    if (g.confused <= 0) {
+      unconfuse();
+    }
+  }
+
+  if (g.halluc != 0 && extra) {
+    unhallucinate();
+  } else if (g.halluc != 0) {
+    g.halluc = g.halluc ~/ 2 + 1;
+  }
+}
+
+Future<void> identify() async {
+  while (true) {
+    String ch = await getPackLetter("identify what? ", Cell.isObject);
+    if (ch == cancel) {
+      return;
+    }
+
+    GameObject? obj = getLetterObject(ch);
+    if (obj == null) {
+      message("no such item, try again", 0);
+      checkMessage();
+      continue;
+    }
+
+    obj.identified = 1;
+    if (obj.whatIs &
+            (Cell.scroll |
+                Cell.potion |
+                Cell.weapon |
+                Cell.armor |
+                Cell.wand) !=
+        0) {
+      List<Identity> idTable = getIdTable(obj);
+      idTable[obj.whichKind].idStatus = IdStatus.identified;
+    }
+
+    message(getDescription(obj), 0);
+    return;
+  }
+}
+
+Future<void> eat() async {
+  String ch = await getPackLetter("eat what? ", Cell.food);
+  if (ch == cancel) {
+    return;
+  }
+
+  GameObject? obj = getLetterObject(ch);
+  if (obj == null) {
+    message("no such item.", 0);
+    return;
+  }
+
+  if (obj.whatIs != Cell.food) {
+    message("you can't eat that", 0);
+    return;
+  }
+
+  int moves = getRand(800, 1000);
+  if (moves >= 900) {
+    message("yum, that tasted good", 0);
+  } else {
+    message("yuk, that food tasted awful", 0);
+    addExp(3);
+  }
+
+  rogue.movesLeft ~/= 2;
+  rogue.movesLeft += moves;
+  g.hungerStr = "";
+  printStats();
+
+  vanish(obj, true);
+}
+
+void holdMonster() {
+  int mcount = 0;
+
+  for (int i = -2; i < 3; i++) {
+    for (int j = -2; j < 3; j++) {
+      int row = rogue.row + i;
+      int col = rogue.col + j;
+
+      if (row < minRow || row > ui.rows - 2 || col < 0 || col > ui.cols - 1) {
+        continue;
+      }
+
+      if (screen[row][col] & Cell.monster != 0) {
+        GameObject monster = objectAt(g.levelMonsters, row, col)!;
+        monster.mFlags |= MonsterFlags.isAsleep;
+        monster.mFlags &= ~MonsterFlags.wakens;
+        mcount += 1;
+      }
+    }
+  }
+
+  if (mcount == 0) {
+    message("you feel a strange sense of loss", 0);
+  } else if (mcount == 1) {
+    message("the monster freezes", 0);
+  } else {
+    message("the monsters around you freeze", 0);
+  }
+}
+
+void teleport() {
+  if (g.currentRoom >= 0) {
+    darkenRoom(g.currentRoom);
+  } else {
+    ui.move(rogue.row, rogue.col);
+    ui.write(getRoomChar(screen[rogue.row][rogue.col], rogue.row, rogue.col));
+  }
+
+  putPlayer();
+  lightUpRoom();
+  g.beingHeld = 0;
+}
+
+void hallucinate() {
+  if (g.blind != 0) {
+    return;
+  }
+
+  GameObject? obj = g.levelObjects.nextObject;
+  while (obj != null) {
+    String ch = ui.read(obj.row, obj.col, 1);
+
+    if ((ch.codeUnitAt(0) < 'A'.codeUnitAt(0) ||
+            ch.codeUnitAt(0) > 'Z'.codeUnitAt(0)) &&
+        (obj.row != rogue.row || obj.col != rogue.col)) {
+      if (ch != ' ' && ch != '.' && ch != '#' && ch != '+') {
+        ui.move(obj.row, obj.col);
+        ui.write(getRandObjChar());
+      }
+    }
+
+    obj = obj.nextObject;
+  }
+
+  obj = g.levelMonsters.nextObject;
+  while (obj != null) {
+    String ch = ui.read(obj.row, obj.col, 1);
+
+    if (ch.codeUnitAt(0) >= 'A'.codeUnitAt(0) &&
+        ch.codeUnitAt(0) <= 'Z'.codeUnitAt(0)) {
+      ui.move(obj.row, obj.col);
+      ui.write(
+        String.fromCharCode(getRand('A'.codeUnitAt(0), 'Z'.codeUnitAt(0))),
+      );
+    }
+
+    obj = obj.nextObject;
+  }
+}
+
+void unhallucinate() {
+  g.halluc = 0;
+
+  if (g.currentRoom == passage) {
+    lightPassage(rogue.row, rogue.col);
+  } else {
+    lightUpRoom();
+  }
+
+  message("everything looks SO boring now", 0);
+}
+
+void unblind() {
+  g.blind = 0;
+  message("the veil of darkness lifts", 0);
+
+  if (g.currentRoom == passage) {
+    lightPassage(rogue.row, rogue.col);
+  } else {
+    lightUpRoom();
+  }
+
+  if (g.detectMonster != 0) {
+    showMonsters();
+  }
+
+  if (g.halluc != 0) {
+    hallucinate();
+  }
+}
+
+void sleepScroll() {
+  message("you fall asleep", 0);
+
+  int i = getRand(4, 10);
+  while (i > 0) {
+    moveMonsters();
+    i -= 1;
+  }
+
+  message("you can move again", 0);
+}
+
+void goBlind() {
+  if (g.blind == 0) {
+    message("a cloak of darkness falls around you", 0);
+  }
+
+  g.blind += getRand(500, 800);
+
+  if (g.currentRoom >= 0) {
+    Room r = rooms[g.currentRoom];
+
+    for (int i = r.topRow + 1; i < r.bottomRow; i++) {
+      for (int j = r.leftCol + 1; j < r.rightCol; j++) {
+        ui.move(i, j);
+        ui.write(' ');
+      }
+    }
+  }
+
+  ui.move(rogue.row, rogue.col);
+  ui.write(rogue.fchar);
+  ui.refresh();
+}
+
+String getEnchColor() {
+  if (g.halluc != 0) {
+    return idPotions[getRand(0, PotionType.values.length - 1)].title;
+  }
+  return "blue ";
+}
+
+void confuse() {
+  g.confused = getRand(12, 22);
+}
+
+void unconfuse() {
+  g.confused = 0;
+  message("you feel less ${g.halluc != 0 ? 'trippy' : 'confused'} now", 0);
+}
