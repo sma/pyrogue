@@ -194,7 +194,7 @@ Future<String> getPackLetter(String prompt, int mask) async {
       checkMessage();
       await inventory(rogue.pack, mask);
       firstMiss = 1;
-      ch = '';
+      ch = ' ';
       continue;
     }
 
