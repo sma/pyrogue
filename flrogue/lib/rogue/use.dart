@@ -1,5 +1,3 @@
-// rogue/use.dart
-
 import 'package:flrogue/rogue/move.dart';
 
 import 'globals.dart';

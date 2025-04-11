@@ -1,5 +1,3 @@
-// rogue/terminal_widget.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'rogue/ui.dart';
@@ -120,7 +118,7 @@ class TerminalPainter extends CustomPainter {
         cellWidth,
         cellHeight,
       ),
-      Paint()..color = Colors.orange,
+      Paint()..color = Colors.orange.shade600,
     );
 
     final TextStyle textStyle = TextStyle(

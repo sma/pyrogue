@@ -1,5 +1,3 @@
-// rogue/play.dart
-
 import 'dart:async';
 import 'package:flrogue/rogue/inventory.dart';
 import 'package:flrogue/rogue/score.dart';

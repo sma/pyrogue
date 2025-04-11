@@ -1,5 +1,3 @@
-// rogue/pack.dart
-
 import 'package:flrogue/rogue/inventory.dart';
 import 'package:flrogue/rogue/level.dart';
 

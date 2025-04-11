@@ -1,5 +1,3 @@
-// rogue/special_hit.dart
-
 import 'package:flrogue/rogue/hit.dart';
 import 'package:flrogue/rogue/score.dart';
 

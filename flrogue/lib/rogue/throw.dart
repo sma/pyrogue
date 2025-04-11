@@ -1,5 +1,3 @@
-// rogue/throw.dart
-
 import 'package:flrogue/rogue/level.dart';
 import 'package:flrogue/rogue/object.dart';
 import 'package:flrogue/rogue/use.dart';

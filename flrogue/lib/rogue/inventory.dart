@@ -1,5 +1,3 @@
-// rogue/inventory.dart
-
 import 'package:flrogue/rogue/pack.dart';
 
 import 'globals.dart';
