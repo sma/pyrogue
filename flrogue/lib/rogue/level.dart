@@ -236,7 +236,7 @@ void clearLevel() {
     }
   }
 
-  detectMonster = 0;
+  detectMonster = false;
   beingHeld = 0;
 }
 

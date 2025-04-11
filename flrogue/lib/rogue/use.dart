@@ -70,7 +70,7 @@ Future<void> quaff() async {
         0,
       );
     }
-    detectMonster = 1;
+    detectMonster = true;
   } else if (k == PotionType.detectObjects.index) {
     if (levelObjects.isNotEmpty) {
       if (blind == 0) {
@@ -398,7 +398,7 @@ Future<void> unblind() async {
     lightUpRoom();
   }
 
-  if (detectMonster != 0) {
+  if (detectMonster) {
     showMonsters();
   }
 

@@ -47,7 +47,7 @@ void darkenRoom(int rn) {
   for (int i = r.topRow + 1; i < r.bottomRow; i++) {
     for (int j = r.leftCol + 1; j < r.rightCol; j++) {
       if (!isObject(i, j) &&
-          !(detectMonster != 0 && screen[i][j] & Cell.monster != 0)) {
+          !(detectMonster && screen[i][j] & Cell.monster != 0)) {
         if (!hidingXeroc(i, j)) {
           ui.move(i, j);
           ui.write(' ');

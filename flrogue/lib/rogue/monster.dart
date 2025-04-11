@@ -94,7 +94,7 @@ void fillRoomWithMonsters(int rn, int n) {
 String getMonsterCharRowCol(int row, int col) {
   GameObject monster = objectAt(levelMonsters, row, col)!;
 
-  if ((detectMonster == 0 && monster.mFlags & MonsterFlags.isInvis != 0) ||
+  if ((!detectMonster && monster.mFlags & MonsterFlags.isInvis != 0) ||
       blind != 0) {
     return getRoomChar(screen[row][col] & ~Cell.monster, row, col);
   }
@@ -107,7 +107,7 @@ String getMonsterCharRowCol(int row, int col) {
 }
 
 String getMonsterChar(GameObject monster) {
-  if ((detectMonster == 0 && monster.mFlags & MonsterFlags.isInvis != 0) ||
+  if ((!detectMonster && monster.mFlags & MonsterFlags.isInvis != 0) ||
       blind != 0) {
     return getRoomChar(
       screen[monster.row][monster.col] & ~Cell.monster,
@@ -249,8 +249,8 @@ void moveMonsterTo(GameObject monster, int row, int col) {
     );
   }
 
-  if (blind == 0 && (detectMonster != 0 || canSee(row, col))) {
-    if (monster.mFlags & MonsterFlags.isInvis == 0 || detectMonster != 0) {
+  if (blind == 0 && (detectMonster || canSee(row, col))) {
+    if (monster.mFlags & MonsterFlags.isInvis == 0 || detectMonster) {
       ui.move(row, col);
       ui.write(getMonsterChar(monster));
     }
@@ -352,7 +352,7 @@ void wakeRoom(int rn, bool entering, int row, int col) {
 
 String monsterName(GameObject monster) {
   if (blind != 0 ||
-      (monster.mFlags & MonsterFlags.isInvis != 0 && detectMonster == 0)) {
+      (monster.mFlags & MonsterFlags.isInvis != 0 && !detectMonster)) {
     return "something";
   }
 

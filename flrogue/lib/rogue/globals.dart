@@ -655,7 +655,7 @@ bool randPercent(int percentage) {
 
 // Global game state
 GameObject? fightMonster;
-int detectMonster = 0;
+bool detectMonster = false;
 String hitMessage = "";
 
 String playerName = "";
