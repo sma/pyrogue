@@ -112,6 +112,17 @@ class TerminalPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final double cellWidth = size.width / ui.cols;
     final double cellHeight = size.height / ui.rows;
+
+    canvas.drawRect(
+      Rect.fromLTWH(
+        ui.col * cellWidth,
+        ui.row * cellHeight,
+        cellWidth,
+        cellHeight,
+      ),
+      Paint()..color = Colors.orange,
+    );
+
     final TextStyle textStyle = TextStyle(
       color: Colors.white,
       fontSize: cellHeight * 0.8,

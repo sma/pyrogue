@@ -97,6 +97,9 @@ class UI with ChangeNotifier {
   // Track current cursor position
   int _row = 0;
   int _col = 0;
+
+  int get row => _row;
+  int get col => _col;
 }
 
 // Global UI instance
