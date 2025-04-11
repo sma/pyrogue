@@ -106,16 +106,16 @@ String getRoomChar(int mask, int row, int col) {
     return ',';
   }
 
+  if (mask & Cell.stairs != 0) {
+    return '%';
+  }
+
   if (mask & Cell.floor != 0) {
     return '.';
   }
 
   if (mask & Cell.door != 0) {
     return '+';
-  }
-
-  if (mask & Cell.stairs != 0) {
-    return '%';
   }
 
   return ' ';
