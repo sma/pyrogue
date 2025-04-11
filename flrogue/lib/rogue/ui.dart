@@ -10,8 +10,6 @@ class UI with ChangeNotifier {
   late List<List<String>> buffer;
 
   // Terminal controller - would be implemented to connect to a widget
-  final StreamController<String> _keyController =
-      StreamController<String>.broadcast();
   final List<Completer<String>> _keyCompleters = [];
 
   UI() {
@@ -25,24 +23,20 @@ class UI with ChangeNotifier {
         buffer[i][j] = ' ';
       }
     }
-    notifyListeners();
   }
 
   // Clear from current position to end of line
   void clearToEndOfLine() {
-    final (row, col) = _getCurrentPosition();
-
-    for (int j = col; j < cols; j++) {
-      buffer[row][j] = ' ';
+    for (int j = _col; j < cols; j++) {
+      buffer[_row][j] = ' ';
     }
-    notifyListeners();
   }
 
   // Move cursor position
   void move(int row, int col) {
     // Store current position for operations
-    _currentRow = row;
-    _currentCol = col;
+    _row = row;
+    _col = col;
   }
 
   // Read characters from the buffer
@@ -60,13 +54,9 @@ class UI with ChangeNotifier {
 
   // Write string to buffer
   void write(String s, {bool inverse = false}) {
-    final (row, col) = _getCurrentPosition();
-
-    for (int i = 0; i < s.length && col + i < cols; i++) {
-      buffer[row][col + i] = s[i];
+    for (int i = 0; i < s.length && _col + i < cols; i++) {
+      buffer[_row][_col++] = s[i];
     }
-    _currentCol += s.length;
-    notifyListeners();
   }
 
   // Refresh the display
@@ -92,23 +82,14 @@ class UI with ChangeNotifier {
     if (_keyCompleters.isNotEmpty) {
       final completer = _keyCompleters.removeAt(0);
       completer.complete(key);
+    } else {
+      beep();
     }
   }
 
   // Track current cursor position
-  int _currentRow = 0;
-  int _currentCol = 0;
-
-  (int, int) _getCurrentPosition() {
-    return (_currentRow, _currentCol);
-  }
-
-  // Clean up resources
-  @override
-  void dispose() {
-    unawaited(_keyController.close());
-    super.dispose();
-  }
+  int _row = 0;
+  int _col = 0;
 }
 
 // Global UI instance
