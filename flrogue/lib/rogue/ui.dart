@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'dart:async';
+import '../beep/beep.dart' as b;
 
 // Terminal UI interface
 class UI with ChangeNotifier {
@@ -73,8 +74,7 @@ class UI with ChangeNotifier {
 
   // Emit a beep sound
   void beep() {
-    // Implementation would depend on platform
-    print('BEEP!');
+    b.beep();
   }
 
   // Get a character input (async)
