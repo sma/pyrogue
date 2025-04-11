@@ -19,7 +19,7 @@ Future<void> playLevel() async {
   int count = 0;
 
   while (true) {
-    interrupted = 0;
+    interrupted = false;
     if (hitMessage.isNotEmpty) {
       await message(hitMessage, 0);
       hitMessage = "";

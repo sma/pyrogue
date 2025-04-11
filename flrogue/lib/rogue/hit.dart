@@ -35,7 +35,7 @@ Future<void> monsterHit(GameObject monster, String? other) async {
   if (hitChance < 0) hitChance = 0;
 
   if (fightMonster == null) {
-    interrupted = 1;
+    interrupted = true;
   }
 
   String mn = monsterName(monster);
@@ -258,7 +258,7 @@ Future<void> fight(bool toTheDeath) async {
     if (!toTheDeath && rogue.hpCurrent <= possibleDamage) {
       fightMonster = null;
     }
-    if (!(screen[row][col] & Cell.monster != 0) || interrupted != 0) {
+    if (!(screen[row][col] & Cell.monster != 0) || interrupted) {
       fightMonster = null;
     }
   }

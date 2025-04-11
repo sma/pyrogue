@@ -144,7 +144,7 @@ Future<void> multipleMoveRogue(String dirch) async {
         1,
       );
 
-      if (m == moveFailed || m == stoppedOnSomething || interrupted != 0) {
+      if (m == moveFailed || m == stoppedOnSomething || interrupted) {
         break;
       }
 
@@ -153,7 +153,7 @@ Future<void> multipleMoveRogue(String dirch) async {
       }
     }
   } else if ("HJKLBYUN".contains(dirch)) {
-    while (interrupted == 0 &&
+    while (!interrupted &&
         await singleMoveRogue(
               String.fromCharCode(dirch.codeUnitAt(0) + 32),
               1,
@@ -356,7 +356,7 @@ Future<bool> registerMove() async {
 
 Future<void> rest(int count) async {
   for (int i = 0; i < count; i++) {
-    if (interrupted != 0) {
+    if (interrupted) {
       break;
     }
     await registerMove();

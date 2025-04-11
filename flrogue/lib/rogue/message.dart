@@ -5,7 +5,7 @@ import 'ui.dart';
 
 Future<void> message(String msg, [int intrpt = 0]) async {
   if (intrpt != 0) {
-    interrupted = 1;
+    interrupted = true;
   }
   cantInt = 1;
   slurp();

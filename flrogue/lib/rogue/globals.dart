@@ -680,7 +680,7 @@ int foods = 0;
 
 List<int> ichars = List.filled(26, 0);
 
-int interrupted = 0;
+bool interrupted = false;
 
 int currentRoom = 0;
 
