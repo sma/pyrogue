@@ -134,7 +134,7 @@ Future<void> stealItem(GameObject monster) async {
     await message("she stole ${getDescription(obj)}", 0);
 
     if (obj.whatIs == Cell.amulet) {
-      hasAmulet = 0;
+      hasAmulet = false;
     }
 
     await vanish(obj, false);

@@ -66,7 +66,7 @@ void makeLevel() {
 
   addDeadEnds();
 
-  if (hasAmulet == 0 && currentLevel >= amuletLevel) {
+  if (!hasAmulet && currentLevel >= amuletLevel) {
     putAmulet();
   }
 }
@@ -534,7 +534,7 @@ Future<bool> checkUp() async {
     return false;
   }
 
-  if (hasAmulet == 0) {
+  if (!hasAmulet) {
     await message("your way is magically blocked", 0);
     return false;
   }

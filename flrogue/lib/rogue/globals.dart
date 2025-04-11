@@ -675,7 +675,7 @@ int messageCol = 0;
 List<GameObject> levelMonsters = [];
 
 List<GameObject> levelObjects = [];
-int hasAmulet = 0;
+bool hasAmulet = false;
 int foods = 0;
 
 List<int> ichars = List.filled(26, 0);

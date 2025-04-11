@@ -314,7 +314,7 @@ Future<bool> checkHunger() async {
 Future<bool> registerMove() async {
   bool fainted = false;
 
-  if (rogue.movesLeft <= hungry && hasAmulet == 0) {
+  if (rogue.movesLeft <= hungry && !hasAmulet) {
     fainted = checkHunger() as bool;
   }
 

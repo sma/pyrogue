@@ -221,7 +221,7 @@ void insertScore(
   }
 
   buf += " on level $maxLevel ";
-  if (other != DeathCause.win && hasAmulet != 0) {
+  if (other != DeathCause.win && hasAmulet) {
     buf += "with amulet";
   }
 

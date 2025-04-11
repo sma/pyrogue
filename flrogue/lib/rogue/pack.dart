@@ -58,7 +58,7 @@ Future<Tuple2<GameObject?, int>> pickUp(int row, int col) async {
   }
 
   if (obj.whatIs == Cell.amulet) {
-    hasAmulet = 1;
+    hasAmulet = true;
   }
 
   removeMask(row, col, obj.whatIs);
@@ -123,7 +123,7 @@ Future<void> drop() async {
   }
 
   if (obj.whatIs == Cell.amulet) {
-    hasAmulet = 0;
+    hasAmulet = false;
   }
 
   makeAvailIchar(obj.ichar);
