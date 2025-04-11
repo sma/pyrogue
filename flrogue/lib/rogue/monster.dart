@@ -150,7 +150,7 @@ Future<void> mvMonster(GameObject monster, int row, int col) async {
   }
 
   if (monsterCanGo(monster, rogue.row, rogue.col)) {
-    await monsterHit(monster, "");
+    await monsterHit(monster, null);
     return;
   }
 
