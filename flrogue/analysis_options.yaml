@@ -5,3 +5,5 @@ linter:
     avoid_print: false
     unawaited_futures: true
     discarded_futures: true
+    directives_ordering: true
+    prefer_relative_imports: true

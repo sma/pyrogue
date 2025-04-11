@@ -1,13 +1,12 @@
-import 'package:flrogue/rogue/move.dart';
-
 import 'globals.dart';
-import 'message.dart';
-import 'pack.dart';
-import 'object.dart';
-import 'monster.dart';
-import 'ui.dart';
-import 'room.dart';
 import 'level.dart' hide levelPoints;
+import 'message.dart';
+import 'monster.dart';
+import 'move.dart';
+import 'object.dart';
+import 'pack.dart';
+import 'room.dart';
+import 'ui.dart';
 
 Future<void> quaff() async {
   String ch = await getPackLetter("quaff what? ", Cell.potion);

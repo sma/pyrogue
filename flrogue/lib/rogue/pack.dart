@@ -1,12 +1,11 @@
-import 'package:flrogue/rogue/inventory.dart';
-import 'package:flrogue/rogue/level.dart';
-
 import 'globals.dart';
+import 'inventory.dart';
+import 'level.dart';
+import 'message.dart';
+import 'monster.dart';
+import 'move.dart';
 import 'object.dart';
 import 'ui.dart';
-import 'message.dart';
-import 'move.dart';
-import 'monster.dart';
 
 const String curseMessage = "you can't, it appears to be cursed";
 

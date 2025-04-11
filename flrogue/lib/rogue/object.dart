@@ -1,10 +1,9 @@
-import 'package:flrogue/rogue/level.dart';
-
 import 'globals.dart';
-import 'room.dart';
-import 'ui.dart';
+import 'level.dart';
 import 'monster.dart';
 import 'pack.dart';
+import 'room.dart';
+import 'ui.dart';
 
 void putObjects() {
   if (currentLevel < maxLevel) return;

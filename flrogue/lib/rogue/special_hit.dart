@@ -1,14 +1,13 @@
-import 'package:flrogue/rogue/hit.dart';
-import 'package:flrogue/rogue/score.dart';
-
 import 'globals.dart';
-import 'message.dart';
-import 'ui.dart';
-import 'room.dart';
-import 'monster.dart';
+import 'hit.dart';
 import 'level.dart' hide levelPoints;
+import 'message.dart';
+import 'monster.dart';
 import 'object.dart';
 import 'pack.dart';
+import 'room.dart';
+import 'score.dart';
+import 'ui.dart';
 import 'use.dart';
 
 Future<void> specialHit(GameObject monster) async {

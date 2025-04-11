@@ -1,9 +1,8 @@
-import 'package:flrogue/rogue/move.dart';
-import 'package:flrogue/rogue/special_hit.dart';
-
 import 'globals.dart';
-import 'ui.dart';
 import 'monster.dart';
+import 'move.dart';
+import 'special_hit.dart';
+import 'ui.dart';
 
 void lightUpRoom() {
   if (blind != 0) return;

@@ -1,15 +1,14 @@
-import 'package:flrogue/rogue/level.dart';
-import 'package:flrogue/rogue/move.dart';
-import 'package:flrogue/rogue/object.dart';
-import 'package:flrogue/rogue/room.dart';
-
 import 'globals.dart';
 import 'hit.dart';
+import 'level.dart';
 import 'message.dart';
-import 'ui.dart';
-import 'pack.dart';
 import 'monster.dart';
+import 'move.dart';
+import 'object.dart';
+import 'pack.dart';
+import 'room.dart';
 import 'special_hit.dart';
+import 'ui.dart';
 
 Future<void> zapp() async {
   bool firstMiss = true;

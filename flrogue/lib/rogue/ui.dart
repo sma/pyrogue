@@ -1,5 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'dart:async';
+
+import 'package:flutter/foundation.dart';
+
 import '../beep/beep.dart' as b;
 
 // Terminal UI interface

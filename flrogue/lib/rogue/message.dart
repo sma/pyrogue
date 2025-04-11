@@ -1,6 +1,5 @@
-import 'package:flrogue/rogue/init.dart';
-
 import 'globals.dart';
+import 'init.dart';
 import 'ui.dart';
 
 Future<void> message(String msg, [bool intrpt = false]) async {

@@ -1,15 +1,14 @@
-import 'package:flrogue/rogue/level.dart';
-import 'package:flrogue/rogue/object.dart';
-import 'package:flrogue/rogue/use.dart';
-
 import 'globals.dart';
 import 'hit.dart';
+import 'level.dart';
 import 'message.dart';
-import 'ui.dart';
+import 'monster.dart';
+import 'object.dart';
 import 'pack.dart';
 import 'room.dart';
-import 'monster.dart';
 import 'special_hit.dart';
+import 'ui.dart';
+import 'use.dart';
 
 Future<void> throwItem() async {
   bool firstMiss = true;

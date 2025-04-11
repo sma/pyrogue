@@ -1,16 +1,16 @@
 import 'dart:async';
-import 'package:flrogue/rogue/inventory.dart';
-import 'package:flrogue/rogue/score.dart';
 
 import 'globals.dart';
-import 'move.dart';
-import 'message.dart';
-import 'use.dart';
-import 'throw.dart';
-import 'pack.dart';
 import 'hit.dart';
+import 'inventory.dart';
 import 'level.dart';
+import 'message.dart';
+import 'move.dart';
+import 'pack.dart';
+import 'score.dart';
+import 'throw.dart';
 import 'ui.dart';
+import 'use.dart';
 import 'zap.dart';
 
 Future<void> playLevel() async {

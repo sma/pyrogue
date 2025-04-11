@@ -1,14 +1,13 @@
-import 'package:flrogue/rogue/hit.dart';
-import 'package:flrogue/rogue/level.dart';
-import 'package:flrogue/rogue/move.dart';
-
 import 'globals.dart';
-import 'room.dart';
-import 'ui.dart';
+import 'hit.dart';
+import 'level.dart';
+import 'message.dart';
+import 'move.dart';
 import 'object.dart';
 import 'pack.dart';
-import 'message.dart';
+import 'room.dart';
 import 'special_hit.dart';
+import 'ui.dart';
 
 void putMonsters() {
   int n = getRand(3, 7);

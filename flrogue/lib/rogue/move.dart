@@ -1,15 +1,14 @@
-import 'package:flrogue/rogue/score.dart';
-import 'package:flrogue/rogue/use.dart';
-
 import 'globals.dart';
-import 'ui.dart';
 import 'hit.dart';
-import 'monster.dart';
-import 'message.dart';
 import 'level.dart';
-import 'room.dart';
+import 'message.dart';
+import 'monster.dart';
 import 'object.dart';
 import 'pack.dart';
+import 'room.dart';
+import 'score.dart';
+import 'ui.dart';
+import 'use.dart';
 
 // Movement status constants
 const int moved = 0;

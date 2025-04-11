@@ -1,10 +1,9 @@
-import 'package:flrogue/rogue/message.dart';
-
 import 'globals.dart';
-import 'ui.dart';
-import 'room.dart';
+import 'message.dart';
 import 'object.dart';
+import 'room.dart';
 import 'score.dart';
+import 'ui.dart';
 
 // List of experience points needed for each level
 final List<int> levelPoints = [

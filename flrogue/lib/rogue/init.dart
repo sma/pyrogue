@@ -1,11 +1,11 @@
 import 'dart:io' if (dart.library.js) 'web_io.dart';
-import 'package:flrogue/rogue/message.dart';
 
 import 'globals.dart';
-import 'ui.dart';
-import 'object.dart';
 import 'inventory.dart';
+import 'message.dart';
+import 'object.dart';
 import 'pack.dart';
+import 'ui.dart';
 
 Future<void> init() async {
   playerName = Platform.environment['USER'] ?? 'Rogue';

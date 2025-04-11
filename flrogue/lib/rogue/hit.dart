@@ -1,15 +1,14 @@
-import 'package:flrogue/rogue/level.dart';
-import 'package:flrogue/rogue/move.dart';
-import 'package:flrogue/rogue/object.dart';
-import 'package:flrogue/rogue/pack.dart';
-
 import 'globals.dart';
-import 'monster.dart';
+import 'level.dart';
 import 'message.dart';
-import 'ui.dart';
+import 'monster.dart';
+import 'move.dart';
+import 'object.dart';
+import 'pack.dart';
 import 'room.dart';
 import 'score.dart';
 import 'special_hit.dart';
+import 'ui.dart';
 
 // Check if a character is a direction
 bool isDirection(String ch) {
