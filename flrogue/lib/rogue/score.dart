@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'globals.dart';
+import 'init.dart';
 import 'ui.dart';
 import 'message.dart';
 import 'object.dart';
@@ -307,19 +308,4 @@ int getValue(GameObject obj) {
   }
 
   return val > 10 ? val : 10;
-}
-
-void cleanUp(String message) {
-  ui.move(ui.rows - 1, 0);
-  ui.refresh();
-  ui.clearScreen();
-  print(message);
-
-  if (exc != null) {
-    print('---------');
-    print(exc.toString());
-    print('---------');
-  }
-
-  exit(0);
 }
