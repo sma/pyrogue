@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:io' if (dart.library.js) 'web_io.dart';
 import 'globals.dart';
 import 'init.dart';
 import 'ui.dart';

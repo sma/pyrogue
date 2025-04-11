@@ -65,9 +65,7 @@ Future<void> quaff() async {
     if (levelMonsters.isNotEmpty) {
       showMonsters();
     } else {
-      await message(
-        "you have a strange feeling for a moment, then it passes",
-      );
+      await message("you have a strange feeling for a moment, then it passes");
     }
     detectMonster = true;
   } else if (k == PotionType.detectObjects.index) {
@@ -76,14 +74,10 @@ Future<void> quaff() async {
         showObjects();
       }
     } else {
-      await message(
-        "you have a strange feeling for a moment, then it passes",
-      );
+      await message("you have a strange feeling for a moment, then it passes");
     }
   } else if (k == PotionType.confusion.index) {
-    await message(
-      halluc != 0 ? "what a trippy feeling" : "you feel confused",
-    );
+    await message(halluc != 0 ? "what a trippy feeling" : "you feel confused");
     confuse();
   }
 

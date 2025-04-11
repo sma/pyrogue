@@ -91,3 +91,9 @@ Okay, the `inventory` function is run, however, the `waitForAck` function isn't 
 - Because `message` uses `waitForAck`, I added `await` to 120+ calls to `message`.
 - Now 40+ more functions like `registerMove` needs `await` which causes more functions to become `async`.
 - And 100+ `await`s later, it finally works!
+
+## Running the App
+
+This is a desktop app.
+
+Right now, only **macOS** and **web** support is included and the `dart:io` usage in `score.dart` needs to be fixed.

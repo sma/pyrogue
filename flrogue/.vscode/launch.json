@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "macOS",
+            "deviceId": "macos",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "web",
+            "deviceId": "chrome",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--web-experimental-hot-reload"
+            ]
+        }
+    ]
+}

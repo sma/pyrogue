@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:io' if (dart.library.js) 'web_io.dart';
 import 'package:flrogue/rogue/message.dart';
 
 import 'globals.dart';
