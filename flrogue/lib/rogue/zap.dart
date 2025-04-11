@@ -112,7 +112,7 @@ Future<void> zapMonster(GameObject monster, int kind) async {
     ui.write(getMonsterChar(monster));
   } else if (kind == WandType.polymorph.index) {
     if (monster.ichar == 'F') {
-      beingHeld = 0;
+      beingHeld = false;
     }
 
     GameObject newMonster;
@@ -151,7 +151,7 @@ Future<void> zapMonster(GameObject monster, int kind) async {
 
 void teleportAway(GameObject monster) {
   if (monster.ichar == 'F') {
-    beingHeld = 0;
+    beingHeld = false;
   }
 
   var pos = getRandRowCol(Cell.floor | Cell.tunnel | Cell.isObject);

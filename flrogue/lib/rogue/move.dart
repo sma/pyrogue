@@ -26,7 +26,7 @@ Future<int> singleMoveRogue(String dirch, int pickup) async {
   int row = rogue.row;
   int col = rogue.col;
 
-  if (beingHeld != 0) {
+  if (beingHeld) {
     var pos = getDirRc(dirch, row, col);
     row = pos.item1;
     col = pos.item2;

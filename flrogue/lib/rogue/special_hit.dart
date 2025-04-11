@@ -18,7 +18,7 @@ Future<void> specialHit(GameObject monster) async {
   if (k == 'A') {
     await rust(monster);
   } else if (k == 'F') {
-    beingHeld = 1;
+    beingHeld = true;
   } else if (k == 'I') {
     await freeze(monster);
   } else if (k == 'L') {

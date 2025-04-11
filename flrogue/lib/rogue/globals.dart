@@ -684,7 +684,7 @@ int interrupted = 0;
 
 int currentRoom = 0;
 
-int beingHeld = 0;
+bool beingHeld = false;
 
 int halluc = 0;
 int blind = 0;

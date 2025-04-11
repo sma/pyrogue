@@ -208,7 +208,7 @@ Future<bool> monsterDamage(GameObject monster, int damage) async {
     removeFromPack(monster, levelMonsters);
 
     if (monster.ichar == 'F') {
-      beingHeld = 0;
+      beingHeld = false;
     }
 
     return false;

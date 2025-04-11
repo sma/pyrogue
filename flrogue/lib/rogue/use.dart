@@ -342,7 +342,7 @@ void teleport() {
 
   putPlayer();
   lightUpRoom();
-  beingHeld = 0;
+  beingHeld = false;
 }
 
 void hallucinate() {

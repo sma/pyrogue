@@ -237,7 +237,7 @@ void clearLevel() {
   }
 
   detectMonster = false;
-  beingHeld = 0;
+  beingHeld = false;
 }
 
 void printStats() {
