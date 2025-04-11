@@ -127,7 +127,7 @@ Future<void> putScores(GameObject? monster, DeathCause other) async {
     if (!dontInsert) {
       for (int j = 0; j < i; j++) {
         if (rank > 9) {
-          int s = int.parse(scores[j].substring(8, 16));
+          int s = int.tryParse(scores[j].substring(8, 16)) ?? 0;
           if (s <= rogue.gold) {
             rank = j;
           }
