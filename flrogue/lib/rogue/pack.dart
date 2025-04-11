@@ -159,8 +159,8 @@ GameObject? checkDuplicate(GameObject obj, List<GameObject> pack) {
 
 String nextAvailIchar() {
   for (int i = 0; i < 26; i++) {
-    if (ichars[i] == 0) {
-      ichars[i] = 1;
+    if (!ichars[i]) {
+      ichars[i] = true;
       return String.fromCharCode('a'.codeUnitAt(0) + i);
     }
   }
@@ -168,7 +168,7 @@ String nextAvailIchar() {
 }
 
 void makeAvailIchar(String ch) {
-  ichars[ch.codeUnitAt(0) - 'a'.codeUnitAt(0)] = 0;
+  ichars[ch.codeUnitAt(0) - 'a'.codeUnitAt(0)] = false;
 }
 
 Future<String> getPackLetter(String prompt, int mask) async {

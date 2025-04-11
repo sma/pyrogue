@@ -13,7 +13,7 @@ Future<void> init() async {
   print("Hello $playerName, just a moment while I dig the dungeon...");
 
   for (int i = 0; i < 26; i++) {
-    ichars[i] = 0;
+    ichars[i] = false;
   }
 
   srandom(DateTime.now().millisecondsSinceEpoch);

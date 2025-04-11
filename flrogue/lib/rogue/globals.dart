@@ -678,7 +678,7 @@ List<GameObject> levelObjects = [];
 bool hasAmulet = false;
 int foods = 0;
 
-List<int> ichars = List.filled(26, 0);
+List<bool> ichars = List.filled(26, false);
 
 bool interrupted = false;
 
