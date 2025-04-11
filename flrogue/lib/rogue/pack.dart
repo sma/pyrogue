@@ -29,9 +29,9 @@ void removeFromPack(GameObject obj, List<GameObject> pack) {
   pack.remove(obj);
 }
 
-Future<Tuple2<GameObject?, int>> pickUp(int row, int col) async {
+Future<Tuple2<GameObject?, bool>> pickUp(int row, int col) async {
   GameObject? obj = objectAt(levelObjects, row, col);
-  int status = 1;
+  bool status = true;
 
   if (obj!.whatIs == Cell.scroll &&
       obj.whichKind == ScrollType.scareMonster.index &&
@@ -39,7 +39,7 @@ Future<Tuple2<GameObject?, int>> pickUp(int row, int col) async {
     await message("the scroll turns to dust as you pick it up", 1);
     removeFromPack(obj, levelObjects);
     removeMask(row, col, Cell.scroll);
-    status = 0;
+    status = false;
     idScrolls[ScrollType.scareMonster.index].idStatus = IdStatus.identified;
     return Tuple2(null, status);
   }
@@ -172,7 +172,7 @@ void makeAvailIchar(String ch) {
 }
 
 Future<String> getPackLetter(String prompt, int mask) async {
-  int firstMiss = 1;
+  bool firstMiss = true;
   await message(prompt, 0);
   String ch = await ui.getchar();
 
@@ -182,9 +182,9 @@ Future<String> getPackLetter(String prompt, int mask) async {
         ui.beep();
       }
 
-      if (firstMiss != 0) {
+      if (firstMiss) {
         await message(prompt, 0);
-        firstMiss = 0;
+        firstMiss = false;
       }
 
       ch = await ui.getchar();
@@ -193,7 +193,7 @@ Future<String> getPackLetter(String prompt, int mask) async {
     if (ch == list) {
       checkMessage();
       await inventory(rogue.pack, mask);
-      firstMiss = 1;
+      firstMiss = true;
       ch = ' ';
       continue;
     }

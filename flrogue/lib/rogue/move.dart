@@ -88,7 +88,7 @@ Future<int> singleMoveRogue(String dirch, int pickup) async {
     if (pickup != 0) {
       var result = await pickUp(row, col);
       GameObject? obj = result.item1;
-      int status = result.item2;
+      bool status = result.item2;
 
       if (obj != null) {
         String description = getDescription(obj);
@@ -97,7 +97,7 @@ Future<int> singleMoveRogue(String dirch, int pickup) async {
           await registerMove();
           return stoppedOnSomething;
         }
-      } else if (status == 0) {
+      } else if (!status) {
         if (await registerMove()) {
           // fainted from hunger
           return stoppedOnSomething;
@@ -240,14 +240,14 @@ bool isObject(int row, int col) {
 }
 
 Future<void> moveOnto() async {
-  int firstMiss = 1;
+  bool firstMiss = true;
 
   String ch = await ui.getchar();
   while (!isDirection(ch)) {
     ui.beep();
-    if (firstMiss != 0) {
+    if (firstMiss) {
       await message("direction? ", 0);
-      firstMiss = 0;
+      firstMiss = false;
     }
     ch = await ui.getchar();
   }

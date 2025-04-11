@@ -14,14 +14,14 @@ import 'monster.dart';
 import 'special_hit.dart';
 
 Future<void> throwItem() async {
-  int firstMiss = 1;
+  bool firstMiss = true;
 
   String dir = await ui.getchar();
   while (!isDirection(dir)) {
     ui.beep();
-    if (firstMiss != 0) {
+    if (firstMiss) {
       await message("direction? ", 0);
-      firstMiss = 0;
+      firstMiss = false;
     }
     dir = await ui.getchar();
   }

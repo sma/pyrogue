@@ -195,35 +195,35 @@ Future<void> mvMonster(GameObject monster, int row, int col) async {
     return;
   }
 
-  List<int> tried = List.filled(6, 0);
+  List<bool> tried = List.filled(6, false);
   for (int i = 0; i < 6; i++) {
     int n = getRand(0, 5);
     if (n == 0) {
-      if (tried[n] == 0 && mtry(monster, row, monster.col - 1)) {
+      if (!tried[n] && mtry(monster, row, monster.col - 1)) {
         return;
       }
     } else if (n == 1) {
-      if (tried[n] == 0 && mtry(monster, row, monster.col)) {
+      if (!tried[n] && mtry(monster, row, monster.col)) {
         return;
       }
     } else if (n == 2) {
-      if (tried[n] == 0 && mtry(monster, row, monster.col + 1)) {
+      if (!tried[n] && mtry(monster, row, monster.col + 1)) {
         return;
       }
     } else if (n == 3) {
-      if (tried[n] == 0 && mtry(monster, monster.row - 1, col)) {
+      if (!tried[n] && mtry(monster, monster.row - 1, col)) {
         return;
       }
     } else if (n == 4) {
-      if (tried[n] == 0 && mtry(monster, monster.row, col)) {
+      if (!tried[n] && mtry(monster, monster.row, col)) {
         return;
       }
     } else if (n == 5) {
-      if (tried[n] == 0 && mtry(monster, monster.row + 1, col)) {
+      if (!tried[n] && mtry(monster, monster.row + 1, col)) {
         return;
       }
     }
-    tried[n] = 1;
+    tried[n] = true;
   }
 }
 

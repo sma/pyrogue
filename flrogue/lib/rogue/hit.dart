@@ -217,14 +217,14 @@ Future<bool> monsterDamage(GameObject monster, int damage) async {
 }
 
 Future<void> fight(bool toTheDeath) async {
-  int firstMiss = 1;
+  bool firstMiss = true;
   String ch = await ui.getchar();
 
   while (!isDirection(ch)) {
     ui.beep();
-    if (firstMiss == 1) {
+    if (firstMiss) {
       await message("direction?", 0);
-      firstMiss = 0;
+      firstMiss = false;
     }
     ch = await ui.getchar();
   }
