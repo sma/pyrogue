@@ -254,7 +254,7 @@ Future<void> fight(bool toTheDeath) async {
   int possibleDamage = getDamage(fightMonster!.damage, false) * 2 ~/ 3;
 
   while (fightMonster != null) {
-    await singleMoveRogue(ch, 0);
+    await singleMoveRogue(ch, false);
     if (!toTheDeath && rogue.hpCurrent <= possibleDamage) {
       fightMonster = null;
     }

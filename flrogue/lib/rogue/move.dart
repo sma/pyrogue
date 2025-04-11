@@ -22,7 +22,7 @@ int _hExp = -1;
 int _hN = 0;
 int _hC = 0;
 
-Future<int> singleMoveRogue(String dirch, int pickup) async {
+Future<int> singleMoveRogue(String dirch, bool pickup) async {
   int row = rogue.row;
   int col = rogue.col;
 
@@ -85,7 +85,7 @@ Future<int> singleMoveRogue(String dirch, int pickup) async {
   rogue.col = col;
 
   if (screen[row][col] & Cell.canPickUp != 0) {
-    if (pickup != 0) {
+    if (pickup) {
       var result = await pickUp(row, col);
       GameObject? obj = result.item1;
       bool status = result.item2;
@@ -141,7 +141,7 @@ Future<void> multipleMoveRogue(String dirch) async {
 
       int m = await singleMoveRogue(
         String.fromCharCode(dirch.codeUnitAt(0) + 96),
-        1,
+        true,
       );
 
       if (m == moveFailed || m == stoppedOnSomething || interrupted) {
@@ -156,7 +156,7 @@ Future<void> multipleMoveRogue(String dirch) async {
     while (!interrupted &&
         await singleMoveRogue(
               String.fromCharCode(dirch.codeUnitAt(0) + 32),
-              1,
+              true,
             ) ==
             moved) {
       // Continue until interrupted or move fails
@@ -254,7 +254,7 @@ Future<void> moveOnto() async {
 
   checkMessage();
   if (ch != cancel) {
-    await singleMoveRogue(ch, 0);
+    await singleMoveRogue(ch, false);
   }
 }
 

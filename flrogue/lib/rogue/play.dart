@@ -42,7 +42,7 @@ Future<void> playLevel() async {
       } else if (ch == 'F') {
         await fight(true);
       } else if ('hjklyunb'.contains(ch)) {
-        await singleMoveRogue(ch, 1);
+        await singleMoveRogue(ch, true);
       } else if ('HJKLYUNB\x08\x0a\x0b\x0c\x19\x15\x0e\x02'.contains(ch)) {
         await multipleMoveRogue(ch);
       } else if (ch == 'e') {
