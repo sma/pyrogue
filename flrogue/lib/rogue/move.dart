@@ -27,9 +27,7 @@ Future<int> singleMoveRogue(String dirch, bool pickup) async {
   int col = rogue.col;
 
   if (beingHeld) {
-    var pos = getDirRc(dirch, row, col);
-    row = pos.item1;
-    col = pos.item2;
+    (row, col) = getDirRc(dirch, row, col);
 
     if (!(screen[row][col] & Cell.monster != 0)) {
       await message("you are being held", true);
@@ -44,9 +42,7 @@ Future<int> singleMoveRogue(String dirch, bool pickup) async {
     dirch = getRandDir();
   }
 
-  var pos = getDirRc(dirch, row, col);
-  row = pos.item1;
-  col = pos.item2;
+  (row, col) = getDirRc(dirch, row, col);
 
   if (screen[row][col] & Cell.monster != 0) {
     await rogueHit(objectAt(levelMonsters, row, col)!);
@@ -86,9 +82,7 @@ Future<int> singleMoveRogue(String dirch, bool pickup) async {
 
   if (screen[row][col] & Cell.canPickUp != 0) {
     if (pickup) {
-      var result = await pickUp(row, col);
-      GameObject? obj = result.item1;
-      bool status = result.item2;
+      var (obj, status) = await pickUp(row, col);
 
       if (obj != null) {
         String description = getDescription(obj);

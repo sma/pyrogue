@@ -317,7 +317,7 @@ void getFood(GameObject obj) {
 
 void putStairs() {
   var pos = getRandRowCol(Cell.floor | Cell.tunnel);
-  screen[pos.item1][pos.item2] |= Cell.stairs;
+  screen[pos.$1][pos.$2] |= Cell.stairs;
 }
 
 int getArmorClass(GameObject? obj) {
@@ -352,9 +352,9 @@ void putAmulet() {
 
 void putObjectRandLocation(GameObject obj) {
   var pos = getRandRowCol(Cell.floor | Cell.tunnel);
-  addMask(pos.item1, pos.item2, obj.whatIs);
-  obj.row = pos.item1;
-  obj.col = pos.item2;
+  addMask(pos.$1, pos.$2, obj.whatIs);
+  obj.row = pos.$1;
+  obj.col = pos.$2;
 }
 
 String getDescription(GameObject obj) {

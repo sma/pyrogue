@@ -62,10 +62,7 @@ Future<void> throwItem() async {
     return;
   }
 
-  var result = await getThrownAtMonster(dir, rogue.row, rogue.col);
-  GameObject? monster = result.item1;
-  int row = result.item2;
-  int col = result.item3;
+  var (monster, row, col) = await getThrownAtMonster(dir, rogue.row, rogue.col);
 
   ui.move(rogue.row, rogue.col);
   ui.write(rogue.fchar);
@@ -118,7 +115,7 @@ Future<bool> throwAtMonster(GameObject monster, GameObject weapon) async {
   return true;
 }
 
-Future<Tuple3<GameObject?, int, int>> getThrownAtMonster(
+Future<(GameObject?, int, int)> getThrownAtMonster(
   String dir,
   int row,
   int col,
@@ -128,13 +125,11 @@ Future<Tuple3<GameObject?, int, int>> getThrownAtMonster(
 
   int i = 0;
   while (i < 24) {
-    var pos = getDirRc(dir, row, col);
-    row = pos.item1;
-    col = pos.item2;
+    (row, col) = getDirRc(dir, row, col);
 
     if (screen[row][col] == Cell.blank ||
         screen[row][col] & (Cell.horWall | Cell.vertWall) != 0) {
-      return Tuple3(null, orow, ocol);
+      return (null, orow, ocol);
     }
 
     if (i != 0 && canSee(orow, ocol)) {
@@ -155,7 +150,7 @@ Future<Tuple3<GameObject?, int, int>> getThrownAtMonster(
 
     if (screen[row][col] & Cell.monster != 0) {
       if (!hidingXeroc(row, col)) {
-        return Tuple3(objectAt(levelMonsters, row, col), row, col);
+        return (objectAt(levelMonsters, row, col), row, col);
       }
     }
 
@@ -166,7 +161,7 @@ Future<Tuple3<GameObject?, int, int>> getThrownAtMonster(
     i += 1;
   }
 
-  return Tuple3(null, row, col);
+  return (null, row, col);
 }
 
 Future<bool> flopWeapon(GameObject weapon, int row, int col) async {
@@ -220,12 +215,4 @@ Future<bool> flopWeapon(GameObject weapon, int row, int col) async {
   }
 
   return found;
-}
-
-class Tuple3<T1, T2, T3> {
-  final T1 item1;
-  final T2 item2;
-  final T3 item3;
-
-  Tuple3(this.item1, this.item2, this.item3);
 }

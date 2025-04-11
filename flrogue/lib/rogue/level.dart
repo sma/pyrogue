@@ -199,13 +199,9 @@ void doConnect(int room1, int room2) {
     return;
   }
 
-  var door1 = putDoor(room1, dir1);
-  int row1 = door1.item1;
-  int col1 = door1.item2;
+  final (row1, col1) = putDoor(room1, dir1);
 
-  var door2 = putDoor(room2, dir2);
-  int row2 = door2.item1;
-  int col2 = door2.item2;
+  final (row2, col2) = putDoor(room2, dir2);
 
   drawSimplePassage(row1, col1, row2, col2, dir1);
 
@@ -277,7 +273,7 @@ bool adjascent(int room1, int room2) {
       (room2 - room1 == 1 || room2 - room1 == 3);
 }
 
-Tuple2<int, int> putDoor(int rn, int dir) {
+(int, int) putDoor(int rn, int dir) {
   int row, col;
 
   if (dir == Direction.up.index || dir == Direction.down.index) {
@@ -291,7 +287,7 @@ Tuple2<int, int> putDoor(int rn, int dir) {
   }
 
   addMask(row, col, Cell.door);
-  return Tuple2(row, col);
+  return (row, col);
 }
 
 void drawSimplePassage(int row1, int col1, int row2, int col2, int dir) {
@@ -510,8 +506,8 @@ int doorCol(int rn, int dir) {
 void putPlayer() {
   while (true) {
     var pos = getRandRowCol(Cell.floor | Cell.isObject);
-    rogue.row = pos.item1;
-    rogue.col = pos.item2;
+    rogue.row = pos.$1;
+    rogue.col = pos.$2;
 
     currentRoom = getRoomNumber(rogue.row, rogue.col);
     if (currentRoom != partyRoom) {
@@ -581,11 +577,4 @@ void tryRooms(int r1, int r2, int r3) {
       doConnect(r1, r3);
     }
   }
-}
-
-class Tuple2<T1, T2> {
-  final T1 item1;
-  final T2 item2;
-
-  Tuple2(this.item1, this.item2);
 }

@@ -377,17 +377,13 @@ Future<bool> flameBroil(GameObject monster) async {
   }
 
   if (!rogueIsAround(row, col)) {
-    Tuple2<int, int> pos = getCloser(row, col, rogue.row, rogue.col);
-    row = pos.item1;
-    col = pos.item2;
+    (row, col) = getCloser(row, col, rogue.row, rogue.col);
 
     ui.move(row, col);
     ui.write('*', inverse: true);
 
     while (row != rogue.row || col != rogue.col) {
-      pos = getCloser(row, col, rogue.row, rogue.col);
-      row = pos.item1;
-      col = pos.item2;
+      (row, col) = getCloser(row, col, rogue.row, rogue.col);
 
       if (row == rogue.row && col == rogue.col) break;
 
@@ -398,18 +394,14 @@ Future<bool> flameBroil(GameObject monster) async {
 
     row = monster.row;
     col = monster.col;
-    pos = getCloser(row, col, rogue.row, rogue.col);
-    row = pos.item1;
-    col = pos.item2;
+    (row, col) = getCloser(row, col, rogue.row, rogue.col);
 
     while (row != rogue.row || col != rogue.col) {
       ui.move(row, col);
       ui.write(getRoomChar(screen[row][col], row, col));
       ui.refresh();
 
-      pos = getCloser(row, col, rogue.row, rogue.col);
-      row = pos.item1;
-      col = pos.item2;
+      (row, col) = getCloser(row, col, rogue.row, rogue.col);
 
       if (row == rogue.row && col == rogue.col) break;
     }
@@ -419,7 +411,7 @@ Future<bool> flameBroil(GameObject monster) async {
   return true;
 }
 
-Tuple2<int, int> getCloser(int row, int col, int trow, int tcol) {
+(int, int) getCloser(int row, int col, int trow, int tcol) {
   if (row < trow) {
     row += 1;
   } else if (row > trow) {
@@ -432,12 +424,5 @@ Tuple2<int, int> getCloser(int row, int col, int trow, int tcol) {
     col -= 1;
   }
 
-  return Tuple2(row, col);
-}
-
-class Tuple2<T1, T2> {
-  final T1 item1;
-  final T2 item2;
-
-  Tuple2(this.item1, this.item2);
+  return (row, col);
 }

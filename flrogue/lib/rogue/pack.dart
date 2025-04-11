@@ -29,7 +29,7 @@ void removeFromPack(GameObject obj, List<GameObject> pack) {
   pack.remove(obj);
 }
 
-Future<Tuple2<GameObject?, bool>> pickUp(int row, int col) async {
+Future<(GameObject?, bool)> pickUp(int row, int col) async {
   GameObject? obj = objectAt(levelObjects, row, col);
   bool status = true;
 
@@ -41,7 +41,7 @@ Future<Tuple2<GameObject?, bool>> pickUp(int row, int col) async {
     removeMask(row, col, Cell.scroll);
     status = false;
     idScrolls[ScrollType.scareMonster.index].idStatus = IdStatus.identified;
-    return Tuple2(null, status);
+    return (null, status);
   }
 
   if (obj.whatIs == Cell.gold) {
@@ -49,12 +49,12 @@ Future<Tuple2<GameObject?, bool>> pickUp(int row, int col) async {
     removeMask(row, col, Cell.gold);
     removeFromPack(obj, levelObjects);
     printStats();
-    return Tuple2(obj, status);
+    return (obj, status);
   }
 
   if (getPackCount(obj) >= maxPackCount) {
     await message("Pack too full", true);
-    return Tuple2(null, status);
+    return (null, status);
   }
 
   if (obj.whatIs == Cell.amulet) {
@@ -65,7 +65,7 @@ Future<Tuple2<GameObject?, bool>> pickUp(int row, int col) async {
   removeFromPack(obj, levelObjects);
   obj = addToPack(obj, rogue.pack, true);
   obj.pickedUp += 1;
-  return Tuple2(obj, status);
+  return (obj, status);
 }
 
 Future<void> drop() async {
@@ -329,11 +329,4 @@ int getPackCount(GameObject newObj) {
   }
 
   return count;
-}
-
-class Tuple2<T1, T2> {
-  final T1 item1;
-  final T2 item2;
-
-  Tuple2(this.item1, this.item2);
 }

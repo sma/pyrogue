@@ -63,9 +63,7 @@ Future<void> zapp() async {
 
 GameObject? getZappedMonster(String dir, int row, int col) {
   while (true) {
-    var pos = getDirRc(dir, row, col);
-    int r = pos.item1;
-    int c = pos.item2;
+    var (r, c) = getDirRc(dir, row, col);
 
     if ((row == r && col == c) ||
         screen[r][c] & (Cell.horWall | Cell.vertWall) != 0 ||
@@ -154,9 +152,7 @@ void teleportAway(GameObject monster) {
     beingHeld = false;
   }
 
-  var pos = getRandRowCol(Cell.floor | Cell.tunnel | Cell.isObject);
-  int row = pos.item1;
-  int col = pos.item2;
+  var (row, col) = getRandRowCol(Cell.floor | Cell.tunnel | Cell.isObject);
 
   removeMask(monster.row, monster.col, Cell.monster);
 

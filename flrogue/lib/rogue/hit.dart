@@ -234,9 +234,7 @@ Future<void> fight(bool toTheDeath) async {
     return;
   }
 
-  var rowCol = getDirRc(ch, rogue.row, rogue.col);
-  int row = rowCol.item1;
-  int col = rowCol.item2;
+  final (row, col) = getDirRc(ch, rogue.row, rogue.col);
 
   if (!(screen[row][col] & Cell.monster != 0) ||
       blind != 0 ||
@@ -264,7 +262,7 @@ Future<void> fight(bool toTheDeath) async {
   }
 }
 
-Tuple2<int, int> getDirRc(String dir, int row, int col) {
+(int, int) getDirRc(String dir, int row, int col) {
   if (dir == 'h' || dir == 'y' || dir == 'b') {
     if (col > 0) col -= 1;
   }
@@ -277,7 +275,7 @@ Tuple2<int, int> getDirRc(String dir, int row, int col) {
   if (dir == 'l' || dir == 'u' || dir == 'n') {
     if (col < ui.cols - 1) col += 1;
   }
-  return Tuple2(row, col);
+  return (row, col);
 }
 
 int getHitChance(GameObject? weapon) {
@@ -293,11 +291,4 @@ int getWeaponDamage(GameObject? weapon) {
   damage += damageForStrength(rogue.strengthCurrent);
   damage += (rogue.exp + 1) ~/ 2;
   return damage;
-}
-
-class Tuple2<T1, T2> {
-  final T1 item1;
-  final T2 item2;
-
-  Tuple2(this.item1, this.item2);
 }

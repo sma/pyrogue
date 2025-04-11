@@ -383,9 +383,7 @@ void startWanderer() {
   wakeUp(monster);
 
   for (int i = 0; i < 12; i++) {
-    var pos = getRandRowCol(Cell.floor | Cell.tunnel | Cell.isObject);
-    int row = pos.item1;
-    int col = pos.item2;
+    var (row, col) = getRandRowCol(Cell.floor | Cell.tunnel | Cell.isObject);
 
     if (!canSee(row, col)) {
       putMonsterAt(row, col, monster);
@@ -492,9 +490,7 @@ bool flit(GameObject monster) {
 }
 
 void putMonsterRandLocation(GameObject monster) {
-  var pos = getRandRowCol(Cell.floor | Cell.tunnel | Cell.isObject);
-  int row = pos.item1;
-  int col = pos.item2;
+  var (row, col) = getRandRowCol(Cell.floor | Cell.tunnel | Cell.isObject);
 
   addMask(row, col, Cell.monster);
   monster.row = row;
@@ -578,10 +574,7 @@ void doorCourse(GameObject monster, bool entering, int row, int col) {
       }
     }
   } else {
-    var result = getOtherRoom(rn, row, col);
-    bool b = result.item1;
-    int rrow = result.item2;
-    int ccol = result.item3;
+    var (b, rrow, ccol) = getOtherRoom(rn, row, col);
 
     if (b) {
       monster.trow = rrow;
@@ -592,7 +585,7 @@ void doorCourse(GameObject monster, bool entering, int row, int col) {
   }
 }
 
-Tuple3<bool, int, int> getOtherRoom(int rn, int row, int col) {
+(bool, int, int) getOtherRoom(int rn, int row, int col) {
   int d = -1;
 
   if (screen[row][col - 1] & Cell.horWall != 0 &&
@@ -611,27 +604,8 @@ Tuple3<bool, int, int> getOtherRoom(int rn, int row, int col) {
   }
 
   if (d != -1 && rooms[rn].doors[d].otherRoom > 0) {
-    return Tuple3(
-      true,
-      rooms[rn].doors[d].otherRow,
-      rooms[rn].doors[d].otherCol,
-    );
+    return (true, rooms[rn].doors[d].otherRow, rooms[rn].doors[d].otherCol);
   }
 
-  return Tuple3(false, 0, 0);
-}
-
-class Tuple2<T1, T2> {
-  final T1 item1;
-  final T2 item2;
-
-  Tuple2(this.item1, this.item2);
-}
-
-class Tuple3<T1, T2, T3> {
-  final T1 item1;
-  final T2 item2;
-  final T3 item3;
-
-  Tuple3(this.item1, this.item2, this.item3);
+  return (false, 0, 0);
 }

@@ -121,7 +121,7 @@ String getRoomChar(int mask, int row, int col) {
   return ' ';
 }
 
-Tuple2<int, int> getRandRowCol(int mask) {
+(int, int) getRandRowCol(int mask) {
   int row, col;
 
   while (true) {
@@ -135,7 +135,7 @@ Tuple2<int, int> getRandRowCol(int mask) {
     }
   }
 
-  return Tuple2(row, col);
+  return (row, col);
 }
 
 int getRandRoom() {
@@ -165,11 +165,4 @@ int getRoomNumber(int row, int col) {
 void shell() {
   // In Flutter, this would either trigger a system dialog or do nothing
   throw Exception("Shell not implemented in Dart version");
-}
-
-class Tuple2<T1, T2> {
-  final T1 item1;
-  final T2 item2;
-
-  Tuple2(this.item1, this.item2);
 }
