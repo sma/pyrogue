@@ -12,7 +12,7 @@ import 'monster.dart';
 
 const String curseMessage = "you can't, it appears to be cursed";
 
-GameObject addToPack(GameObject obj, ObjectHolder pack, bool condense) {
+GameObject addToPack(GameObject obj, List<GameObject> pack, bool condense) {
   if (condense) {
     GameObject? op = checkDuplicate(obj, pack);
     if (op != null) {
@@ -21,38 +21,12 @@ GameObject addToPack(GameObject obj, ObjectHolder pack, bool condense) {
       obj.ichar = nextAvailIchar();
     }
   }
-
-  if (pack.nextObject == null) {
-    pack.nextObject = obj;
-  } else {
-    GameObject? op = pack.nextObject;
-    while (op!.nextObject != null) {
-      op = op.nextObject;
-    }
-    op.nextObject = obj;
-  }
-
-  obj.nextObject = null;
+  pack.add(obj);
   return obj;
 }
 
-void removeFromPack(GameObject obj, ObjectHolder pack) {
-  GameObject? curr = pack.nextObject;
-  GameObject? prev;
-
-  while (curr != null && curr != obj) {
-    prev = curr;
-    curr = curr.nextObject;
-  }
-
-  if (curr != null) {
-    if (prev == null) {
-      // obj is the first in the pack
-      pack.nextObject = obj.nextObject;
-    } else {
-      prev.nextObject = obj.nextObject;
-    }
-  }
+void removeFromPack(GameObject obj, List<GameObject> pack) {
+  pack.remove(obj);
 }
 
 Future<Tuple2<GameObject?, int>> pickUp(int row, int col) async {
@@ -100,7 +74,7 @@ Future<void> drop() async {
     return;
   }
 
-  if (rogue.pack.nextObject == null) {
+  if (rogue.pack.isEmpty) {
     await message("You have nothing to drop", 0);
     return;
   }
@@ -161,14 +135,13 @@ Future<void> drop() async {
   await registerMove();
 }
 
-GameObject? checkDuplicate(GameObject obj, ObjectHolder pack) {
+GameObject? checkDuplicate(GameObject obj, List<GameObject> pack) {
   if (!(obj.whatIs & (Cell.weapon | Cell.food | Cell.scroll | Cell.potion) !=
       0)) {
     return null;
   }
 
-  GameObject? op = pack.nextObject;
-  while (op != null) {
+  for (GameObject op in pack) {
     if (op.whatIs == obj.whatIs && op.whichKind == obj.whichKind) {
       if (obj.whatIs != Cell.weapon ||
           (obj.whatIs == Cell.weapon &&
@@ -179,7 +152,6 @@ GameObject? checkDuplicate(GameObject obj, ObjectHolder pack) {
         return op;
       }
     }
-    op = op.nextObject;
   }
 
   return null;
@@ -342,8 +314,7 @@ Future<void> callIt() async {
 int getPackCount(GameObject newObj) {
   int count = 0;
 
-  GameObject? obj = rogue.pack.nextObject;
-  while (obj != null) {
+  for (GameObject obj in rogue.pack) {
     if (obj.whatIs != Cell.weapon) {
       count += obj.quantity;
     } else {
@@ -355,7 +326,6 @@ int getPackCount(GameObject newObj) {
         count += 1;
       }
     }
-    obj = obj.nextObject;
   }
 
   return count;

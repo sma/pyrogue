@@ -63,20 +63,22 @@ void putObjectAt(GameObject obj, int row, int col) {
   addToPack(obj, levelObjects, false);
 }
 
-GameObject? objectAt(ObjectHolder pack, int row, int col) {
-  GameObject? obj = pack.nextObject;
-  while (obj != null && (obj.row != row || obj.col != col)) {
-    obj = obj.nextObject;
+GameObject? objectAt(List<GameObject> pack, int row, int col) {
+  for (GameObject obj in pack) {
+    if (obj.row == row && obj.col == col) {
+      return obj;
+    }
   }
-  return obj;
+  return null;
 }
 
 GameObject? getLetterObject(String ch) {
-  GameObject? obj = rogue.pack.nextObject;
-  while (obj != null && obj.ichar != ch) {
-    obj = obj.nextObject;
+  for (GameObject obj in rogue.pack) {
+    if (obj.ichar == ch) {
+      return obj;
+    }
   }
-  return obj;
+  return null;
 }
 
 String nameOf(GameObject obj) {
@@ -335,11 +337,9 @@ void makeParty() {
 }
 
 void showObjects() {
-  GameObject? obj = levelObjects.nextObject;
-  while (obj != null) {
+  for (GameObject obj in levelObjects) {
     ui.move(obj.row, obj.col);
     ui.write(getRoomChar(obj.whatIs, obj.row, obj.col));
-    obj = obj.nextObject;
   }
 }
 

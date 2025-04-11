@@ -74,20 +74,18 @@ void initItems() {
   makeScrollTitles();
 }
 
-Future<void> inventory(ObjectHolder pack, int mask) async {
+Future<void> inventory(List<GameObject> pack, int mask) async {
   int i = 0;
   int maxlen = 27;
   List<String> descriptions = List.filled(maxPackCount + 1, "");
 
-  GameObject? obj = pack.nextObject;
-  while (obj != null) {
+  for (GameObject obj in pack) {
     if (obj.whatIs & mask != 0) {
       descriptions[i] = " ${obj.ichar}) ${getDescription(obj)}";
       maxlen =
           maxlen > descriptions[i].length ? maxlen : descriptions[i].length;
       i++;
     }
-    obj = obj.nextObject;
   }
 
   descriptions[i] = " --press space to continue--";

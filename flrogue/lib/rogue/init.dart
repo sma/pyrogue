@@ -19,13 +19,13 @@ Future<void> init() async {
   srandom(DateTime.now().millisecondsSinceEpoch);
   initItems();
 
-  levelObjects.nextObject = null;
-  levelMonsters.nextObject = null;
+  levelObjects.clear();
+  levelMonsters.clear();
   playerInit();
 }
 
 void playerInit() {
-  rogue.pack.nextObject = null;
+  rogue.pack.clear();
 
   // Initial food
   GameObject obj = getAnObject();

@@ -74,8 +74,8 @@ class _RogueGameState extends State<RogueGame> {
           lightUpRoom();
           printStats();
           await playLevel();
-          levelObjects.nextObject = null;
-          levelMonsters.nextObject = null;
+          levelObjects.clear();
+          levelMonsters.clear();
           ui.clearScreen();
         } catch (e) {
           print("Level error: $e");

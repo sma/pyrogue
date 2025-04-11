@@ -62,7 +62,7 @@ Future<void> quaff() async {
     await message("oh wow, everything seems so cosmic", 0);
     halluc += getRand(500, 800);
   } else if (k == PotionType.detectMonster.index) {
-    if (levelMonsters.nextObject != null) {
+    if (levelMonsters.isNotEmpty) {
       showMonsters();
     } else {
       await message(
@@ -72,7 +72,7 @@ Future<void> quaff() async {
     }
     detectMonster = 1;
   } else if (k == PotionType.detectObjects.index) {
-    if (levelObjects.nextObject != null) {
+    if (levelObjects.isNotEmpty) {
       if (blind == 0) {
         showObjects();
       }
@@ -350,8 +350,7 @@ void hallucinate() {
     return;
   }
 
-  GameObject? obj = levelObjects.nextObject;
-  while (obj != null) {
+  for (GameObject obj in levelObjects) {
     String ch = ui.read(obj.row, obj.col, 1);
 
     if ((ch.codeUnitAt(0) < 'A'.codeUnitAt(0) ||
@@ -362,12 +361,9 @@ void hallucinate() {
         ui.write(getRandObjChar());
       }
     }
-
-    obj = obj.nextObject;
   }
 
-  obj = levelMonsters.nextObject;
-  while (obj != null) {
+  for (GameObject obj in levelMonsters) {
     String ch = ui.read(obj.row, obj.col, 1);
 
     if (ch.codeUnitAt(0) >= 'A'.codeUnitAt(0) &&
@@ -377,8 +373,6 @@ void hallucinate() {
         String.fromCharCode(getRand('A'.codeUnitAt(0), 'Z'.codeUnitAt(0))),
       );
     }
-
-    obj = obj.nextObject;
   }
 }
 

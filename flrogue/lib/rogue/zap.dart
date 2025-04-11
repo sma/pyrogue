@@ -88,8 +88,6 @@ Future<void> zapMonster(GameObject monster, int kind) async {
   int row = monster.row;
   int col = monster.col;
 
-  GameObject? nm = monster.nextObject;
-
   if (kind == WandType.slowMonster.index) {
     if (monster.mFlags & MonsterFlags.hasted != 0) {
       monster.mFlags &= ~MonsterFlags.hasted;
@@ -117,12 +115,6 @@ Future<void> zapMonster(GameObject monster, int kind) async {
       beingHeld = 0;
     }
 
-    // Find previous monster to link to new one
-    GameObject? pm = levelMonsters.nextObject;
-    while (pm != null && pm.nextObject != monster) {
-      pm = pm.nextObject;
-    }
-
     GameObject newMonster;
     while (true) {
       newMonster = monsterTab[getRand(0, monsterCount - 1)].copy();
@@ -135,8 +127,9 @@ Future<void> zapMonster(GameObject monster, int kind) async {
     newMonster.whatIs = Cell.monster;
     newMonster.row = row;
     newMonster.col = col;
-    newMonster.nextObject = nm;
-    pm?.nextObject = newMonster;
+    int i = levelMonsters.indexOf(monster);
+    levelMonsters[i] = newMonster;
+
     wakeUp(newMonster);
 
     if (canSee(row, col)) {

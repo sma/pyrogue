@@ -176,7 +176,6 @@ class GameObject {
   int toHitEnchantment = 0;
   int whatIs = 0;
   int pickedUp = 0;
-  GameObject? nextObject;
 
   GameObject(
     this.mFlags,
@@ -217,13 +216,6 @@ class GameObject {
   }
 }
 
-// Object holder class
-class ObjectHolder {
-  GameObject? nextObject;
-
-  ObjectHolder() : nextObject = null;
-}
-
 // Fighter class for the player
 class Fighter {
   GameObject? armor;
@@ -232,7 +224,7 @@ class Fighter {
   int hpMax = 12;
   int strengthCurrent = 16;
   int strengthMax = 16;
-  ObjectHolder pack = ObjectHolder();
+  List<GameObject> pack = [];
   int gold = 0;
   int exp = 1;
   int expPoints = 0;
@@ -680,9 +672,9 @@ int messageCleared = 1;
 String messageLine = "";
 int messageCol = 0;
 
-ObjectHolder levelMonsters = ObjectHolder();
+List<GameObject> levelMonsters = [];
 
-ObjectHolder levelObjects = ObjectHolder();
+List<GameObject> levelObjects = [];
 int hasAmulet = 0;
 int foods = 0;
 

@@ -258,8 +258,7 @@ Future<void> sellPack() async {
 
   ui.clearScreen();
 
-  GameObject? obj = rogue.pack.nextObject;
-  while (obj != null) {
+  for (GameObject obj in rogue.pack) {
     ui.move(1, 0);
     ui.write("Value      Item");
 
@@ -274,8 +273,6 @@ Future<void> sellPack() async {
         rows += 1;
       }
     }
-
-    obj = obj.nextObject;
   }
 
   ui.refresh();

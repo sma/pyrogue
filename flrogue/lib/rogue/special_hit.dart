@@ -112,33 +112,26 @@ Future<void> stealGold(GameObject monster) async {
 Future<void> stealItem(GameObject monster) async {
   if (!randPercent(15)) return;
 
-  bool hasSomething = false;
-  GameObject? obj = rogue.pack.nextObject;
-
-  while (obj != null) {
+  int items = 0;
+  for (GameObject obj in rogue.pack) {
     if (obj != rogue.armor && obj != rogue.weapon) {
-      hasSomething = true;
-      break;
+      items++;
     }
-    obj = obj.nextObject;
   }
 
-  if (hasSomething) {
-    int n = getRand(0, maxPackCount);
-    obj = rogue.pack.nextObject;
+  if (items > 0) {
+    int n = getRand(0, items);
 
-    for (int i = 0; i < n + 1; i++) {
-      obj = obj!.nextObject;
-      while (obj == null || obj == rogue.armor || obj == rogue.weapon) {
-        if (obj == null) {
-          obj = rogue.pack.nextObject;
-        } else {
-          obj = obj.nextObject;
+    GameObject obj = rogue.pack.first;
+    for (obj in rogue.pack) {
+      if (obj != rogue.armor && obj != rogue.weapon) {
+        if (--n < 0) {
+          break;
         }
       }
     }
 
-    await message("she stole ${getDescription(obj!)}", 0);
+    await message("she stole ${getDescription(obj)}", 0);
 
     if (obj.whatIs == Cell.amulet) {
       hasAmulet = 0;

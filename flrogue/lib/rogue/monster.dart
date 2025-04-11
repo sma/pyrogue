@@ -51,15 +51,12 @@ GameObject getRandMonster() {
 }
 
 Future<void> moveMonsters() async {
-  GameObject? monster = levelMonsters.nextObject;
-
-  while (monster != null) {
+  for (GameObject monster in levelMonsters) {
     if (monster.mFlags & MonsterFlags.hasted != 0) {
       await mvMonster(monster, rogue.row, rogue.col);
     } else if (monster.mFlags & MonsterFlags.slowed != 0) {
       monster.quiver = monster.quiver == 0 ? 1 : 0;
       if (monster.quiver != 0) {
-        monster = monster.nextObject;
         continue;
       }
     }
@@ -74,8 +71,6 @@ Future<void> moveMonsters() async {
     if (!flew || !monsterCanGo(monster, rogue.row, rogue.col)) {
       await mvMonster(monster, rogue.row, rogue.col);
     }
-
-    monster = monster.nextObject;
   }
 }
 
@@ -331,8 +326,7 @@ void wakeUp(GameObject monster) {
 void wakeRoom(int rn, bool entering, int row, int col) {
   int wakePercent_ = rn == partyRoom ? partyWakePercent : wakePercent;
 
-  GameObject? monster = levelMonsters.nextObject;
-  while (monster != null) {
+  for (GameObject monster in levelMonsters) {
     if ((monster.mFlags & MonsterFlags.wakens != 0 || rn == partyRoom) &&
         rn == getRoomNumber(monster.row, monster.col)) {
       if (monster.ichar == 'X' && rn == partyRoom) {
@@ -353,7 +347,6 @@ void wakeRoom(int rn, bool entering, int row, int col) {
         }
       }
     }
-    monster = monster.nextObject;
   }
 }
 
@@ -404,16 +397,13 @@ void startWanderer() {
 void showMonsters() {
   if (blind != 0) return;
 
-  GameObject? monster = levelMonsters.nextObject;
-  while (monster != null) {
+  for (GameObject monster in levelMonsters) {
     ui.move(monster.row, monster.col);
     ui.write(monster.ichar);
 
     if (monster.ichar == 'X') {
       monster.identified = 0;
     }
-
-    monster = monster.nextObject;
   }
 }
 
@@ -532,13 +522,11 @@ bool noRoomForMonster(int rn) {
 Future<void> aggravate() async {
   await message("you hear a high pitched humming noise");
 
-  GameObject? monster = levelMonsters.nextObject;
-  while (monster != null) {
+  for (GameObject monster in levelMonsters) {
     wakeUp(monster);
     if (monster.ichar == 'X') {
       monster.identified = 0;
     }
-    monster = monster.nextObject;
   }
 }
 
@@ -553,12 +541,10 @@ bool monsterCanSee(GameObject monster, int row, int col) {
 }
 
 Future<void> mvAquatars() async {
-  GameObject? monster = levelMonsters.nextObject;
-  while (monster != null) {
+  for (GameObject monster in levelMonsters) {
     if (monster.ichar == 'A') {
       await mvMonster(monster, rogue.row, rogue.col);
     }
-    monster = monster.nextObject;
   }
 }
 
