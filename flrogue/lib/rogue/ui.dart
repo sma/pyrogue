@@ -54,8 +54,15 @@ class UI with ChangeNotifier {
 
   // Write string to buffer
   void write(String s, {bool inverse = false}) {
-    for (int i = 0; i < s.length && _col + i < cols; i++) {
-      buffer[_row][_col++] = s[i];
+    for (int i = 0; i < s.length; i++) {
+      if (s[i] == '\b') {
+        _col--;
+      } else if (s[i] == '\n') {
+        _row++;
+        _col = 0;
+      } else {
+        buffer[_row][_col++] = s[i];
+      }
     }
   }
 
