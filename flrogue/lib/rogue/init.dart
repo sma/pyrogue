@@ -78,7 +78,7 @@ void playerInit() {
   addToPack(obj, rogue.pack, true);
 }
 
-void cleanUp(String estr) {
+Never cleanUp(String estr) {
   ui.move(ui.rows - 1, 0);
   ui.refresh();
   ui.clearScreen();

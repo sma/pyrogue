@@ -1,16 +1,7 @@
-// rogue/main.dart
-
 import 'dart:async';
-import 'dart:io';
-import 'package:flrogue/rogue/room.dart';
 import 'package:flutter/material.dart';
-import 'rogue/globals.dart';
-import 'rogue/init.dart';
-import 'rogue/level.dart';
-import 'rogue/monster.dart';
-import 'rogue/object.dart';
-import 'rogue/play.dart';
-import 'rogue/ui.dart';
+import 'rogue/globals.dart' show exc;
+import 'rogue/main.dart' as rogue;
 import 'terminal_widget.dart';
 
 void main() {
@@ -58,35 +49,10 @@ class _RogueGameState extends State<RogueGame> {
     setState(() {
       _isGameRunning = true;
     });
-
-    // Run game in separate isolate to prevent UI freezes
     try {
-      await init();
-
-      while (true) {
-        try {
-          clearLevel();
-          makeLevel();
-          putObjects();
-          putStairs();
-          putMonsters();
-          putPlayer();
-          lightUpRoom();
-          printStats();
-          await playLevel();
-          levelObjects.clear();
-          levelMonsters.clear();
-          ui.clearScreen();
-        } catch (e) {
-          print("Level error: $e");
-          exc = e as Exception;
-          break;
-        }
-      }
+      await rogue.main();
     } catch (e) {
-      print("Game error: $e");
       exc = e as Exception;
-      cleanUp("Game error occurred");
     } finally {
       setState(() {
         _isGameRunning = false;
@@ -116,13 +82,4 @@ class _RogueGameState extends State<RogueGame> {
       ),
     );
   }
-}
-
-// Simplified version for testing
-void cleanUp(String msg) {
-  print("Game cleanup: $msg");
-  if (exc != null) {
-    print("Exception: ${exc.toString()}");
-  }
-  exit(0);
 }
