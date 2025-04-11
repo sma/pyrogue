@@ -96,8 +96,8 @@ void byebye() {
 }
 
 Future<void> onintr() async {
-  if (cantInt != 0) {
-    didInt = 1;
+  if (cantInt) {
+    didInt = true;
   } else {
     checkMessage();
     await message("interrupt", 1);

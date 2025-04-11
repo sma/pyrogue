@@ -7,10 +7,10 @@ Future<void> message(String msg, [int intrpt = 0]) async {
   if (intrpt != 0) {
     interrupted = true;
   }
-  cantInt = 1;
+  cantInt = true;
   slurp();
 
-  if (messageCleared == 0) {
+  if (!messageCleared) {
     ui.move(minRow - 1, messageCol);
     ui.write(more);
     ui.refresh();
@@ -23,13 +23,13 @@ Future<void> message(String msg, [int intrpt = 0]) async {
   ui.write(msg);
   ui.write(' ');
   ui.refresh();
-  messageCleared = 0;
+  messageCleared = false;
   messageCol = msg.length;
 
-  if (didInt != 0) {
+  if (didInt) {
     await onintr();
   }
-  cantInt = 0;
+  cantInt = false;
 }
 
 Future<void> remessage() async {
@@ -39,14 +39,14 @@ Future<void> remessage() async {
 }
 
 void checkMessage() {
-  if (messageCleared != 0) {
+  if (messageCleared) {
     return;
   }
   ui.move(minRow - 1, 0);
   ui.clearToEndOfLine();
   ui.move(rogue.row, rogue.col);
   ui.refresh();
-  messageCleared = 1;
+  messageCleared = true;
 }
 
 Future<String> getInputLine(String prompt, bool echo) async {

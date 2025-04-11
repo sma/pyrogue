@@ -659,8 +659,8 @@ bool detectMonster = false;
 String hitMessage = "";
 
 String playerName = "";
-int cantInt = 0;
-int didInt = 0;
+bool cantInt = false;
+bool didInt = false;
 Exception? exc;
 
 int currentLevel = 0;
@@ -668,7 +668,7 @@ int maxLevel = 1;
 String hungerStr = "";
 int partyRoom = 0;
 
-int messageCleared = 1;
+bool messageCleared = true;
 String messageLine = "";
 int messageCol = 0;
 
