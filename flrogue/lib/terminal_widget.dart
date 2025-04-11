@@ -21,13 +21,11 @@ class _TerminalWidgetState extends State<TerminalWidget> {
   void initState() {
     super.initState();
     ui.addListener(_refresh);
-    _focusNode.addListener(_onFocusChange);
   }
 
   @override
   void dispose() {
     ui.removeListener(_refresh);
-    _focusNode.removeListener(_onFocusChange);
     _focusNode.dispose();
     super.dispose();
   }
@@ -38,7 +36,7 @@ class _TerminalWidgetState extends State<TerminalWidget> {
     }
   }
 
-  void _onFocusChange() {
+  void _onFocusChange(bool _) {
     setState(() {
       _hasFocus = _focusNode.hasFocus;
     });
@@ -60,6 +58,7 @@ class _TerminalWidgetState extends State<TerminalWidget> {
       backgroundColor: Colors.black,
       body: Focus(
         focusNode: _focusNode,
+        onFocusChange: _onFocusChange,
         onKeyEvent: _handleKeyEvent,
         autofocus: true,
         child: GestureDetector(
