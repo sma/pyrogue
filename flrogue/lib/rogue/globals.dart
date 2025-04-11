@@ -260,7 +260,7 @@ class Room {
 }
 
 // Monster names
-final List<String> monsterNames = [
+const monsterNames = [
   "aquatar",
   "bat",
   "centaur",

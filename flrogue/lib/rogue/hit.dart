@@ -57,7 +57,7 @@ Future<void> monsterHit(GameObject monster, String? other) async {
 
   int damage;
   if (monster.ichar != 'F') {
-    damage = getDamage(monster.damage, 1);
+    damage = getDamage(monster.damage, true);
     double minus = (getArmorClass(rogue.armor) * 3.0) / 100.0 * damage;
     damage -= minus.toInt();
   } else {
@@ -109,7 +109,7 @@ Future<void> rogueDamage(int d, GameObject monster) async {
   printStats();
 }
 
-int getDamage(String ds, int r) {
+int getDamage(String ds, bool r) {
   int total = 0;
   int i = 0;
 
@@ -124,7 +124,7 @@ int getDamage(String ds, int r) {
       i++;
     }
     for (int j = 0; j < n; j++) {
-      if (r != 0) {
+      if (r) {
         total += getRand(1, d);
       } else {
         total += d;
@@ -152,7 +152,7 @@ int getWDamage(GameObject? obj) {
 
   int damage = getNumber(obj.damage.substring(i)) + obj.damageEnchantment;
 
-  return getDamage("${toHit}d$damage", 1);
+  return getDamage("${toHit}d$damage", true);
 }
 
 int getNumber(String s) {
@@ -251,7 +251,7 @@ Future<void> fight(bool toTheDeath) async {
     return;
   }
 
-  int possibleDamage = getDamage(fightMonster!.damage, 0) * 2 ~/ 3;
+  int possibleDamage = getDamage(fightMonster!.damage, false) * 2 ~/ 3;
 
   while (fightMonster != null) {
     await singleMoveRogue(ch, 0);
