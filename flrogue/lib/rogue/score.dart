@@ -116,10 +116,10 @@ Future<void> putScores(GameObject? monster, DeathCause other) async {
 
       if (ncmp(scores[i].substring(16), playerName)) {
         int s = int.parse(scores[i].substring(8, 16));
-        if (s <= rogue.gold) {
-          continue;
+        if (s > rogue.gold) {
+          dontInsert = true;
+          break;
         }
-        dontInsert = true;
       }
 
       i++;
@@ -198,7 +198,7 @@ void insertScore(
   }
 
   String buf =
-      "${"${rank + 1}".padLeft(2)}${"      ${rogue.gold}".padLeft(7)}   $playerName: ";
+      "${"${rank + 1}".padLeft(2)}    ${"${rogue.gold}".padLeft(7)}   $playerName: ";
 
   if (other == DeathCause.hypothermia) {
     buf += "died of hypothermia";
