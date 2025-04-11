@@ -20,7 +20,7 @@ Future<void> throwItem() async {
   while (!isDirection(dir)) {
     ui.beep();
     if (firstMiss) {
-      await message("direction? ", 0);
+      await message("direction? ");
       firstMiss = false;
     }
     dir = await ui.getchar();
@@ -41,24 +41,24 @@ Future<void> throwItem() async {
 
   GameObject? weapon = getLetterObject(wch);
   if (weapon == null) {
-    await message("no such item.", 0);
+    await message("no such item.");
     return;
   }
 
   if (weapon.whatIs != Cell.weapon) {
     int k = getRand(0, 2);
     if (k == 0) {
-      await message("if you don't want it, drop it!", 0);
+      await message("if you don't want it, drop it!");
     } else if (k == 1) {
-      await message("throwing that would do noone any good", 0);
+      await message("throwing that would do noone any good");
     } else {
-      await message("why would you want to throw that?", 0);
+      await message("why would you want to throw that?");
     }
     return;
   }
 
   if (weapon == rogue.weapon && weapon.isCursed != 0) {
-    await message("you can't, it appears to be cursed", 0);
+    await message("you can't, it appears to be cursed");
     return;
   }
 
@@ -216,7 +216,7 @@ Future<bool> flopWeapon(GameObject weapon, int row, int col) async {
     weapon.quantity = 1;
     String msg = "the ${nameOf(weapon)}vanishes as it hits the ground";
     weapon.quantity = t;
-    await message(msg, 0);
+    await message(msg);
   }
 
   return found;

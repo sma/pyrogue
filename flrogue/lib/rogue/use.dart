@@ -19,47 +19,47 @@ Future<void> quaff() async {
 
   GameObject? obj = getLetterObject(ch);
   if (obj == null) {
-    await message("no such item.", 0);
+    await message("no such item.");
     return;
   }
 
   if (obj.whatIs != Cell.potion) {
-    await message("you can't drink that", 0);
+    await message("you can't drink that");
     return;
   }
 
   int k = obj.whichKind;
   if (k == PotionType.increaseStrength.index) {
-    await message("you feel stronger now, what bulging muscles!", 0);
+    await message("you feel stronger now, what bulging muscles!");
     rogue.strengthCurrent += 1;
     if (rogue.strengthCurrent > rogue.strengthMax) {
       rogue.strengthMax = rogue.strengthCurrent;
     }
   } else if (k == PotionType.restoreStrength.index) {
-    await message("this tastes great, you feel warm all over", 0);
+    await message("this tastes great, you feel warm all over");
     rogue.strengthCurrent = rogue.strengthMax;
   } else if (k == PotionType.healing.index) {
-    await message("you begin to feel better", 0);
+    await message("you begin to feel better");
     await potionHeal(false);
   } else if (k == PotionType.extraHealing.index) {
-    await message("you begin to feel much better", 0);
+    await message("you begin to feel much better");
     await potionHeal(true);
   } else if (k == PotionType.poison.index) {
     rogue.strengthCurrent -= getRand(1, 3);
     if (rogue.strengthCurrent < 0) {
       rogue.strengthCurrent = 0;
     }
-    await message("you feel very sick now", 0);
+    await message("you feel very sick now");
     if (halluc != 0) {
       await unhallucinate();
     }
   } else if (k == PotionType.raiseLevel.index) {
-    await message("you feel more experienced", 0);
+    await message("you feel more experienced");
     await addExp(levelPoints[rogue.exp - 1] - rogue.expPoints + 1);
   } else if (k == PotionType.blindness.index) {
     await goBlind();
   } else if (k == PotionType.hallucination.index) {
-    await message("oh wow, everything seems so cosmic", 0);
+    await message("oh wow, everything seems so cosmic");
     halluc += getRand(500, 800);
   } else if (k == PotionType.detectMonster.index) {
     if (levelMonsters.isNotEmpty) {
@@ -67,7 +67,6 @@ Future<void> quaff() async {
     } else {
       await message(
         "you have a strange feeling for a moment, then it passes",
-        0,
       );
     }
     detectMonster = true;
@@ -79,13 +78,11 @@ Future<void> quaff() async {
     } else {
       await message(
         "you have a strange feeling for a moment, then it passes",
-        0,
       );
     }
   } else if (k == PotionType.confusion.index) {
     await message(
       halluc != 0 ? "what a trippy feeling" : "you feel confused",
-      0,
     );
     confuse();
   }
@@ -107,25 +104,24 @@ Future<void> readScroll() async {
 
   GameObject? obj = getLetterObject(ch);
   if (obj == null) {
-    await message("no such item.", 0);
+    await message("no such item.");
     return;
   }
 
   if (obj.whatIs != Cell.scroll) {
-    await message("you can't read that", 0);
+    await message("you can't read that");
     return;
   }
 
   int k = obj.whichKind;
   if (k == ScrollType.scareMonster.index) {
-    await message("you hear a maniacal laughter in the distance", 0);
+    await message("you hear a maniacal laughter in the distance");
   } else if (k == ScrollType.holdMonster.index) {
     await holdMonster();
   } else if (k == ScrollType.enchantWeapon.index) {
     if (rogue.weapon != null) {
       await message(
         "your ${idWeapons[rogue.weapon!.whichKind].title}glows ${getEnchColor()} for a moment",
-        0,
       );
       if (getRand(0, 1) != 0) {
         rogue.weapon!.toHitEnchantment += 1;
@@ -134,20 +130,20 @@ Future<void> readScroll() async {
       }
       rogue.weapon!.isCursed = 0;
     } else {
-      await message("your hands tingle", 0);
+      await message("your hands tingle");
     }
   } else if (k == ScrollType.enchantArmor.index) {
     if (rogue.armor != null) {
-      await message("your armor glows ${getEnchColor()} for a moment", 0);
+      await message("your armor glows ${getEnchColor()} for a moment");
       rogue.armor!.damageEnchantment += 1;
       rogue.armor!.isCursed = 0;
       printStats();
     } else {
-      await message("your skin crawls", 0);
+      await message("your skin crawls");
     }
   } else if (k == ScrollType.identify.index) {
-    await message("this is a scroll of identify", 0);
-    await message("what would you like to identify?", 0);
+    await message("this is a scroll of identify");
+    await message("what would you like to identify?");
     obj.identified = 1;
     idScrolls[k].idStatus = IdStatus.identified;
     await identify();
@@ -157,13 +153,13 @@ Future<void> readScroll() async {
     await sleepScroll();
   } else if (k == ScrollType.protectArmor.index) {
     if (rogue.armor != null) {
-      await message("your armor is covered by a shimmering gold shield", 0);
+      await message("your armor is covered by a shimmering gold shield");
       rogue.armor!.isProtected = 1;
     } else {
-      await message("your acne seems to have disappeared", 0);
+      await message("your acne seems to have disappeared");
     }
   } else if (k == ScrollType.removeCurse.index) {
-    await message("you feel as though someone is watching over you", 0);
+    await message("you feel as though someone is watching over you");
     if (rogue.armor != null) {
       rogue.armor!.isCursed = 0;
     }
@@ -247,7 +243,7 @@ Future<void> identify() async {
 
     GameObject? obj = getLetterObject(ch);
     if (obj == null) {
-      await message("no such item, try again", 0);
+      await message("no such item, try again");
       checkMessage();
       continue;
     }
@@ -264,7 +260,7 @@ Future<void> identify() async {
       idTable[obj.whichKind].idStatus = IdStatus.identified;
     }
 
-    await message(getDescription(obj), 0);
+    await message(getDescription(obj));
     return;
   }
 }
@@ -277,20 +273,20 @@ Future<void> eat() async {
 
   GameObject? obj = getLetterObject(ch);
   if (obj == null) {
-    await message("no such item.", 0);
+    await message("no such item.");
     return;
   }
 
   if (obj.whatIs != Cell.food) {
-    await message("you can't eat that", 0);
+    await message("you can't eat that");
     return;
   }
 
   int moves = getRand(800, 1000);
   if (moves >= 900) {
-    await message("yum, that tasted good", 0);
+    await message("yum, that tasted good");
   } else {
-    await message("yuk, that food tasted awful", 0);
+    await message("yuk, that food tasted awful");
     await addExp(3);
   }
 
@@ -324,11 +320,11 @@ Future<void> holdMonster() async {
   }
 
   if (mcount == 0) {
-    await message("you feel a strange sense of loss", 0);
+    await message("you feel a strange sense of loss");
   } else if (mcount == 1) {
-    await message("the monster freezes", 0);
+    await message("the monster freezes");
   } else {
-    await message("the monsters around you freeze", 0);
+    await message("the monsters around you freeze");
   }
 }
 
@@ -385,12 +381,12 @@ Future<void> unhallucinate() async {
     lightUpRoom();
   }
 
-  await message("everything looks SO boring now", 0);
+  await message("everything looks SO boring now");
 }
 
 Future<void> unblind() async {
   blind = 0;
-  await message("the veil of darkness lifts", 0);
+  await message("the veil of darkness lifts");
 
   if (currentRoom == passage) {
     lightPassage(rogue.row, rogue.col);
@@ -408,7 +404,7 @@ Future<void> unblind() async {
 }
 
 Future<void> sleepScroll() async {
-  await message("you fall asleep", 0);
+  await message("you fall asleep");
 
   int i = getRand(4, 10);
   while (i > 0) {
@@ -416,12 +412,12 @@ Future<void> sleepScroll() async {
     i -= 1;
   }
 
-  await message("you can move again", 0);
+  await message("you can move again");
 }
 
 Future<void> goBlind() async {
   if (blind == 0) {
-    await message("a cloak of darkness falls around you", 0);
+    await message("a cloak of darkness falls around you");
   }
 
   blind += getRand(500, 800);
@@ -455,5 +451,5 @@ void confuse() {
 
 Future<void> unconfuse() async {
   confused = 0;
-  await message("you feel less ${halluc != 0 ? 'trippy' : 'confused'} now", 0);
+  await message("you feel less ${halluc != 0 ? 'trippy' : 'confused'} now");
 }

@@ -32,7 +32,7 @@ Future<int> singleMoveRogue(String dirch, int pickup) async {
     col = pos.item2;
 
     if (!(screen[row][col] & Cell.monster != 0)) {
-      await message("you are being held", 1);
+      await message("you are being held", true);
       return moveFailed;
     }
   }
@@ -93,7 +93,7 @@ Future<int> singleMoveRogue(String dirch, int pickup) async {
       if (obj != null) {
         String description = getDescription(obj);
         if (obj.whatIs == Cell.gold) {
-          await message(description, 1);
+          await message(description, true);
           await registerMove();
           return stoppedOnSomething;
         }
@@ -106,14 +106,14 @@ Future<int> singleMoveRogue(String dirch, int pickup) async {
       } else {
         GameObject obj = objectAt(levelObjects, row, col)!;
         String description = "moved onto ${getDescription(obj)}";
-        await message(description, 1);
+        await message(description, true);
         await registerMove();
         return stoppedOnSomething;
       }
     } else {
       GameObject obj = objectAt(levelObjects, row, col)!;
       String description = "moved onto ${getDescription(obj)}";
-      await message(description, 1);
+      await message(description, true);
       await registerMove();
       return stoppedOnSomething;
     }
@@ -246,7 +246,7 @@ Future<void> moveOnto() async {
   while (!isDirection(ch)) {
     ui.beep();
     if (firstMiss) {
-      await message("direction? ", 0);
+      await message("direction? ");
       firstMiss = false;
     }
     ch = await ui.getchar();
@@ -270,20 +270,20 @@ Future<bool> checkHunger() async {
 
   if (rogue.movesLeft == hungry) {
     hungerStr = "hungry";
-    await message(hungerStr, 0);
+    await message(hungerStr);
     printStats();
   }
 
   if (rogue.movesLeft == weak) {
     hungerStr = "weak";
-    await message(hungerStr, 0);
+    await message(hungerStr);
     printStats();
   }
 
   if (rogue.movesLeft <= faint) {
     if (rogue.movesLeft == faint) {
       hungerStr = "faint";
-      await message(hungerStr, 1);
+      await message(hungerStr, true);
       printStats();
     }
 
@@ -291,7 +291,7 @@ Future<bool> checkHunger() async {
     if (n > 0) {
       fainted = true;
       if (randPercent(40)) rogue.movesLeft += 1;
-      await message("you faint", 1);
+      await message("you faint", true);
 
       for (int i = 0; i < n; i++) {
         if (randPercent(50)) {
@@ -299,7 +299,7 @@ Future<bool> checkHunger() async {
         }
       }
 
-      await message("you can move again", 1);
+      await message("you can move again", true);
     }
   }
 

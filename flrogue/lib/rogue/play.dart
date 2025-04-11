@@ -21,7 +21,7 @@ Future<void> playLevel() async {
   while (true) {
     interrupted = false;
     if (hitMessage.isNotEmpty) {
-      await message(hitMessage, 0);
+      await message(hitMessage);
       hitMessage = "";
     }
 
@@ -86,7 +86,7 @@ Future<void> playLevel() async {
       } else if (ch == '!') {
         shell();
       } else if (ch == 'v') {
-        await message("pyrogue: Version 1.0 (dart port)", 0);
+        await message("pyrogue: Version 1.0 (dart port)");
       } else if (ch == 'Q') {
         await quit();
       } else if ('0123456789'.contains(ch)) {

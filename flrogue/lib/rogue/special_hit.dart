@@ -43,12 +43,12 @@ Future<void> rust(GameObject monster) async {
 
   if (rogue.armor!.isProtected != 0) {
     if (monster.identified == 0) {
-      await message("the rust vanishes instantly", 0);
+      await message("the rust vanishes instantly");
       monster.identified = 1;
     }
   } else {
     rogue.armor!.damageEnchantment -= 1;
-    await message("your armor weakens", 0);
+    await message("your armor weakens");
     printStats();
   }
 }
@@ -64,7 +64,7 @@ Future<void> freeze(GameObject monster) async {
 
   if (freezePercent > 10) {
     monster.identified = 1;
-    await message("you are frozen", 1);
+    await message("you are frozen", true);
 
     int n = getRand(5, 9);
     for (int i = 0; i < n; i++) {
@@ -78,7 +78,7 @@ Future<void> freeze(GameObject monster) async {
       await killedBy(null, DeathCause.hypothermia);
     }
 
-    await message("you can move again", 1);
+    await message("you can move again", true);
     monster.identified = 0;
   }
 }
@@ -102,7 +102,7 @@ Future<void> stealGold(GameObject monster) async {
 
   if (amount > 0) {
     rogue.gold -= amount;
-    await message("your purse feels lighter", 0);
+    await message("your purse feels lighter");
     printStats();
   }
 
@@ -131,7 +131,7 @@ Future<void> stealItem(GameObject monster) async {
       }
     }
 
-    await message("she stole ${getDescription(obj)}", 0);
+    await message("she stole ${getDescription(obj)}");
 
     if (obj.whatIs == Cell.amulet) {
       hasAmulet = false;
@@ -270,7 +270,7 @@ Future<bool> checkXeroc(GameObject monster) async {
       getRoomChar(screen[monster.row][monster.col], monster.row, monster.col),
     );
     checkMessage();
-    await message("wait, that's a ${monsterName(monster)}!", 1);
+    await message("wait, that's a ${monsterName(monster)}!", true);
     return true;
   }
   return false;
@@ -302,7 +302,7 @@ Future<void> sting(GameObject monster) async {
   stingChance = stingChance < 1 ? 1 : stingChance;
 
   if (randPercent(stingChance)) {
-    await message("the ${monsterName(monster)}'s bite has weakened you", 0);
+    await message("the ${monsterName(monster)}'s bite has weakened you");
     rogue.strengthCurrent -= 1;
     printStats();
   }
@@ -323,7 +323,7 @@ Future<void> drainLife() async {
     return;
   }
 
-  await message("you feel weaker", 0);
+  await message("you feel weaker");
   rogue.hpMax -= 1;
   rogue.hpCurrent -= 1;
 
@@ -357,7 +357,7 @@ Future<bool> mConfuse(GameObject monster) async {
     monster.identified = 1;
     await message(
       "the gaze of the ${monsterName(monster)} has confused you",
-      1,
+      true,
     );
     confuse();
     return true;

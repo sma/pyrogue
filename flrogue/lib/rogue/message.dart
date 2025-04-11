@@ -3,8 +3,8 @@ import 'package:flrogue/rogue/init.dart';
 import 'globals.dart';
 import 'ui.dart';
 
-Future<void> message(String msg, [int intrpt = 0]) async {
-  if (intrpt != 0) {
+Future<void> message(String msg, [bool intrpt = false]) async {
+  if (intrpt) {
     interrupted = true;
   }
   cantInt = true;
@@ -34,7 +34,7 @@ Future<void> message(String msg, [int intrpt = 0]) async {
 
 Future<void> remessage() async {
   if (messageLine.isNotEmpty) {
-    await message(messageLine, 0);
+    await message(messageLine);
   }
 }
 
@@ -50,7 +50,7 @@ void checkMessage() {
 }
 
 Future<String> getInputLine(String prompt, bool echo) async {
-  await message(prompt, 0);
+  await message(prompt);
   String buf = "";
   // ignore: unused_local_variable
   int n = prompt.length;

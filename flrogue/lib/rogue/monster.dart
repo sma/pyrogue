@@ -445,7 +445,7 @@ Future<void> createMonster() async {
       wakeUp(monster);
     }
   } else {
-    await message("you hear a faint cry of anguish in the distance", 0);
+    await message("you hear a faint cry of anguish in the distance");
   }
 }
 

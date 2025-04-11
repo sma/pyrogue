@@ -100,6 +100,6 @@ Future<void> onintr() async {
     didInt = true;
   } else {
     checkMessage();
-    await message("interrupt", 1);
+    await message("interrupt", true);
   }
 }

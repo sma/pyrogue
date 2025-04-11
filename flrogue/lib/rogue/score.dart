@@ -32,8 +32,8 @@ Future<void> killedBy(GameObject? monster, DeathCause other) async {
   }
 
   buf += " with ${rogue.gold} gold";
-  await message(buf, 0);
-  await message("", 0);
+  await message(buf);
+  await message("");
   await score(monster, other);
 
   exit(0);
@@ -61,8 +61,8 @@ Future<void> win() async {
   ui.move(19, 11);
   ui.write("treasures at great profit and retire into comfort.");
 
-  await message("", 0);
-  await message("", 0);
+  await message("");
+  await message("");
   idAll();
   await sellPack();
   await score(null, DeathCause.win);
@@ -71,7 +71,7 @@ Future<void> win() async {
 }
 
 Future<void> quit() async {
-  await message("really quit?", 1);
+  await message("really quit?", true);
   String ch = await ui.getchar();
   if (ch != 'y') {
     checkMessage();
@@ -96,7 +96,7 @@ Future<void> putScores(GameObject? monster, DeathCause other) async {
       f.createSync();
     }
   } catch (e) {
-    await message("Cannot access score file: $e", 1);
+    await message("Cannot access score file: $e", true);
     return;
   }
 
@@ -110,7 +110,7 @@ Future<void> putScores(GameObject? monster, DeathCause other) async {
       scores[i] = lines[i];
 
       if (scores[i].length < 18) {
-        await message("error in score file format", 1);
+        await message("error in score file format", true);
         cleanUp("sorry, score file is out of order");
       }
 
@@ -177,7 +177,7 @@ Future<void> putScores(GameObject? monster, DeathCause other) async {
 
     ui.refresh();
   } catch (e) {
-    await message("Error processing scores: $e", 1);
+    await message("Error processing scores: $e", true);
   }
 
   await waitForAck("");
@@ -277,7 +277,7 @@ Future<void> sellPack() async {
   }
 
   ui.refresh();
-  await message("", 0);
+  await message("");
 }
 
 int getValue(GameObject obj) {

@@ -18,7 +18,7 @@ Future<void> zapp() async {
   while (!isDirection(dir)) {
     ui.beep();
     if (firstMiss) {
-      await message("direction? ", 0);
+      await message("direction? ");
       firstMiss = false;
     }
     dir = await ui.getchar();
@@ -37,17 +37,17 @@ Future<void> zapp() async {
 
   GameObject? wand = getLetterObject(wch);
   if (wand == null) {
-    await message("no such item.", 0);
+    await message("no such item.");
     return;
   }
 
   if (wand.whatIs != Cell.wand) {
-    await message("you can't zap with that", 0);
+    await message("you can't zap with that");
     return;
   }
 
   if (wand.clasz <= 0) {
-    await message("nothing happens", 0);
+    await message("nothing happens");
   } else {
     wand.clasz -= 1;
 
@@ -140,7 +140,7 @@ Future<void> zapMonster(GameObject monster, int kind) async {
     monster.mFlags |= MonsterFlags.isAsleep;
     monster.mFlags &= ~MonsterFlags.wakens;
   } else if (kind == WandType.doNothing.index) {
-    await message("nothing happens", 0);
+    await message("nothing happens");
   }
 
   // Set wand as identified

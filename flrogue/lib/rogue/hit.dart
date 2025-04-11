@@ -43,7 +43,7 @@ Future<void> monsterHit(GameObject monster, String? other) async {
   if (!randPercent(hitChance)) {
     if (fightMonster == null) {
       hitMessage += "the ${other ?? mn} misses";
-      await message(hitMessage, 0);
+      await message(hitMessage);
       hitMessage = "";
     }
     return;
@@ -51,7 +51,7 @@ Future<void> monsterHit(GameObject monster, String? other) async {
 
   if (fightMonster == null) {
     hitMessage += "the ${other ?? mn} hit";
-    await message(hitMessage, 0);
+    await message(hitMessage);
     hitMessage = "";
   }
 
@@ -201,7 +201,7 @@ Future<bool> monsterDamage(GameObject monster, int damage) async {
     fightMonster = null;
     coughUp(monster);
     hitMessage += "defeated the ${monsterName(monster)}";
-    await message(hitMessage, 1);
+    await message(hitMessage, true);
     hitMessage = "";
     await addExp(monster.killExp);
     printStats();
@@ -223,7 +223,7 @@ Future<void> fight(bool toTheDeath) async {
   while (!isDirection(ch)) {
     ui.beep();
     if (firstMiss) {
-      await message("direction?", 0);
+      await message("direction?");
       firstMiss = false;
     }
     ch = await ui.getchar();
@@ -241,13 +241,13 @@ Future<void> fight(bool toTheDeath) async {
   if (!(screen[row][col] & Cell.monster != 0) ||
       blind != 0 ||
       hidingXeroc(row, col)) {
-    await message("I see no monster there", 0);
+    await message("I see no monster there");
     return;
   }
 
   fightMonster = objectAt(levelMonsters, row, col);
   if (fightMonster!.mFlags & MonsterFlags.isInvis != 0 && !detectMonster) {
-    await message("I see no monster there", 0);
+    await message("I see no monster there");
     return;
   }
 

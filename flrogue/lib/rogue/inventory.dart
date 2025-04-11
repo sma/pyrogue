@@ -168,9 +168,9 @@ Future<void> singleInventory() async {
 
   GameObject? obj = getLetterObject(ch);
   if (obj == null) {
-    await message("No such item.", 0);
+    await message("No such item.");
     return;
   }
 
-  await message("$ch) ${getDescription(obj)}", 0);
+  await message("$ch) ${getDescription(obj)}");
 }
