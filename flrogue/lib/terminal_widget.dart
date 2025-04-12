@@ -1,6 +1,93 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import '../beep/beep.dart' as b;
 import 'rogue/ui.dart';
+
+class TerminalUI with ChangeNotifier {
+  TerminalUI(this.cols, this.rows)
+    : _buffer = List.generate(rows, (_) => List.filled(cols, (' ', false)));
+
+  final int cols;
+  final int rows;
+  final List<List<(String, bool)>> _buffer;
+  final List<Completer<String>> _keyCompleters = [];
+
+  int _row = 0;
+  int _col = 0;
+  int get row => _row;
+  int get col => _col;
+
+  // Clear the entire screen
+  void clearScreen() {
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        _buffer[i][j] = (' ', false);
+      }
+    }
+  }
+
+  // Clear from current position to end of line
+  void clearToEndOfLine() {
+    for (int j = _col; j < cols; j++) {
+      _buffer[_row][j] = (' ', false);
+    }
+  }
+
+  // Move cursor position
+  void move(int row, int col) {
+    // Store current position for operations
+    _row = row;
+    _col = col;
+  }
+
+  // Read characters from the buffer
+  String read(int row, int col, [int length = 1]) {
+    String result = '';
+    for (int i = 0; i < length && col + i < cols; i++) {
+      result += _buffer[row][col + i].$1;
+    }
+    return result;
+  }
+
+  // Write string to buffer
+  void write(String s, {bool inverse = false}) {
+    for (int i = 0; i < s.length; i++) {
+      if (s[i] == '\b') {
+        _col--;
+      } else if (s[i] == '\n') {
+        _row++;
+        _col = 0;
+      } else {
+        _buffer[_row][_col++] = (s[i], inverse);
+      }
+    }
+  }
+
+  // Refresh the display
+  void refresh() => notifyListeners();
+
+  // Emit a beep sound
+  void beep() {
+    b.beep();
+  }
+
+  // Get a character input
+  Future<String> getchar() {
+    final completer = Completer<String>();
+    _keyCompleters.add(completer);
+    return completer.future;
+  }
+
+  // Used by widget to input keys
+  void injectKey(String key) {
+    if (_keyCompleters.isNotEmpty) {
+      _keyCompleters.removeAt(0).complete(key);
+    }
+  }
+}
 
 /// TerminalWidget provides a terminal-like interface for Rogue
 /// It renders the game screen and handles keyboard input
@@ -76,7 +163,7 @@ class _TerminalWidgetState extends State<TerminalWidget> {
                     height: 600, // Height for 25 rows with fixed-height font
                     padding: const EdgeInsets.all(10),
                     color: Colors.black,
-                    child: CustomPaint(painter: TerminalPainter(ui.buffer)),
+                    child: CustomPaint(painter: TerminalPainter(ui)),
                   ),
                 ),
 
@@ -102,12 +189,13 @@ class _TerminalWidgetState extends State<TerminalWidget> {
 }
 
 class TerminalPainter extends CustomPainter {
-  final List<List<String>> buffer;
+  final TerminalUI ui;
 
-  TerminalPainter(this.buffer);
+  TerminalPainter(this.ui);
 
   @override
   void paint(Canvas canvas, Size size) {
+    final buffer = ui._buffer;
     final double cellWidth = size.width / ui.cols;
     final double cellHeight = size.height / ui.rows;
 
@@ -126,7 +214,7 @@ class TerminalPainter extends CustomPainter {
       fontSize: cellHeight * 0.8,
       fontFamily: 'monospace',
     );
-    // ignore: unused_local_variable
+
     final TextStyle inverseStyle = TextStyle(
       color: Colors.black,
       backgroundColor: Colors.white,
@@ -137,10 +225,10 @@ class TerminalPainter extends CustomPainter {
     // Draw each character from the buffer
     for (int row = 0; row < buffer.length && row < ui.rows; row++) {
       for (int col = 0; col < buffer[row].length && col < ui.cols; col++) {
-        final String char = buffer[row][col];
+        final (char, inverse) = buffer[row][col];
         final TextSpan span = TextSpan(
           text: char,
-          style: textStyle, // In a real implementation, check for inverse text
+          style: inverse ? inverseStyle : textStyle,
         );
 
         final TextPainter textPainter = TextPainter(
