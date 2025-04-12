@@ -50,7 +50,7 @@ GameObject getRandMonster() {
 }
 
 Future<void> moveMonsters() async {
-  for (GameObject monster in levelMonsters) {
+  for (GameObject monster in levelMonsters.toList()) {
     if (monster.mFlags & MonsterFlags.hasted != 0) {
       await mvMonster(monster, rogue.row, rogue.col);
     } else if (monster.mFlags & MonsterFlags.slowed != 0) {
