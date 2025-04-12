@@ -27,10 +27,10 @@ extension MonsterFlags on int {
 }
 
 // Death causes
-enum DeathCause { hypothermia, starvation, quit, win }
+enum DeathCause { monster, hypothermia, starvation, quit, win }
 
 // Cell types and objects
-class Cell {
+extension Cell on int {
   static const int blank = 0x00;
   static const int armor = 0x01;
   static const int weapon = 0x02;

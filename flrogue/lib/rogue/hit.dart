@@ -102,7 +102,7 @@ Future<void> rogueDamage(int d, GameObject monster) async {
   if (d >= rogue.hpCurrent) {
     rogue.hpCurrent = 0;
     printStats();
-    await killedBy(monster, DeathCause.hypothermia);
+    await killedBy(monster, DeathCause.monster);
   }
   rogue.hpCurrent -= d;
   printStats();

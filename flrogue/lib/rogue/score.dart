@@ -20,7 +20,7 @@ Future<void> killedBy(GameObject? monster, DeathCause other) async {
     buf = "died of starvation";
   } else if (other == DeathCause.quit) {
     buf = "quit";
-  } else {
+  } else if (other != DeathCause.win) {
     buf = "killed by ";
     String name =
         monsterNames[monster!.ichar.codeUnitAt(0) - 'A'.codeUnitAt(0)];
@@ -30,6 +30,8 @@ Future<void> killedBy(GameObject? monster, DeathCause other) async {
       buf += "a ";
     }
     buf += name;
+  } else {
+    buf = "";
   }
 
   buf += " with ${rogue.gold} gold";
@@ -119,7 +121,6 @@ Future<void> putScores(GameObject? monster, DeathCause other) async {
         int s = int.parse(scores[i].substring(8, 16));
         if (s > rogue.gold) {
           dontInsert = true;
-          break;
         }
       }
 
