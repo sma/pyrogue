@@ -152,7 +152,12 @@ class Identity {
   String real;
   IdStatus idStatus;
 
-  Identity(this.value, this.title, this.real, this.idStatus);
+  Identity(
+    this.value,
+    this.title,
+    this.real, [
+    this.idStatus = IdStatus.unidentified,
+  ]);
 }
 
 // Object class for game entities
@@ -572,61 +577,61 @@ final List<GameObject> monsterTab = [
 
 // Item identification tables
 final List<Identity> idPotions = [
-  Identity(100, "blue ", "of increase strength ", IdStatus.unidentified),
-  Identity(250, "red ", "of restore strength ", IdStatus.unidentified),
-  Identity(100, "green ", "of healing ", IdStatus.unidentified),
-  Identity(200, "grey ", "of extra healing ", IdStatus.unidentified),
-  Identity(10, "brown ", "of poison ", IdStatus.unidentified),
-  Identity(300, "clear ", "of raise level ", IdStatus.unidentified),
-  Identity(10, "pink ", "of blindness ", IdStatus.unidentified),
-  Identity(25, "white ", "of hallucination ", IdStatus.unidentified),
-  Identity(100, "purple ", "of detect monster ", IdStatus.unidentified),
-  Identity(100, "black ", "of detect things ", IdStatus.unidentified),
-  Identity(10, "yellow ", "of confusion ", IdStatus.unidentified),
+  Identity(100, "blue ", "of increase strength "),
+  Identity(250, "red ", "of restore strength "),
+  Identity(100, "green ", "of healing "),
+  Identity(200, "grey ", "of extra healing "),
+  Identity(10, "brown ", "of poison "),
+  Identity(300, "clear ", "of raise level "),
+  Identity(10, "pink ", "of blindness "),
+  Identity(25, "white ", "of hallucination "),
+  Identity(100, "purple ", "of detect monster "),
+  Identity(100, "black ", "of detect things "),
+  Identity(10, "yellow ", "of confusion "),
 ];
 
 final List<Identity> idScrolls = [
-  Identity(505, "", "of protect armor ", IdStatus.unidentified),
-  Identity(200, "", "of hold monster ", IdStatus.unidentified),
-  Identity(235, "", "of enchant weapon ", IdStatus.unidentified),
-  Identity(235, "", "of enchant armor ", IdStatus.unidentified),
-  Identity(175, "", "of identify ", IdStatus.unidentified),
-  Identity(190, "", "of teleportation ", IdStatus.unidentified),
-  Identity(25, "", "of sleep ", IdStatus.unidentified),
-  Identity(610, "", "of scare monster ", IdStatus.unidentified),
-  Identity(210, "", "of remove curse ", IdStatus.unidentified),
-  Identity(100, "", "of create monster ", IdStatus.unidentified),
-  Identity(25, "", "of aggravate monster ", IdStatus.unidentified),
+  Identity(505, "", "of protect armor "),
+  Identity(200, "", "of hold monster "),
+  Identity(235, "", "of enchant weapon "),
+  Identity(235, "", "of enchant armor "),
+  Identity(175, "", "of identify "),
+  Identity(190, "", "of teleportation "),
+  Identity(25, "", "of sleep "),
+  Identity(610, "", "of scare monster "),
+  Identity(210, "", "of remove curse "),
+  Identity(100, "", "of create monster "),
+  Identity(25, "", "of aggravate monster "),
 ];
 
 final List<Identity> idWeapons = [
-  Identity(150, "short bow ", "", IdStatus.unidentified),
-  Identity(15, "arrows ", "", IdStatus.unidentified),
-  Identity(35, "shurikens ", "", IdStatus.unidentified),
-  Identity(370, "mace ", "", IdStatus.unidentified),
-  Identity(480, "long sword ", "", IdStatus.unidentified),
-  Identity(590, "two-handed sword ", "", IdStatus.unidentified),
+  Identity(150, "short bow ", ""),
+  Identity(15, "arrows ", ""),
+  Identity(35, "shurikens ", ""),
+  Identity(370, "mace ", ""),
+  Identity(480, "long sword ", ""),
+  Identity(590, "two-handed sword ", ""),
 ];
 
 final List<Identity> idArmors = [
-  Identity(300, "leather armor ", "", IdStatus.unidentified),
-  Identity(300, "ring mail ", "", IdStatus.unidentified),
-  Identity(400, "scale mail ", "", IdStatus.unidentified),
-  Identity(500, "chain mail ", "", IdStatus.unidentified),
-  Identity(600, "banded mail ", "", IdStatus.unidentified),
-  Identity(600, "splint mail ", "", IdStatus.unidentified),
-  Identity(700, "plate mail ", "", IdStatus.unidentified),
+  Identity(300, "leather armor ", ""),
+  Identity(300, "ring mail ", ""),
+  Identity(400, "scale mail ", ""),
+  Identity(500, "chain mail ", ""),
+  Identity(600, "banded mail ", ""),
+  Identity(600, "splint mail ", ""),
+  Identity(700, "plate mail ", ""),
 ];
 
 final List<Identity> idWands = [
-  Identity(25, "", "of teleport away ", IdStatus.unidentified),
-  Identity(50, "", "of slow monster ", IdStatus.unidentified),
-  Identity(45, "", "of kill monster ", IdStatus.unidentified),
-  Identity(8, "", "of invisibility ", IdStatus.unidentified),
-  Identity(55, "", "of polymorph ", IdStatus.unidentified),
-  Identity(2, "", "of haste monster ", IdStatus.unidentified),
-  Identity(25, "", "of put to sleep ", IdStatus.unidentified),
-  Identity(0, "", "of do nothing ", IdStatus.unidentified),
+  Identity(25, "", "of teleport away "),
+  Identity(50, "", "of slow monster "),
+  Identity(45, "", "of kill monster "),
+  Identity(8, "", "of invisibility "),
+  Identity(55, "", "of polymorph "),
+  Identity(2, "", "of haste monster "),
+  Identity(25, "", "of put to sleep "),
+  Identity(0, "", "of do nothing "),
 ];
 
 // Screen cells
