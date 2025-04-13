@@ -161,11 +161,6 @@ int getRoomNumber(int row, int col) {
   return noRoom;
 }
 
-void shell() {
-  // In Flutter, this would either trigger a system dialog or do nothing
-  throw Exception("Shell not implemented in Dart version");
-}
-
 void drawMagicMap() {
   const mask =
       Cell.horWall | Cell.vertWall | Cell.door | Cell.tunnel | Cell.stairs;
