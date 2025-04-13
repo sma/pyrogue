@@ -165,3 +165,26 @@ void shell() {
   // In Flutter, this would either trigger a system dialog or do nothing
   throw Exception("Shell not implemented in Dart version");
 }
+
+void drawMagicMap() {
+  const mask =
+      Cell.horWall | Cell.vertWall | Cell.door | Cell.tunnel | Cell.stairs;
+
+  for (var i = 0; i < sRows; i++) {
+    for (var j = 0; j < sCols; j++) {
+      var s = screen[i][j];
+      if (s & mask != 0) {
+        var ch = ui.read(i, j);
+        if (ch == ' ') {
+          if (s & Cell.horWall != 0) ch = '-';
+          if (s & Cell.vertWall != 0) ch = '|';
+          if (s & Cell.door != 0) ch = '+';
+          if (s & Cell.tunnel != 0) ch = '#';
+          if (s & Cell.stairs != 0) ch = '%';
+          ui.move(i, j);
+          ui.write(ch);
+        }
+      }
+    }
+  }
+}

@@ -7,6 +7,7 @@ import 'level.dart';
 import 'message.dart';
 import 'move.dart';
 import 'pack.dart';
+import 'room.dart';
 import 'score.dart';
 import 'throw.dart';
 import 'ui.dart';
@@ -77,6 +78,8 @@ Future<void> playLevel() async {
         await zapp();
       } else if (ch == 't') {
         await throwItem();
+      } else if (ch == '\x17') {
+        drawMagicMap();
       } else if (ch == 'v') {
         await message("pyrogue: Version 1.0 (dart port)");
       } else if (ch == 'Q') {

@@ -104,67 +104,72 @@ Future<void> readScroll() async {
     return;
   }
 
-  int k = obj.whichKind;
-  if (k == ScrollType.scareMonster.index) {
-    await message("you hear a maniacal laughter in the distance");
-  } else if (k == ScrollType.holdMonster.index) {
-    await holdMonster();
-  } else if (k == ScrollType.enchantWeapon.index) {
-    if (rogue.weapon != null) {
-      await message(
-        "your ${idWeapons[rogue.weapon!.whichKind].title}glows ${getEnchColor()} for a moment",
-      );
-      if (getRand(0, 1) != 0) {
-        rogue.weapon!.toHitEnchantment += 1;
+  var k = ScrollType.values[obj.whichKind];
+  switch (k) {
+    case ScrollType.scareMonster:
+      await message("you hear a maniacal laughter in the distance");
+    case ScrollType.holdMonster:
+      await holdMonster();
+    case ScrollType.enchantWeapon:
+      if (rogue.weapon case final weapon?) {
+        await message(
+          "your ${nameOf(weapon)}glow${weapon.quantity > 1 ? '' : 's'} ${getEnchColor()}for a moment",
+        );
+        if (getRand(0, 1) != 0) {
+          weapon.toHitEnchantment += 1;
+        } else {
+          weapon.damageEnchantment += 1;
+        }
+        weapon.isCursed = 0;
       } else {
-        rogue.weapon!.damageEnchantment += 1;
+        await message("your hands tingle");
       }
-      rogue.weapon!.isCursed = 0;
-    } else {
-      await message("your hands tingle");
-    }
-  } else if (k == ScrollType.enchantArmor.index) {
-    if (rogue.armor != null) {
-      await message("your armor glows ${getEnchColor()} for a moment");
-      rogue.armor!.damageEnchantment += 1;
-      rogue.armor!.isCursed = 0;
-      printStats();
-    } else {
-      await message("your skin crawls");
-    }
-  } else if (k == ScrollType.identify.index) {
-    await message("this is a scroll of identify");
-    await message("what would you like to identify?");
-    obj.identified = 1;
-    idScrolls[k].idStatus = IdStatus.identified;
-    await identify();
-  } else if (k == ScrollType.teleport.index) {
-    teleport();
-  } else if (k == ScrollType.sleep.index) {
-    await sleepScroll();
-  } else if (k == ScrollType.protectArmor.index) {
-    if (rogue.armor != null) {
-      await message("your armor is covered by a shimmering gold shield");
-      rogue.armor!.isProtected = 1;
-    } else {
-      await message("your acne seems to have disappeared");
-    }
-  } else if (k == ScrollType.removeCurse.index) {
-    await message("you feel as though someone is watching over you");
-    if (rogue.armor != null) {
-      rogue.armor!.isCursed = 0;
-    }
-    if (rogue.weapon != null) {
-      rogue.weapon!.isCursed = 0;
-    }
-  } else if (k == ScrollType.createMonster.index) {
-    await createMonster();
-  } else if (k == ScrollType.aggravateMonster.index) {
-    await aggravate();
+    case ScrollType.enchantArmor:
+      if (rogue.armor case final armor?) {
+        await message("your armor glows ${getEnchColor()}for a moment");
+        armor.damageEnchantment += 1;
+        armor.isCursed = 0;
+        printStats();
+      } else {
+        await message("your skin crawls");
+      }
+    case ScrollType.identify:
+      await message("this is a scroll of identify");
+      await message("what would you like to identify?");
+      obj.identified = 1;
+      idScrolls[k.index].idStatus = IdStatus.identified;
+      await identify();
+    case ScrollType.teleport:
+      teleport();
+    case ScrollType.sleep:
+      await sleepScroll();
+    case ScrollType.protectArmor:
+      if (rogue.armor case final armor?) {
+        await message("your armor is covered by a shimmering gold shield");
+        armor.isProtected = 1;
+        armor.isCursed = 0;
+      } else {
+        await message("your acne seems to have disappeared");
+      }
+    case ScrollType.removeCurse:
+      await message(
+        halluc == 0
+            ? "you feel as though someone is watching over you"
+            : "you feel in touch with the universal oneness",
+      );
+      rogue.armor?.isCursed = 0;
+      rogue.weapon?.isCursed = 0;
+    case ScrollType.createMonster:
+      await createMonster();
+    case ScrollType.aggravateMonster:
+      await aggravate();
+    case ScrollType.magicMapping:
+      await message("this scroll seems to have a map on it");
+      drawMagicMap();
   }
 
-  if (idScrolls[k].idStatus != IdStatus.called) {
-    idScrolls[k].idStatus = IdStatus.identified;
+  if (idScrolls[k.index].idStatus != IdStatus.called) {
+    idScrolls[k.index].idStatus = IdStatus.identified;
   }
 
   await vanish(obj, true);
