@@ -7,7 +7,6 @@ Future<void> message(String msg, [bool intrpt = false]) async {
     interrupted = true;
   }
   cantInt = true;
-  slurp();
 
   if (!messageCleared) {
     ui.move(minRow - 1, messageCol);
@@ -89,11 +88,6 @@ Future<String> getInputLine(String prompt, bool echo) async {
 
   checkMessage();
   return buf;
-}
-
-void slurp() {
-  // In the original this would clear the input buffer
-  // In our async implementation, this isn't necessary
 }
 
 Future<void> waitForAck(String prompt) async {
