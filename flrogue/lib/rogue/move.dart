@@ -133,7 +133,7 @@ Future<void> multipleMoveRogue(String dirch) async {
       int col = rogue.col;
 
       int m = await singleMoveRogue(
-        String.fromCharCode(dirch.codeUnitAt(0) + 96),
+        String.fromCharCode(dirch.ascii + 96),
         true,
       );
 
@@ -147,10 +147,7 @@ Future<void> multipleMoveRogue(String dirch) async {
     }
   } else if ("HJKLBYUN".contains(dirch)) {
     while (!interrupted &&
-        await singleMoveRogue(
-              String.fromCharCode(dirch.codeUnitAt(0) + 32),
-              true,
-            ) ==
+        await singleMoveRogue(String.fromCharCode(dirch.ascii + 32), true) ==
             moved) {
       // Continue until interrupted or move fails
     }
@@ -252,10 +249,7 @@ Future<void> moveOnto() async {
 }
 
 bool isPackLetter(String c) {
-  return (c.codeUnitAt(0) >= 'a'.codeUnitAt(0) &&
-          c.codeUnitAt(0) <= 'z'.codeUnitAt(0)) ||
-      c == cancel ||
-      c == list;
+  return c.between('a', 'z') || c == cancel || c == list;
 }
 
 Future<bool> checkHunger() async {

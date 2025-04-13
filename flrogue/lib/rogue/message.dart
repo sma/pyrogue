@@ -61,8 +61,7 @@ Future<String> getInputLine(String prompt, bool echo) async {
       }
     }
 
-    if (ch.codeUnitAt(0) >= ' '.codeUnitAt(0) &&
-        ch.codeUnitAt(0) <= '~'.codeUnitAt(0)) {
+    if (ch.between(' ', '~')) {
       buf += ch;
       if (echo) {
         ui.write(ch);

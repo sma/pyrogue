@@ -38,7 +38,7 @@ GameObject getRandMonster() {
   monster.whatIs = Cell.monster;
 
   if (monster.ichar == 'X') {
-    monster.identified = getRandObjChar().codeUnitAt(0);
+    monster.identified = getRandObjChar().ascii;
   }
 
   if (currentLevel > amuletLevel + 2) {
@@ -240,8 +240,7 @@ void moveMonsterTo(GameObject monster, int row, int col) {
 
   String c = ui.read(monster.row, monster.col, 1);
 
-  if (c.codeUnitAt(0) >= 'A'.codeUnitAt(0) &&
-      c.codeUnitAt(0) <= 'Z'.codeUnitAt(0)) {
+  if (c.between('A', 'Z')) {
     ui.move(monster.row, monster.col);
     ui.write(
       getRoomChar(screen[monster.row][monster.col], monster.row, monster.col),
@@ -359,7 +358,7 @@ String monsterName(GameObject monster) {
     return monsterNames[getRand(0, 25)];
   }
 
-  return monsterNames[monster.ichar.codeUnitAt(0) - 'A'.codeUnitAt(0)];
+  return monsterNames[monster.ichar.ascii - 'A'.ascii];
 }
 
 bool rogueIsAround(int row, int col) {

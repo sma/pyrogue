@@ -23,7 +23,7 @@ Future<void> killedBy(GameObject? monster, DeathCause other) async {
   } else if (other != DeathCause.win) {
     buf = "killed by ";
     String name =
-        monsterNames[monster!.ichar.codeUnitAt(0) - 'A'.codeUnitAt(0)];
+        monsterNames[monster!.ichar.ascii - 'A'.ascii];
     if (isVowel(name[0])) {
       buf += "an ";
     } else {
@@ -213,7 +213,7 @@ void insertScore(
   } else {
     buf += "killed by ";
     String name =
-        monsterNames[monster!.ichar.codeUnitAt(0) - 'A'.codeUnitAt(0)];
+        monsterNames[monster!.ichar.ascii - 'A'.ascii];
     if (isVowel(name[0])) {
       buf += "an ";
     } else {

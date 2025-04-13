@@ -158,14 +158,14 @@ String nextAvailIchar() {
   for (int i = 0; i < 26; i++) {
     if (!ichars[i]) {
       ichars[i] = true;
-      return String.fromCharCode('a'.codeUnitAt(0) + i);
+      return String.fromCharCode('a'.ascii + i);
     }
   }
   return '';
 }
 
 void makeAvailIchar(String ch) {
-  ichars[ch.codeUnitAt(0) - 'a'.codeUnitAt(0)] = false;
+  ichars[ch.ascii - 'a'.ascii] = false;
 }
 
 Future<String> getPackLetter(String prompt, int mask) async {

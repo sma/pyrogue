@@ -87,7 +87,7 @@ Future<void> playLevel() async {
       } else if ('0123456789'.contains(ch)) {
         count = 0;
         while (true) {
-          count = 10 * count + (ch.codeUnitAt(0) - '0'.codeUnitAt(0));
+          count = 10 * count + (ch.ascii - '0'.ascii);
           ch = await ui.getchar();
           if (!('0123456789'.contains(ch))) break;
         }

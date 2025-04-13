@@ -715,3 +715,8 @@ const levelPoints = [
   1000000,
   10000000,
 ];
+
+extension X on String {
+  int get ascii => codeUnitAt(0);
+  bool between(String a, String b) => ascii >= a.ascii && ascii <= b.ascii;
+}

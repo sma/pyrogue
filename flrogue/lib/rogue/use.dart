@@ -345,8 +345,7 @@ void hallucinate() {
   for (GameObject obj in levelObjects) {
     String ch = ui.read(obj.row, obj.col, 1);
 
-    if ((ch.codeUnitAt(0) < 'A'.codeUnitAt(0) ||
-            ch.codeUnitAt(0) > 'Z'.codeUnitAt(0)) &&
+    if (!ch.between('A', 'Z') &&
         (obj.row != rogue.row || obj.col != rogue.col)) {
       if (ch != ' ' && ch != '.' && ch != '#' && ch != '+') {
         ui.move(obj.row, obj.col);
@@ -358,12 +357,9 @@ void hallucinate() {
   for (GameObject obj in levelMonsters) {
     String ch = ui.read(obj.row, obj.col, 1);
 
-    if (ch.codeUnitAt(0) >= 'A'.codeUnitAt(0) &&
-        ch.codeUnitAt(0) <= 'Z'.codeUnitAt(0)) {
+    if (ch.between('A', 'Z')) {
       ui.move(obj.row, obj.col);
-      ui.write(
-        String.fromCharCode(getRand('A'.codeUnitAt(0), 'Z'.codeUnitAt(0))),
-      );
+      ui.write(String.fromCharCode(getRand('A'.ascii, 'Z'.ascii)));
     }
   }
 }

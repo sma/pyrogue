@@ -158,10 +158,8 @@ int getNumber(String s) {
   int total = 0;
   int i = 0;
 
-  while (i < s.length &&
-      s[i].codeUnitAt(0) >= '0'.codeUnitAt(0) &&
-      s[i].codeUnitAt(0) <= '9'.codeUnitAt(0)) {
-    total = 10 * total + (s[i].codeUnitAt(0) - '0'.codeUnitAt(0));
+  while (i < s.length && s[i].between('0', '9')) {
+    total = 10 * total + (s[i].ascii - '0'.ascii);
     i++;
   }
 
