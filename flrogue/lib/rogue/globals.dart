@@ -659,8 +659,6 @@ bool detectMonster = false;
 String hitMessage = "";
 
 String playerName = "";
-bool cantInt = false;
-bool didInt = false;
 Exception? exc;
 
 int currentLevel = 0;

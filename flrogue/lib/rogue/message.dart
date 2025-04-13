@@ -1,12 +1,10 @@
 import 'globals.dart';
-import 'init.dart';
 import 'ui.dart';
 
 Future<void> message(String msg, [bool intrpt = false]) async {
   if (intrpt) {
     interrupted = true;
   }
-  cantInt = true;
 
   if (!messageCleared) {
     ui.move(minRow - 1, messageCol);
@@ -23,11 +21,6 @@ Future<void> message(String msg, [bool intrpt = false]) async {
   ui.refresh();
   messageCleared = false;
   messageCol = msg.length;
-
-  if (didInt) {
-    await onintr();
-  }
-  cantInt = false;
 }
 
 Future<void> remessage() async {

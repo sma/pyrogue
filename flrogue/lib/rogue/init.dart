@@ -2,7 +2,6 @@ import 'dart:io' if (dart.library.js) 'web_io.dart';
 
 import 'globals.dart';
 import 'inventory.dart';
-import 'message.dart';
 import 'object.dart';
 import 'pack.dart';
 import 'ui.dart';
@@ -93,13 +92,4 @@ Never cleanUp(String estr) {
 
 void byebye() {
   cleanUp("Okay, bye bye!");
-}
-
-Future<void> onintr() async {
-  if (cantInt) {
-    didInt = true;
-  } else {
-    checkMessage();
-    await message("interrupt", true);
-  }
 }
