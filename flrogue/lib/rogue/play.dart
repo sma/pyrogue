@@ -77,10 +77,6 @@ Future<void> playLevel() async {
         await zapp();
       } else if (ch == 't') {
         await throwItem();
-      } else if (ch == '\x1a') {
-        tstp();
-      } else if (ch == '!') {
-        shell();
       } else if (ch == 'v') {
         await message("pyrogue: Version 1.0 (dart port)");
       } else if (ch == 'Q') {
@@ -101,12 +97,4 @@ Future<void> playLevel() async {
       break;
     }
   }
-}
-
-void tstp() {
-  // Implement terminal stop functionality if needed
-}
-
-void shell() {
-  // Implement shell functionality if needed
 }
