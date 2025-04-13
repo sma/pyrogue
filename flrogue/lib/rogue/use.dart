@@ -9,7 +9,7 @@ import 'room.dart';
 import 'ui.dart';
 
 Future<void> quaff() async {
-  String ch = await getPackLetter("quaff what? ", Cell.potion);
+  String ch = await getPackLetter("quaff what?", Cell.potion);
   if (ch == cancel) {
     return;
   }
@@ -88,7 +88,7 @@ Future<void> quaff() async {
 }
 
 Future<void> readScroll() async {
-  String ch = await getPackLetter("read what? ", Cell.scroll);
+  String ch = await getPackLetter("read what?", Cell.scroll);
   if (ch == cancel) {
     return;
   }
@@ -227,7 +227,7 @@ Future<void> potionHeal(bool extra) async {
 
 Future<void> identify() async {
   while (true) {
-    String ch = await getPackLetter("identify what? ", Cell.isObject);
+    String ch = await getPackLetter("identify what?", Cell.isObject);
     if (ch == cancel) {
       return;
     }
@@ -257,7 +257,7 @@ Future<void> identify() async {
 }
 
 Future<void> eat() async {
-  String ch = await getPackLetter("eat what? ", Cell.food);
+  String ch = await getPackLetter("eat what?", Cell.food);
   if (ch == cancel) {
     return;
   }

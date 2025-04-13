@@ -17,7 +17,7 @@ Future<void> throwItem() async {
   while (!isDirection(dir)) {
     ui.beep();
     if (firstMiss) {
-      await message("direction? ");
+      await message("direction?");
       firstMiss = false;
     }
     dir = await ui.getchar();

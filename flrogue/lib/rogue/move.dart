@@ -239,7 +239,7 @@ Future<void> moveOnto() async {
   while (!isDirection(ch)) {
     ui.beep();
     if (firstMiss) {
-      await message("direction? ");
+      await message("direction?");
       firstMiss = false;
     }
     ch = await ui.getchar();

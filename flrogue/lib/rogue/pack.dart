@@ -76,7 +76,7 @@ Future<void> drop() async {
     return;
   }
 
-  String ch = await getPackLetter("drop what? ", Cell.isObject);
+  String ch = await getPackLetter("drop what?", Cell.isObject);
   if (ch == cancel) {
     return;
   }
@@ -225,7 +225,7 @@ Future<void> wear() async {
     return;
   }
 
-  String ch = await getPackLetter("wear what? ", Cell.armor);
+  String ch = await getPackLetter("wear what?", Cell.armor);
   if (ch == cancel) {
     return;
   }
@@ -254,7 +254,7 @@ Future<void> wield() async {
     return;
   }
 
-  String ch = await getPackLetter("wield what? ", Cell.weapon);
+  String ch = await getPackLetter("wield what?", Cell.weapon);
   if (ch == cancel) {
     return;
   }
@@ -281,7 +281,7 @@ Future<void> wield() async {
 
 Future<void> callIt() async {
   String ch = await getPackLetter(
-    "call what? ",
+    "call what?",
     Cell.scroll | Cell.potion | Cell.wand,
   );
   if (ch == cancel) {

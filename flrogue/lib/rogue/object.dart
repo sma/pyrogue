@@ -165,11 +165,11 @@ int getRandWhatIs() {
 }
 
 void getRandScroll(GameObject obj) {
-  int percent = getRand(0, 82);
+  int percent = getRand(0, 85);
 
   if (percent <= 5) {
     obj.whichKind = ScrollType.protectArmor.index;
-  } else if (percent <= 11) {
+  } else if (percent <= 10) {
     obj.whichKind = ScrollType.holdMonster.index;
   } else if (percent <= 20) {
     obj.whichKind = ScrollType.createMonster.index;
@@ -177,18 +177,20 @@ void getRandScroll(GameObject obj) {
     obj.whichKind = ScrollType.identify.index;
   } else if (percent <= 43) {
     obj.whichKind = ScrollType.teleport.index;
-  } else if (percent <= 52) {
+  } else if (percent <= 50) {
     obj.whichKind = ScrollType.sleep.index;
-  } else if (percent <= 57) {
+  } else if (percent <= 55) {
     obj.whichKind = ScrollType.scareMonster.index;
-  } else if (percent <= 66) {
+  } else if (percent <= 64) {
     obj.whichKind = ScrollType.removeCurse.index;
-  } else if (percent <= 71) {
+  } else if (percent <= 69) {
     obj.whichKind = ScrollType.enchantArmor.index;
-  } else if (percent <= 76) {
+  } else if (percent <= 74) {
     obj.whichKind = ScrollType.enchantWeapon.index;
-  } else {
+  } else if (percent <= 80) {
     obj.whichKind = ScrollType.aggravateMonster.index;
+  } else {
+    obj.whichKind = ScrollType.magicMapping.index;
   }
 }
 

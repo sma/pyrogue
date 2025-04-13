@@ -72,6 +72,7 @@ enum ScrollType {
   removeCurse,
   createMonster,
   aggravateMonster,
+  magicMapping,
 }
 
 // Constants for potion types
@@ -602,6 +603,7 @@ final List<Identity> idScrolls = [
   Identity(210, "", "of remove curse "),
   Identity(100, "", "of create monster "),
   Identity(25, "", "of aggravate monster "),
+  Identity(180, "", "of magic mapping "),
 ];
 
 final List<Identity> idWeapons = [

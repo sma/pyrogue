@@ -28,7 +28,7 @@ Future<void> zapp() async {
     return;
   }
 
-  String wch = await getPackLetter("zap with what? ", Cell.wand);
+  String wch = await getPackLetter("zap with what?", Cell.wand);
   if (wch == cancel) {
     checkMessage();
     return;

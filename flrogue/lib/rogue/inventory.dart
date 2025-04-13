@@ -157,7 +157,7 @@ void mixMetals() {
 }
 
 Future<void> singleInventory() async {
-  String ch = await getPackLetter("inventory what? ", Cell.isObject);
+  String ch = await getPackLetter("inventory what?", Cell.isObject);
 
   if (ch == cancel) {
     return;
