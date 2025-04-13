@@ -14,19 +14,12 @@ Future<void> message(String msg, [bool intrpt = false]) async {
     checkMessage();
   }
 
-  messageLine = msg;
   ui.move(minRow - 1, 0);
   ui.write(msg);
   ui.write(' ');
   ui.refresh();
   messageCleared = false;
   messageCol = msg.length;
-}
-
-Future<void> remessage() async {
-  if (messageLine.isNotEmpty) {
-    await message(messageLine);
-  }
 }
 
 void checkMessage() {

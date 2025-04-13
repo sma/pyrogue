@@ -53,8 +53,6 @@ Future<void> playLevel() async {
         await moveOnto();
       } else if (ch == 'd') {
         await drop();
-      } else if (ch == '\x10') {
-        await remessage();
       } else if (ch == '>') {
         if (await checkDown()) {
           return;

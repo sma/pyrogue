@@ -667,7 +667,6 @@ String hungerStr = "";
 int partyRoom = 0;
 
 bool messageCleared = true;
-String messageLine = "";
 int messageCol = 0;
 
 List<GameObject> levelMonsters = [];
