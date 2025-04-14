@@ -191,8 +191,7 @@ Future<bool> monsterDamage(GameObject monster, int damage) async {
     int row = monster.row;
     int col = monster.col;
     removeMask(row, col, Cell.monster);
-    ui.move(row, col);
-    ui.write(getRoomChar(screen[row][col], row, col));
+    ui.move(row, col).write(getRoomChar(screen[row][col], row, col));
     ui.refresh();
 
     fightMonster = null;

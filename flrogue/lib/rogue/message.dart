@@ -7,15 +7,13 @@ Future<void> message(String msg, [bool intrpt = false]) async {
   }
 
   if (!messageCleared) {
-    ui.move(minRow - 1, messageCol);
-    ui.write(more);
+    ui.move(minRow - 1, messageCol).write(more);
     ui.refresh();
     await waitForAck("");
     checkMessage();
   }
 
-  ui.move(minRow - 1, 0);
-  ui.write(msg);
+  ui.move(minRow - 1, 0).write(msg);
   ui.write(' ');
   ui.refresh();
   messageCleared = false;
@@ -26,10 +24,8 @@ void checkMessage() {
   if (messageCleared) {
     return;
   }
-  ui.move(minRow - 1, 0);
-  ui.clearToEndOfLine();
-  ui.move(rogue.row, rogue.col);
-  ui.refresh();
+  ui.move(minRow - 1, 0).clearToEndOfLine();
+  ui.move(rogue.row, rogue.col).refresh();
   messageCleared = true;
 }
 

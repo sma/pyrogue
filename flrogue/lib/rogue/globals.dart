@@ -670,7 +670,7 @@ bool detectMonster = false;
 String hitMessage = "";
 
 String playerName = "";
-Exception? exc;
+(Object, StackTrace)? exc;
 
 int currentLevel = 0;
 int maxLevel = 1;

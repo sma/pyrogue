@@ -38,6 +38,7 @@ Future<void> killedBy(GameObject? monster, DeathCause other) async {
   await message("");
   await score(monster, other);
 
+  ui.end();
   exit(0);
 }
 
@@ -46,22 +47,14 @@ Future<void> win() async {
   rogue.weapon = null;
 
   ui.clearScreen();
-  ui.move(10, 11);
-  ui.write("@   @  @@@   @   @      @  @  @   @@@   @   @   @");
-  ui.move(11, 11);
-  ui.write(" @ @  @   @  @   @      @  @  @  @   @  @@  @   @");
-  ui.move(12, 11);
-  ui.write("  @   @   @  @   @      @  @  @  @   @  @ @ @   @");
-  ui.move(13, 11);
-  ui.write("  @   @   @  @   @      @  @  @  @   @  @  @@");
-  ui.move(14, 11);
-  ui.write("  @    @@@    @@@        @@ @@    @@@   @   @   @");
-  ui.move(17, 11);
-  ui.write("Congratulations,  you have  been admitted  to  the");
-  ui.move(18, 11);
-  ui.write("Fighter's Guild.   You return home,  sell all your");
-  ui.move(19, 11);
-  ui.write("treasures at great profit and retire into comfort.");
+  ui.move(10, 11).write("@   @  @@@   @   @      @  @  @   @@@   @   @   @");
+  ui.move(11, 11).write(" @ @  @   @  @   @      @  @  @  @   @  @@  @   @");
+  ui.move(12, 11).write("  @   @   @  @   @      @  @  @  @   @  @ @ @   @");
+  ui.move(13, 11).write("  @   @   @  @   @      @  @  @  @   @  @  @@");
+  ui.move(14, 11).write("  @    @@@    @@@        @@ @@    @@@   @   @   @");
+  ui.move(17, 11).write("Congratulations,  you have  been admitted  to  the");
+  ui.move(18, 11).write("Fighter's Guild.   You return home,  sell all your");
+  ui.move(19, 11).write("treasures at great profit and retire into comfort.");
 
   await message("");
   await message("");
@@ -69,6 +62,7 @@ Future<void> win() async {
   await _sellPack();
   await score(null, DeathCause.win);
 
+  ui.end();
   exit(0);
 }
 
@@ -154,10 +148,8 @@ Future<void> putScores(GameObject? monster, DeathCause other) async {
     }
 
     ui.clearScreen();
-    ui.move(3, 30);
-    ui.write("Top  Ten  Rogueists");
-    ui.move(8, 0);
-    ui.write("Rank    Score   Name");
+    ui.move(3, 30).write("Top  Ten  Rogueists");
+    ui.move(8, 0).write("Rank    Score   Name");
 
     for (int j = 0; j < i; j++) {
       bool isRankHighlighted = j == rank;
@@ -260,8 +252,7 @@ Future<void> _sellPack() async {
   ui.clearScreen();
 
   for (GameObject obj in rogue.pack) {
-    ui.move(1, 0);
-    ui.write("Value      Item");
+    ui.move(1, 0).write("Value      Item");
 
     if (obj.whatIs != Cell.food) {
       obj.identified = 1;
@@ -269,8 +260,9 @@ Future<void> _sellPack() async {
       rogue.gold += val;
 
       if (rows < sRows) {
-        ui.move(rows, 0);
-        ui.write("${"$val".padLeft(5)}      ${getDescription(obj)}");
+        ui
+            .move(rows, 0)
+            .write("${"$val".padLeft(5)}      ${getDescription(obj)}");
         rows += 1;
       }
     }

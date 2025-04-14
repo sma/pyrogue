@@ -69,10 +69,10 @@ Future<MovementStatus> singleMoveRogue(String dirch, bool pickup) async {
     lightPassage(row, col);
   }
 
-  ui.move(rogue.row, rogue.col);
-  ui.write(getRoomChar(screen[rogue.row][rogue.col], rogue.row, rogue.col));
-  ui.move(row, col);
-  ui.write(rogue.fchar);
+  ui
+      .move(rogue.row, rogue.col)
+      .write(getRoomChar(screen[rogue.row][rogue.col], rogue.row, rogue.col));
+  ui.move(row, col).write(rogue.fchar);
 
   rogue.row = row;
   rogue.col = col;

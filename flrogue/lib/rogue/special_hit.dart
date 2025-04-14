@@ -146,8 +146,7 @@ void _disappear(GameObject monster) {
 
   removeMask(row, col, Cell.monster);
   if (canSee(row, col)) {
-    ui.move(row, col);
-    ui.write(getRoomChar(screen[row][col], row, col));
+    ui.move(row, col).write(getRoomChar(screen[row][col], row, col));
   }
 
   removeFromPack(monster, levelMonsters);
@@ -203,8 +202,7 @@ bool _tryToCough(int row, int col, GameObject obj) {
       !(screen[row][col] & Cell.monster != 0) &&
       (screen[row][col] & (Cell.tunnel | Cell.floor | Cell.door) != 0)) {
     putObjectAt(obj, row, col);
-    ui.move(row, col);
-    ui.write(getRoomChar(screen[row][col], row, col));
+    ui.move(row, col).write(getRoomChar(screen[row][col], row, col));
     ui.refresh();
     return true;
   }
@@ -262,10 +260,15 @@ Future<bool> checkXeroc(GameObject monster) async {
   if (monster.ichar == 'X' && monster.identified != 0) {
     wakeUp(monster);
     monster.identified = 0;
-    ui.move(monster.row, monster.col);
-    ui.write(
-      getRoomChar(screen[monster.row][monster.col], monster.row, monster.col),
-    );
+    ui
+        .move(monster.row, monster.col)
+        .write(
+          getRoomChar(
+            screen[monster.row][monster.col],
+            monster.row,
+            monster.col,
+          ),
+        );
     checkMessage();
     await message("wait, that's a ${monsterName(monster)}!", true);
     return true;
@@ -376,16 +379,14 @@ Future<bool> flameBroil(GameObject monster) async {
   if (!rogueIsAround(row, col)) {
     (row, col) = _getCloser(row, col, rogue.row, rogue.col);
 
-    ui.move(row, col);
-    ui.write('*', inverse: true);
+    ui.move(row, col).write('*', inverse: true);
 
     while (row != rogue.row || col != rogue.col) {
       (row, col) = _getCloser(row, col, rogue.row, rogue.col);
 
       if (row == rogue.row && col == rogue.col) break;
 
-      ui.move(row, col);
-      ui.write('*', inverse: true);
+      ui.move(row, col).write('*', inverse: true);
       ui.refresh();
     }
 
@@ -394,8 +395,7 @@ Future<bool> flameBroil(GameObject monster) async {
     (row, col) = _getCloser(row, col, rogue.row, rogue.col);
 
     while (row != rogue.row || col != rogue.col) {
-      ui.move(row, col);
-      ui.write(getRoomChar(screen[row][col], row, col));
+      ui.move(row, col).write(getRoomChar(screen[row][col], row, col));
       ui.refresh();
 
       (row, col) = _getCloser(row, col, rogue.row, rogue.col);

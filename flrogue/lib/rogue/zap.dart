@@ -106,8 +106,7 @@ Future<void> _zapMonster(GameObject monster, WandType kind) async {
       await monsterDamage(monster, monster.quantity);
     case WandType.invisibility:
       monster.flagsAdd(MonsterFlags.isInvis);
-      ui.move(row, col);
-      ui.write(getMonsterChar(monster));
+      ui.move(row, col).write(getMonsterChar(monster));
     case WandType.polymorph:
       if (monster.ichar == 'F') {
         beingHeld = false;
@@ -131,8 +130,7 @@ Future<void> _zapMonster(GameObject monster, WandType kind) async {
       wakeUp(newMonster);
 
       if (canSee(row, col)) {
-        ui.move(row, col);
-        ui.write(getMonsterChar(newMonster));
+        ui.move(row, col).write(getMonsterChar(newMonster));
       }
     case WandType.putToSleep:
       monster.flagsAdd(MonsterFlags.isAsleep);
@@ -156,17 +154,17 @@ void _teleportAway(GameObject monster) {
 
   removeMask(monster.row, monster.col, Cell.monster);
 
-  ui.move(monster.row, monster.col);
-  ui.write(
-    getRoomChar(screen[monster.row][monster.col], monster.row, monster.col),
-  );
+  ui
+      .move(monster.row, monster.col)
+      .write(
+        getRoomChar(screen[monster.row][monster.col], monster.row, monster.col),
+      );
 
   monster.row = row;
   monster.col = col;
   addMask(row, col, Cell.monster);
 
   if (canSee(row, col)) {
-    ui.move(row, col);
-    ui.write(getMonsterChar(monster));
+    ui.move(row, col).write(getMonsterChar(monster));
   }
 }

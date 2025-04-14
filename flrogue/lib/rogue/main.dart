@@ -26,15 +26,13 @@ Future<void> main() async {
         levelObjects.clear();
         levelMonsters.clear();
         ui.clearScreen();
-      } catch (e) {
-        print("Level error: $e");
-        exc = e as Exception;
+      } catch (ex, st) {
+        exc = (ex, st);
         cleanUp("Level error occurred");
       }
     }
-  } catch (e) {
-    print("Game error: $e");
-    exc = e as Exception;
+  } catch (ex, st) {
+    exc = (ex, st);
     cleanUp("Game error occurred");
   }
 }

@@ -236,19 +236,23 @@ void moveMonsterTo(GameObject monster, int row, int col) {
   addMask(row, col, Cell.monster);
   removeMask(monster.row, monster.col, Cell.monster);
 
-  String c = ui.read(monster.row, monster.col, 1);
+  String c = ui.move(monster.row, monster.col).read();
 
   if (c.between('A', 'Z')) {
-    ui.move(monster.row, monster.col);
-    ui.write(
-      getRoomChar(screen[monster.row][monster.col], monster.row, monster.col),
-    );
+    ui
+        .move(monster.row, monster.col)
+        .write(
+          getRoomChar(
+            screen[monster.row][monster.col],
+            monster.row,
+            monster.col,
+          ),
+        );
   }
 
   if (blind == 0 && (detectMonster || canSee(row, col))) {
     if (monster.flagsIsnt(MonsterFlags.isInvis) || detectMonster) {
-      ui.move(row, col);
-      ui.write(getMonsterChar(monster));
+      ui.move(row, col).write(getMonsterChar(monster));
     }
   }
 
@@ -256,8 +260,7 @@ void moveMonsterTo(GameObject monster, int row, int col) {
       getRoomNumber(row, col) != currentRoom &&
       screen[monster.row][monster.col] == Cell.floor) {
     if (blind == 0) {
-      ui.move(monster.row, monster.col);
-      ui.write(' ');
+      ui.move(monster.row, monster.col).write(' ');
     }
   }
 
@@ -390,8 +393,7 @@ void showMonsters() {
   if (blind != 0) return;
 
   for (GameObject monster in levelMonsters) {
-    ui.move(monster.row, monster.col);
-    ui.write(monster.ichar);
+    ui.move(monster.row, monster.col).write(monster.ichar);
 
     if (monster.ichar == 'X') {
       monster.identified = 0;
@@ -430,8 +432,7 @@ Future<void> createMonster() async {
     GameObject monster = _getRandMonster();
     _putMonsterAt(row, col, monster);
 
-    ui.move(row, col);
-    ui.write(getMonsterChar(monster));
+    ui.move(row, col).write(getMonsterChar(monster));
 
     if (monster.flagsIs(MonsterFlags.wanders)) {
       wakeUp(monster);

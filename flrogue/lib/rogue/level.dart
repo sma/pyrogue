@@ -218,8 +218,7 @@ void printStats() {
   String m =
       "Level: $currentLevel  Gold: ${rogue.gold}  Hp: ${rogue.hpCurrent}(${rogue.hpMax})  Str: ${rogue.strengthCurrent}(${rogue.strengthMax})  Arm: ${getArmorClass(rogue.armor)}  Exp: ${rogue.exp}/${rogue.expPoints} $hungerStr";
 
-  ui.move(ui.rows - 1, 0);
-  ui.write(m);
+  ui.move(ui.rows - 1, 0).write(m);
   ui.clearToEndOfLine();
   ui.refresh();
 }

@@ -335,8 +335,9 @@ void _teleport() {
   if (currentRoom >= 0) {
     darkenRoom(currentRoom);
   } else {
-    ui.move(rogue.row, rogue.col);
-    ui.write(getRoomChar(screen[rogue.row][rogue.col], rogue.row, rogue.col));
+    ui
+        .move(rogue.row, rogue.col)
+        .write(getRoomChar(screen[rogue.row][rogue.col], rogue.row, rogue.col));
   }
 
   putPlayer();
@@ -350,23 +351,23 @@ void hallucinate() {
   }
 
   for (GameObject obj in levelObjects) {
-    String ch = ui.read(obj.row, obj.col, 1);
+    String ch = ui.move(obj.row, obj.col).read();
 
     if (!ch.between('A', 'Z') &&
         (obj.row != rogue.row || obj.col != rogue.col)) {
       if (ch != ' ' && ch != '.' && ch != '#' && ch != '+') {
-        ui.move(obj.row, obj.col);
-        ui.write(getRandObjChar());
+        ui.move(obj.row, obj.col).write(getRandObjChar());
       }
     }
   }
 
   for (GameObject obj in levelMonsters) {
-    String ch = ui.read(obj.row, obj.col, 1);
+    String ch = ui.move(obj.row, obj.col).read();
 
     if (ch.between('A', 'Z')) {
-      ui.move(obj.row, obj.col);
-      ui.write(String.fromCharCode(getRand('A'.ascii, 'Z'.ascii)));
+      ui
+          .move(obj.row, obj.col)
+          .write(String.fromCharCode(getRand('A'.ascii, 'Z'.ascii)));
     }
   }
 }
@@ -426,14 +427,12 @@ Future<void> _goBlind() async {
 
     for (int i = r.topRow + 1; i < r.bottomRow; i++) {
       for (int j = r.leftCol + 1; j < r.rightCol; j++) {
-        ui.move(i, j);
-        ui.write(' ');
+        ui.move(i, j).write(' ');
       }
     }
   }
 
-  ui.move(rogue.row, rogue.col);
-  ui.write(rogue.fchar);
+  ui.move(rogue.row, rogue.col).write(rogue.fchar);
   ui.refresh();
 }
 

@@ -65,13 +65,11 @@ Future<void> throwItem() async {
     rogue.col,
   );
 
-  ui.move(rogue.row, rogue.col);
-  ui.write(rogue.fchar);
+  ui.move(rogue.row, rogue.col).write(rogue.fchar);
   ui.refresh();
 
   if (canSee(row, col) && (row != rogue.row || col != rogue.col)) {
-    ui.move(row, col);
-    ui.write(getRoomChar(screen[row][col], row, col));
+    ui.move(row, col).write(getRoomChar(screen[row][col], row, col));
   }
 
   if (monster != null) {
@@ -134,14 +132,12 @@ Future<(GameObject?, int, int)> _getThrownAtMonster(
     }
 
     if (i != 0 && canSee(orow, ocol)) {
-      ui.move(orow, ocol);
-      ui.write(getRoomChar(screen[orow][ocol], orow, ocol));
+      ui.move(orow, ocol).write(getRoomChar(screen[orow][ocol], orow, ocol));
     }
 
     if (canSee(row, col)) {
       if (!(screen[row][col] & Cell.monster != 0)) {
-        ui.move(row, col);
-        ui.write(')');
+        ui.move(row, col).write(')');
       }
       ui.refresh();
     }
@@ -204,8 +200,7 @@ Future<bool> _flopWeapon(GameObject weapon, int row, int col) async {
     addToPack(newWeapon, levelObjects, false);
 
     if (canSee(r, c)) {
-      ui.move(r, c);
-      ui.write(getRoomChar(screen[r][c], r, c));
+      ui.move(r, c).write(getRoomChar(screen[r][c], r, c));
     }
   } else {
     int t = weapon.quantity;

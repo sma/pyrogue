@@ -339,8 +339,7 @@ void _makeParty() {
 
 void showObjects() {
   for (GameObject obj in levelObjects) {
-    ui.move(obj.row, obj.col);
-    ui.write(getRoomChar(obj.whatIs, obj.row, obj.col));
+    ui.move(obj.row, obj.col).write(getRoomChar(obj.whatIs, obj.row, obj.col));
   }
 }
 

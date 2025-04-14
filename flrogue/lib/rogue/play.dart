@@ -24,8 +24,7 @@ Future<void> playLevel() async {
       hitMessage = "";
     }
 
-    ui.move(rogue.row, rogue.col);
-    ui.refresh();
+    ui.move(rogue.row, rogue.col).refresh();
 
     String ch = await ui.getchar();
     checkMessage();

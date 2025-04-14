@@ -80,11 +80,12 @@ void _playerInit() {
 Never cleanUp(String estr) {
   ui.move(ui.rows - 1, 0);
   ui.refresh();
-  ui.clearScreen();
+  ui.end();
   print(estr);
-  if (exc != null) {
+  if (exc case (final ex, final st)) {
     print("---------");
-    print(exc.toString());
+    print(ex);
+    print(st);
     print("---------");
   }
   exit(0);

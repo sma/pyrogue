@@ -93,13 +93,12 @@ Future<void> inventory(List<GameObject> pack, int mask) async {
     if (row > 0) {
       String d = "";
       for (int j = col; j < ui.cols; j++) {
-        d += ui.read(row, j, 1);
+        d += ui.move(row, j).read();
       }
       descriptions[row - 1] = d;
     }
 
-    ui.move(row, col);
-    ui.write(descriptions[row]);
+    ui.move(row, col).write(descriptions[row]);
     ui.clearToEndOfLine();
     row++;
   }
@@ -107,12 +106,10 @@ Future<void> inventory(List<GameObject> pack, int mask) async {
   ui.refresh();
   await waitForAck("");
 
-  ui.move(0, 0);
-  ui.clearToEndOfLine();
+  ui.move(0, 0).clearToEndOfLine();
 
   for (int j = 1; j <= i; j++) {
-    ui.move(j, col);
-    ui.write(descriptions[j - 1]);
+    ui.move(j, col).write(descriptions[j - 1]);
   }
 }
 

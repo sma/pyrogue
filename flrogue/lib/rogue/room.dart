@@ -11,13 +11,11 @@ void lightUpRoom() {
 
   for (int i = r.topRow; i <= r.bottomRow; i++) {
     for (int j = r.leftCol; j <= r.rightCol; j++) {
-      ui.move(i, j);
-      ui.write(getRoomChar(screen[i][j], i, j));
+      ui.move(i, j).write(getRoomChar(screen[i][j], i, j));
     }
   }
 
-  ui.move(rogue.row, rogue.col);
-  ui.write(rogue.fchar);
+  ui.move(rogue.row, rogue.col).write(rogue.fchar);
 }
 
 void lightPassage(int row, int col) {
@@ -31,8 +29,7 @@ void lightPassage(int row, int col) {
       if (isPassable(row + i, col + j)) {
         int r = row + i;
         int c = col + j;
-        ui.move(r, c);
-        ui.write(getRoomChar(screen[r][c], r, c));
+        ui.move(r, c).write(getRoomChar(screen[r][c], r, c));
       }
     }
   }
@@ -48,8 +45,7 @@ void darkenRoom(int rn) {
       if (!isObject(i, j) &&
           !(detectMonster && screen[i][j] & Cell.monster != 0)) {
         if (!hidingXeroc(i, j)) {
-          ui.move(i, j);
-          ui.write(' ');
+          ui.move(i, j).write(' ');
         }
       }
     }
@@ -169,15 +165,14 @@ void drawMagicMap() {
     for (var j = 0; j < sCols; j++) {
       var s = screen[i][j];
       if (s & mask != 0) {
-        var ch = ui.read(i, j);
+        var ch = ui.move(i, j).read();
         if (ch == ' ') {
           if (s & Cell.horWall != 0) ch = '-';
           if (s & Cell.vertWall != 0) ch = '|';
           if (s & Cell.door != 0) ch = '+';
           if (s & Cell.tunnel != 0) ch = '#';
           if (s & Cell.stairs != 0) ch = '%';
-          ui.move(i, j);
-          ui.write(ch);
+          ui.move(i, j).write(ch);
         }
       }
     }
