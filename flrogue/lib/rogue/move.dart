@@ -11,9 +11,7 @@ import 'ui.dart';
 import 'use.dart';
 
 // Movement status constants
-const int moved = 0;
-const int moveFailed = -1;
-const int stoppedOnSomething = -2;
+enum MovementStatus { moved, moveFailed, stoppedOnSomething }
 
 // Global state for move logic
 int _moves = 0;
@@ -21,7 +19,7 @@ int _hExp = -1;
 int _hN = 0;
 int _hC = 0;
 
-Future<int> singleMoveRogue(String dirch, bool pickup) async {
+Future<MovementStatus> singleMoveRogue(String dirch, bool pickup) async {
   int row = rogue.row;
   int col = rogue.col;
 
@@ -30,7 +28,7 @@ Future<int> singleMoveRogue(String dirch, bool pickup) async {
 
     if (!(screen[row][col] & Cell.monster != 0)) {
       await message("you are being held", true);
-      return moveFailed;
+      return MovementStatus.moveFailed;
     }
   }
 
@@ -46,11 +44,11 @@ Future<int> singleMoveRogue(String dirch, bool pickup) async {
   if (screen[row][col] & Cell.monster != 0) {
     await rogueHit(objectAt(levelMonsters, row, col)!);
     await registerMove();
-    return moveFailed;
+    return MovementStatus.moveFailed;
   }
 
   if (!_canMove(rogue.row, rogue.col, row, col)) {
-    return moveFailed;
+    return MovementStatus.moveFailed;
   }
 
   if (screen[row][col] & Cell.door != 0) {
@@ -88,42 +86,46 @@ Future<int> singleMoveRogue(String dirch, bool pickup) async {
         if (obj.whatIs == Cell.gold) {
           await message(description, true);
           await registerMove();
-          return stoppedOnSomething;
+          return MovementStatus.stoppedOnSomething;
         }
       } else if (!status) {
         if (await registerMove()) {
           // fainted from hunger
-          return stoppedOnSomething;
+          return MovementStatus.stoppedOnSomething;
         }
-        return confused != 0 ? stoppedOnSomething : moved;
+        return confused != 0
+            ? MovementStatus.stoppedOnSomething
+            : MovementStatus.moved;
       } else {
         GameObject obj = objectAt(levelObjects, row, col)!;
         String description = "moved onto ${getDescription(obj)}";
         await message(description, true);
         await registerMove();
-        return stoppedOnSomething;
+        return MovementStatus.stoppedOnSomething;
       }
     } else {
       GameObject obj = objectAt(levelObjects, row, col)!;
       String description = "moved onto ${getDescription(obj)}";
       await message(description, true);
       await registerMove();
-      return stoppedOnSomething;
+      return MovementStatus.stoppedOnSomething;
     }
   }
 
   if (screen[row][col] & Cell.door != 0 ||
       screen[row][col] & Cell.stairs != 0) {
     await registerMove();
-    return stoppedOnSomething;
+    return MovementStatus.stoppedOnSomething;
   }
 
   if (await registerMove()) {
     // fainted from hunger
-    return stoppedOnSomething;
+    return MovementStatus.stoppedOnSomething;
   }
 
-  return confused != 0 ? stoppedOnSomething : moved;
+  return confused != 0
+      ? MovementStatus.stoppedOnSomething
+      : MovementStatus.moved;
 }
 
 Future<void> multipleMoveRogue(String dirch) async {
@@ -132,12 +134,14 @@ Future<void> multipleMoveRogue(String dirch) async {
       int row = rogue.row;
       int col = rogue.col;
 
-      int m = await singleMoveRogue(
+      MovementStatus m = await singleMoveRogue(
         String.fromCharCode(dirch.ascii + 96),
         true,
       );
 
-      if (m == moveFailed || m == stoppedOnSomething || interrupted) {
+      if (m == MovementStatus.moveFailed ||
+          m == MovementStatus.stoppedOnSomething ||
+          interrupted) {
         break;
       }
 
@@ -148,7 +152,7 @@ Future<void> multipleMoveRogue(String dirch) async {
   } else if ("HJKLBYUN".contains(dirch)) {
     while (!interrupted &&
         await singleMoveRogue(String.fromCharCode(dirch.ascii + 32), true) ==
-            moved) {
+            MovementStatus.moved) {
       // Continue until interrupted or move fails
     }
   }

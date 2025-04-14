@@ -136,10 +136,6 @@ const int maxSyllables = 40;
 const int maxMetals = 15;
 const int goldPercent = 46;
 
-// Movement status
-const int moved = 0;
-const int moveFailed = -1;
-const int stoppedOnSomething = -2;
 const String cancel = '\u001b'; // ESC character
 const String list = '*';
 
