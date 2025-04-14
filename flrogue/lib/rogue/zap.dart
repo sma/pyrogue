@@ -53,7 +53,7 @@ Future<void> zapp() async {
     GameObject? monster = _getZappedMonster(dir, rogue.row, rogue.col);
     if (monster != null) {
       wakeUp(monster);
-      await _zapMonster(monster, wand.whichKind);
+      await _zapMonster(monster, WandType.values[wand.whichKind]);
     }
   }
 
@@ -81,68 +81,69 @@ GameObject? _getZappedMonster(String dir, int row, int col) {
   }
 }
 
-Future<void> _zapMonster(GameObject monster, int kind) async {
+Future<void> _zapMonster(GameObject monster, WandType kind) async {
   int row = monster.row;
   int col = monster.col;
 
-  if (kind == WandType.slowMonster.index) {
-    if (monster.flagsIs(MonsterFlags.hasted)) {
-      monster.flagsRemove(MonsterFlags.hasted);
-    } else {
-      monster.quiver = 0;
-      monster.flagsAdd(MonsterFlags.slowed);
-    }
-  } else if (kind == WandType.hasteMonster.index) {
-    if (monster.flagsIs(MonsterFlags.slowed)) {
-      monster.flagsRemove(MonsterFlags.slowed);
-    } else {
-      monster.flagsAdd(MonsterFlags.hasted);
-    }
-  } else if (kind == WandType.teleportAway.index) {
-    _teleportAway(monster);
-  } else if (kind == WandType.killMonster.index) {
-    rogue.expPoints -= monster.killExp;
-    await monsterDamage(monster, monster.quantity);
-  } else if (kind == WandType.invisibility.index) {
-    monster.flagsAdd(MonsterFlags.isInvis);
-    ui.move(row, col);
-    ui.write(getMonsterChar(monster));
-  } else if (kind == WandType.polymorph.index) {
-    if (monster.ichar == 'F') {
-      beingHeld = false;
-    }
-
-    GameObject newMonster;
-    while (true) {
-      newMonster = monsterTab[getRand(0, monsterCount - 1)].copy();
-      if (!(newMonster.ichar == 'X' &&
-          (currentLevel < xeroc1 || currentLevel > xeroc2))) {
-        break;
+  switch (kind) {
+    case WandType.slowMonster:
+      if (monster.flagsIs(MonsterFlags.hasted)) {
+        monster.flagsRemove(MonsterFlags.hasted);
+      } else {
+        monster.quiver = 0;
+        monster.flagsAdd(MonsterFlags.slowed);
       }
-    }
-
-    newMonster.whatIs = Cell.monster;
-    newMonster.row = row;
-    newMonster.col = col;
-    int i = levelMonsters.indexOf(monster);
-    levelMonsters[i] = newMonster;
-
-    wakeUp(newMonster);
-
-    if (canSee(row, col)) {
+    case WandType.hasteMonster:
+      if (monster.flagsIs(MonsterFlags.slowed)) {
+        monster.flagsRemove(MonsterFlags.slowed);
+      } else {
+        monster.flagsAdd(MonsterFlags.hasted);
+      }
+    case WandType.teleportAway:
+      _teleportAway(monster);
+    case WandType.killMonster:
+      rogue.expPoints -= monster.killExp;
+      await monsterDamage(monster, monster.quantity);
+    case WandType.invisibility:
+      monster.flagsAdd(MonsterFlags.isInvis);
       ui.move(row, col);
-      ui.write(getMonsterChar(newMonster));
-    }
-  } else if (kind == WandType.putToSleep.index) {
-    monster.flagsAdd(MonsterFlags.isAsleep);
-    monster.flagsRemove(MonsterFlags.wakens);
-  } else if (kind == WandType.doNothing.index) {
-    await message("nothing happens");
+      ui.write(getMonsterChar(monster));
+    case WandType.polymorph:
+      if (monster.ichar == 'F') {
+        beingHeld = false;
+      }
+
+      GameObject newMonster;
+      while (true) {
+        newMonster = monsterTab[getRand(0, monsterCount - 1)].copy();
+        if (!(newMonster.ichar == 'X' &&
+            (currentLevel < xeroc1 || currentLevel > xeroc2))) {
+          break;
+        }
+      }
+
+      newMonster.whatIs = Cell.monster;
+      newMonster.row = row;
+      newMonster.col = col;
+      int i = levelMonsters.indexOf(monster);
+      levelMonsters[i] = newMonster;
+
+      wakeUp(newMonster);
+
+      if (canSee(row, col)) {
+        ui.move(row, col);
+        ui.write(getMonsterChar(newMonster));
+      }
+    case WandType.putToSleep:
+      monster.flagsAdd(MonsterFlags.isAsleep);
+      monster.flagsRemove(MonsterFlags.wakens);
+    case WandType.doNothing:
+      await message("nothing happens");
   }
 
   // Set wand as identified
-  if (idWands[kind].idStatus != IdStatus.called) {
-    idWands[kind].idStatus = IdStatus.identified;
+  if (idWands[kind.index].idStatus != IdStatus.called) {
+    idWands[kind.index].idStatus = IdStatus.identified;
   }
 }
 

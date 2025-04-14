@@ -1,10 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
+import 'package:global_vars_devtools_plugin/global_vars_service.dart';
 import 'rogue/globals.dart' show exc;
 import 'rogue/main.dart' as rogue;
 import 'terminal_widget.dart';
 
+int foo = 42;
+
 void main() {
+  GlobalVarsService.instance.register('foo', foo, (value) => foo = value);
+
   runApp(const RogueApp());
 }
 
@@ -63,6 +69,16 @@ class _RogueGameState extends State<RogueGame> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () {
+              print(foo);
+            },
+            icon: Icon(Icons.anchor_sharp),
+          ),
+        ],
+      ),
       backgroundColor: Colors.black,
       body: Column(
         children: [

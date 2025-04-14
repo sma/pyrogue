@@ -25,63 +25,70 @@ Future<void> quaff() async {
     return;
   }
 
-  int k = obj.whichKind;
-  if (k == PotionType.increaseStrength.index) {
-    await message("you feel stronger now, what bulging muscles!");
-    rogue.strengthCurrent += 1;
-    if (rogue.strengthCurrent > rogue.strengthMax) {
-      rogue.strengthMax = rogue.strengthCurrent;
-    }
-  } else if (k == PotionType.restoreStrength.index) {
-    await message("this tastes great, you feel warm all over");
-    rogue.strengthCurrent = rogue.strengthMax;
-  } else if (k == PotionType.healing.index) {
-    await message("you begin to feel better");
-    await _potionHeal(false);
-  } else if (k == PotionType.extraHealing.index) {
-    await message("you begin to feel much better");
-    await _potionHeal(true);
-  } else if (k == PotionType.poison.index) {
-    rogue.strengthCurrent -= getRand(1, 3);
-    if (rogue.strengthCurrent < 0) {
-      rogue.strengthCurrent = 0;
-    }
-    await message("you feel very sick now");
-    if (halluc != 0) {
-      await unhallucinate();
-    }
-  } else if (k == PotionType.raiseLevel.index) {
-    await message("you feel more experienced");
-    await addExp(levelPoints[rogue.exp - 1] - rogue.expPoints + 1);
-  } else if (k == PotionType.blindness.index) {
-    await _goBlind();
-  } else if (k == PotionType.hallucination.index) {
-    await message("oh wow, everything seems so cosmic");
-    halluc += getRand(500, 800);
-  } else if (k == PotionType.detectMonster.index) {
-    if (levelMonsters.isNotEmpty) {
-      showMonsters();
-    } else {
-      await message("you have a strange feeling for a moment, then it passes");
-    }
-    detectMonster = true;
-  } else if (k == PotionType.detectObjects.index) {
-    if (levelObjects.isNotEmpty) {
-      if (blind == 0) {
-        showObjects();
+  var k = PotionType.values[obj.whichKind];
+  switch (k) {
+    case PotionType.increaseStrength:
+      await message("you feel stronger now, what bulging muscles!");
+      rogue.strengthCurrent += 1;
+      if (rogue.strengthCurrent > rogue.strengthMax) {
+        rogue.strengthMax = rogue.strengthCurrent;
       }
-    } else {
-      await message("you have a strange feeling for a moment, then it passes");
-    }
-  } else if (k == PotionType.confusion.index) {
-    await message(halluc != 0 ? "what a trippy feeling" : "you feel confused");
-    confuse();
+    case PotionType.restoreStrength:
+      await message("this tastes great, you feel warm all over");
+      rogue.strengthCurrent = rogue.strengthMax;
+    case PotionType.healing:
+      await message("you begin to feel better");
+      await _potionHeal(false);
+    case PotionType.extraHealing:
+      await message("you begin to feel much better");
+      await _potionHeal(true);
+    case PotionType.poison:
+      rogue.strengthCurrent -= getRand(1, 3);
+      if (rogue.strengthCurrent < 1) {
+        rogue.strengthCurrent = 1;
+      }
+      await message("you feel very sick now");
+      if (halluc != 0) {
+        await unhallucinate();
+      }
+    case PotionType.raiseLevel:
+      await message("you feel more experienced");
+      await addExp(levelPoints[rogue.exp - 1] - rogue.expPoints + 1);
+    case PotionType.blindness:
+      await _goBlind();
+    case PotionType.hallucination:
+      await message("oh wow, everything seems so cosmic");
+      halluc += getRand(500, 800);
+    case PotionType.detectMonster:
+      if (levelMonsters.isNotEmpty) {
+        showMonsters();
+      } else {
+        await message(
+          "you have a strange feeling for a moment, then it passes",
+        );
+      }
+      detectMonster = true;
+    case PotionType.detectObjects:
+      if (levelObjects.isNotEmpty) {
+        if (blind == 0) {
+          showObjects();
+        }
+      } else {
+        await message(
+          "you have a strange feeling for a moment, then it passes",
+        );
+      }
+    case PotionType.confusion:
+      await message(
+        halluc != 0 ? "what a trippy feeling" : "you feel confused",
+      );
+      confuse();
   }
 
   printStats();
 
-  if (idPotions[k].idStatus != IdStatus.called) {
-    idPotions[k].idStatus = IdStatus.identified;
+  if (idPotions[k.index].idStatus != IdStatus.called) {
+    idPotions[k.index].idStatus = IdStatus.identified;
   }
 
   await vanish(obj, true);
