@@ -86,17 +86,17 @@ Future<void> _zapMonster(GameObject monster, int kind) async {
   int col = monster.col;
 
   if (kind == WandType.slowMonster.index) {
-    if (monster.mFlags & MonsterFlags.hasted != 0) {
-      monster.mFlags &= ~MonsterFlags.hasted;
+    if (monster.flagsIs(MonsterFlags.hasted)) {
+      monster.flagsRemove(MonsterFlags.hasted);
     } else {
       monster.quiver = 0;
-      monster.mFlags |= MonsterFlags.slowed;
+      monster.flagsAdd(MonsterFlags.slowed);
     }
   } else if (kind == WandType.hasteMonster.index) {
-    if (monster.mFlags & MonsterFlags.slowed != 0) {
-      monster.mFlags &= ~MonsterFlags.slowed;
+    if (monster.flagsIs(MonsterFlags.slowed)) {
+      monster.flagsRemove(MonsterFlags.slowed);
     } else {
-      monster.mFlags |= MonsterFlags.hasted;
+      monster.flagsAdd(MonsterFlags.hasted);
     }
   } else if (kind == WandType.teleportAway.index) {
     _teleportAway(monster);
@@ -104,7 +104,7 @@ Future<void> _zapMonster(GameObject monster, int kind) async {
     rogue.expPoints -= monster.killExp;
     await monsterDamage(monster, monster.quantity);
   } else if (kind == WandType.invisibility.index) {
-    monster.mFlags |= MonsterFlags.isInvis;
+    monster.flagsAdd(MonsterFlags.isInvis);
     ui.move(row, col);
     ui.write(getMonsterChar(monster));
   } else if (kind == WandType.polymorph.index) {
@@ -134,8 +134,8 @@ Future<void> _zapMonster(GameObject monster, int kind) async {
       ui.write(getMonsterChar(newMonster));
     }
   } else if (kind == WandType.putToSleep.index) {
-    monster.mFlags |= MonsterFlags.isAsleep;
-    monster.mFlags &= ~MonsterFlags.wakens;
+    monster.flagsAdd(MonsterFlags.isAsleep);
+    monster.flagsRemove(MonsterFlags.wakens);
   } else if (kind == WandType.doNothing.index) {
     await message("nothing happens");
   }

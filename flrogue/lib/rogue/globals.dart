@@ -216,6 +216,11 @@ class GameObject {
     obj.pickedUp = pickedUp;
     return obj;
   }
+
+  bool flagsIs(int flag) => mFlags & flag != 0;
+  bool flagsIsnt(int flag) => mFlags & flag == 0;
+  void flagsAdd(int flag) => mFlags |= flag;
+  void flagsRemove(int flag) => mFlags &= ~flag;
 }
 
 // Fighter class for the player
@@ -633,7 +638,10 @@ final List<Identity> idWands = [
 ];
 
 // Screen cells
-final List<List<int>> screen = List.generate(sRows, (_) => List.filled(sCols, 0));
+final List<List<int>> screen = List.generate(
+  sRows,
+  (_) => List.filled(sCols, 0),
+);
 
 // Fighter instance for the player
 final Fighter rogue = Fighter();

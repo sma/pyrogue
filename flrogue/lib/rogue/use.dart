@@ -308,8 +308,8 @@ Future<void> _holdMonster() async {
 
       if (screen[row][col] & Cell.monster != 0) {
         GameObject monster = objectAt(levelMonsters, row, col)!;
-        monster.mFlags |= MonsterFlags.isAsleep;
-        monster.mFlags &= ~MonsterFlags.wakens;
+        monster.flagsAdd(MonsterFlags.isAsleep);
+        monster.flagsRemove(MonsterFlags.wakens);
         mcount += 1;
       }
     }

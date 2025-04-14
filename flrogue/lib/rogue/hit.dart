@@ -241,7 +241,7 @@ Future<void> fight(bool toTheDeath) async {
   }
 
   fightMonster = objectAt(levelMonsters, row, col);
-  if (fightMonster!.mFlags & MonsterFlags.isInvis != 0 && !detectMonster) {
+  if (fightMonster!.flagsIs(MonsterFlags.isInvis) && !detectMonster) {
     await message("I see no monster there");
     return;
   }

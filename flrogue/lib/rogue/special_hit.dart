@@ -227,22 +227,22 @@ Future<bool> orcGold(GameObject monster) async {
     for (int j = r.leftCol + 1; j < r.rightCol; j++) {
       if (screen[i][j] & Cell.gold != 0 &&
           !(screen[i][j] & Cell.monster != 0)) {
-        monster.mFlags |= MonsterFlags.canGo;
+        monster.flagsAdd(MonsterFlags.canGo);
         bool s = monsterCanGo(monster, i, j);
-        monster.mFlags &= ~MonsterFlags.canGo;
+        monster.flagsRemove(MonsterFlags.canGo);
 
         if (s) {
           moveMonsterTo(monster, i, j);
-          monster.mFlags |= MonsterFlags.isAsleep;
-          monster.mFlags &= ~MonsterFlags.wakens;
+          monster.flagsAdd(MonsterFlags.isAsleep);
+          monster.flagsRemove(MonsterFlags.wakens);
           monster.identified = 1;
           return true;
         }
 
         monster.identified = 1;
-        monster.mFlags |= MonsterFlags.canGo;
+        monster.flagsAdd(MonsterFlags.canGo);
         await mvMonster(monster, i, j);
-        monster.mFlags &= ~MonsterFlags.canGo;
+        monster.flagsRemove(MonsterFlags.canGo);
         monster.identified = 0;
         return true;
       }
