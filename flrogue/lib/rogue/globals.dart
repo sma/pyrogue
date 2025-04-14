@@ -633,13 +633,13 @@ final List<Identity> idWands = [
 ];
 
 // Screen cells
-List<List<int>> screen = List.generate(sRows, (_) => List.filled(sCols, 0));
+final List<List<int>> screen = List.generate(sRows, (_) => List.filled(sCols, 0));
 
 // Fighter instance for the player
-Fighter rogue = Fighter();
+final Fighter rogue = Fighter();
 
 // Room instances
-List<Room> rooms = List.generate(maxRooms, (_) => Room());
+final List<Room> rooms = List.generate(maxRooms, (_) => Room());
 
 // Random functions
 Random _random = Random();
@@ -672,13 +672,13 @@ int partyRoom = 0;
 bool messageCleared = true;
 int messageCol = 0;
 
-List<GameObject> levelMonsters = [];
+final List<GameObject> levelMonsters = [];
 
-List<GameObject> levelObjects = [];
+final List<GameObject> levelObjects = [];
 bool hasAmulet = false;
 int foods = 0;
 
-List<bool> ichars = List.filled(26, false);
+final List<bool> ichars = List.filled(26, false);
 
 bool interrupted = false;
 
