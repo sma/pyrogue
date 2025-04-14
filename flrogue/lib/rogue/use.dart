@@ -1,5 +1,5 @@
 import 'globals.dart';
-import 'level.dart' hide levelPoints;
+import 'level.dart';
 import 'message.dart';
 import 'monster.dart';
 import 'move.dart';
@@ -37,10 +37,10 @@ Future<void> quaff() async {
     rogue.strengthCurrent = rogue.strengthMax;
   } else if (k == PotionType.healing.index) {
     await message("you begin to feel better");
-    await potionHeal(false);
+    await _potionHeal(false);
   } else if (k == PotionType.extraHealing.index) {
     await message("you begin to feel much better");
-    await potionHeal(true);
+    await _potionHeal(true);
   } else if (k == PotionType.poison.index) {
     rogue.strengthCurrent -= getRand(1, 3);
     if (rogue.strengthCurrent < 0) {
@@ -54,7 +54,7 @@ Future<void> quaff() async {
     await message("you feel more experienced");
     await addExp(levelPoints[rogue.exp - 1] - rogue.expPoints + 1);
   } else if (k == PotionType.blindness.index) {
-    await goBlind();
+    await _goBlind();
   } else if (k == PotionType.hallucination.index) {
     await message("oh wow, everything seems so cosmic");
     halluc += getRand(500, 800);
@@ -109,11 +109,11 @@ Future<void> readScroll() async {
     case ScrollType.scareMonster:
       await message("you hear a maniacal laughter in the distance");
     case ScrollType.holdMonster:
-      await holdMonster();
+      await _holdMonster();
     case ScrollType.enchantWeapon:
       if (rogue.weapon case final weapon?) {
         await message(
-          "your ${nameOf(weapon)}glow${weapon.quantity > 1 ? '' : 's'} ${getEnchColor()}for a moment",
+          "your ${nameOf(weapon)}glow${weapon.quantity > 1 ? '' : 's'} ${_getEnchColor()}for a moment",
         );
         if (getRand(0, 1) != 0) {
           weapon.toHitEnchantment += 1;
@@ -126,7 +126,7 @@ Future<void> readScroll() async {
       }
     case ScrollType.enchantArmor:
       if (rogue.armor case final armor?) {
-        await message("your armor glows ${getEnchColor()}for a moment");
+        await message("your armor glows ${_getEnchColor()}for a moment");
         armor.damageEnchantment += 1;
         armor.isCursed = 0;
         printStats();
@@ -138,11 +138,11 @@ Future<void> readScroll() async {
       await message("what would you like to identify?");
       obj.identified = 1;
       idScrolls[k.index].idStatus = IdStatus.identified;
-      await identify();
+      await _identify();
     case ScrollType.teleport:
-      teleport();
+      _teleport();
     case ScrollType.sleep:
-      await sleepScroll();
+      await _sleepScroll();
     case ScrollType.protectArmor:
       if (rogue.armor case final armor?) {
         await message("your armor is covered by a shimmering gold shield");
@@ -188,7 +188,7 @@ Future<void> vanish(GameObject obj, bool rm) async {
   }
 }
 
-Future<void> potionHeal(bool extra) async {
+Future<void> _potionHeal(bool extra) async {
   double ratio = rogue.hpCurrent / rogue.hpMax;
 
   if (ratio >= 0.9) {
@@ -230,7 +230,7 @@ Future<void> potionHeal(bool extra) async {
   }
 }
 
-Future<void> identify() async {
+Future<void> _identify() async {
   while (true) {
     String ch = await getPackLetter("identify what?", Cell.isObject);
     if (ch == cancel) {
@@ -294,7 +294,7 @@ Future<void> eat() async {
   await vanish(obj, true);
 }
 
-Future<void> holdMonster() async {
+Future<void> _holdMonster() async {
   int mcount = 0;
 
   for (int i = -2; i < 3; i++) {
@@ -324,7 +324,7 @@ Future<void> holdMonster() async {
   }
 }
 
-void teleport() {
+void _teleport() {
   if (currentRoom >= 0) {
     darkenRoom(currentRoom);
   } else {
@@ -395,7 +395,7 @@ Future<void> unblind() async {
   }
 }
 
-Future<void> sleepScroll() async {
+Future<void> _sleepScroll() async {
   await message("you fall asleep");
 
   int i = getRand(4, 10);
@@ -407,7 +407,7 @@ Future<void> sleepScroll() async {
   await message("you can move again");
 }
 
-Future<void> goBlind() async {
+Future<void> _goBlind() async {
   if (blind == 0) {
     await message("a cloak of darkness falls around you");
   }
@@ -430,7 +430,7 @@ Future<void> goBlind() async {
   ui.refresh();
 }
 
-String getEnchColor() {
+String _getEnchColor() {
   if (halluc != 0) {
     return idPotions[getRand(0, PotionType.values.length - 1)].title;
   }

@@ -22,9 +22,8 @@ Future<void> killedBy(GameObject? monster, DeathCause other) async {
     buf = "quit";
   } else if (other != DeathCause.win) {
     buf = "killed by ";
-    String name =
-        monsterNames[monster!.ichar.ascii - 'A'.ascii];
-    if (isVowel(name[0])) {
+    String name = monsterNames[monster!.ichar.ascii - 'A'.ascii];
+    if (_isVowel(name[0])) {
       buf += "an ";
     } else {
       buf += "a ";
@@ -66,8 +65,8 @@ Future<void> win() async {
 
   await message("");
   await message("");
-  idAll();
-  await sellPack();
+  _idAll();
+  await _sellPack();
   await score(null, DeathCause.win);
 
   exit(0);
@@ -117,7 +116,7 @@ Future<void> putScores(GameObject? monster, DeathCause other) async {
         cleanUp("sorry, score file is out of order");
       }
 
-      if (ncmp(scores[i].substring(16), playerName)) {
+      if (_ncmp(scores[i].substring(16), playerName)) {
         int s = int.parse(scores[i].substring(8, 16));
         if (s > rogue.gold) {
           dontInsert = true;
@@ -144,7 +143,7 @@ Future<void> putScores(GameObject? monster, DeathCause other) async {
       }
 
       if (rank <= 9) {
-        insertScore(scores, rank, i, monster, other);
+        _insertScore(scores, rank, i, monster, other);
         if (i < 10) {
           i += 1;
         }
@@ -186,7 +185,7 @@ Future<void> putScores(GameObject? monster, DeathCause other) async {
   cleanUp("");
 }
 
-void insertScore(
+void _insertScore(
   List<String> scores,
   int rank,
   int n,
@@ -212,9 +211,8 @@ void insertScore(
     buf += "a total winner";
   } else {
     buf += "killed by ";
-    String name =
-        monsterNames[monster!.ichar.ascii - 'A'.ascii];
-    if (isVowel(name[0])) {
+    String name = monsterNames[monster!.ichar.ascii - 'A'.ascii];
+    if (_isVowel(name[0])) {
       buf += "an ";
     } else {
       buf += "a ";
@@ -230,15 +228,15 @@ void insertScore(
   scores[rank] = buf;
 }
 
-bool isVowel(String ch) {
+bool _isVowel(String ch) {
   return "aeiou".contains(ch.toLowerCase());
 }
 
-bool ncmp(String s1, String s2) {
+bool _ncmp(String s1, String s2) {
   return s1.split(':')[0].trim() == s2;
 }
 
-void idAll() {
+void _idAll() {
   for (int i = 0; i < ScrollType.values.length; i++) {
     idScrolls[i].idStatus = IdStatus.identified;
   }
@@ -256,7 +254,7 @@ void idAll() {
   }
 }
 
-Future<void> sellPack() async {
+Future<void> _sellPack() async {
   int rows = 2;
 
   ui.clearScreen();
@@ -267,7 +265,7 @@ Future<void> sellPack() async {
 
     if (obj.whatIs != Cell.food) {
       obj.identified = 1;
-      int val = getValue(obj);
+      int val = _getValue(obj);
       rogue.gold += val;
 
       if (rows < sRows) {
@@ -282,7 +280,7 @@ Future<void> sellPack() async {
   await message("");
 }
 
-int getValue(GameObject obj) {
+int _getValue(GameObject obj) {
   int k = obj.whichKind;
   int val = 0;
 

@@ -5,28 +5,6 @@ import 'room.dart';
 import 'score.dart';
 import 'ui.dart';
 
-// List of experience points needed for each level
-final List<int> levelPoints = [
-  10,
-  20,
-  40,
-  80,
-  160,
-  320,
-  640,
-  1300,
-  2600,
-  5200,
-  10000,
-  20000,
-  40000,
-  80000,
-  160000,
-  320000,
-  1000000,
-  10000000,
-];
-
 void makeLevel() {
   partyRoom = -1;
 
@@ -48,29 +26,29 @@ void makeLevel() {
   }
 
   for (int i = 0; i < maxRooms; i++) {
-    makeRoom(i, mustExists1, mustExists2, 4);
+    _makeRoom(i, mustExists1, mustExists2, 4);
   }
 
-  tryRooms(0, 1, 2);
-  tryRooms(0, 3, 6);
-  tryRooms(2, 5, 8);
-  tryRooms(6, 7, 8);
+  _tryRooms(0, 1, 2);
+  _tryRooms(0, 3, 6);
+  _tryRooms(2, 5, 8);
+  _tryRooms(6, 7, 8);
 
   for (int i = 0; i < maxRooms - 1; i++) {
-    connectRooms(i, i + 1, mustExists1, mustExists2, 4);
+    _connectRooms(i, i + 1, mustExists1, mustExists2, 4);
     if (i < maxRooms - 3) {
-      connectRooms(i, i + 3, mustExists1, mustExists2, 4);
+      _connectRooms(i, i + 3, mustExists1, mustExists2, 4);
     }
   }
 
-  addDeadEnds();
+  _addDeadEnds();
 
   if (!hasAmulet && currentLevel >= amuletLevel) {
     putAmulet();
   }
 }
 
-void makeRoom(int n, int r1, int r2, int r3) {
+void _makeRoom(int n, int r1, int r2, int r3) {
   int leftCol, rightCol, topRow, bottomRow;
 
   if (n == 0) {
@@ -159,7 +137,7 @@ void makeRoom(int n, int r1, int r2, int r3) {
   }
 }
 
-void connectRooms(int room1, int room2, int m1, int m2, int m3) {
+void _connectRooms(int room1, int room2, int m1, int m2, int m3) {
   if (room1 != m1 &&
       room1 != m2 &&
       room1 != m3 &&
@@ -171,41 +149,42 @@ void connectRooms(int room1, int room2, int m1, int m2, int m3) {
     }
   }
 
-  if (adjascent(room1, room2)) {
-    doConnect(room1, room2);
+  if (_adjascent(room1, room2)) {
+    _doConnect(room1, room2);
   }
 }
 
-void doConnect(int room1, int room2) {
+void _doConnect(int room1, int room2) {
   int dir1, dir2;
 
-  if (rooms[room1].leftCol > rooms[room2].rightCol && onSameRow(room1, room2)) {
+  if (rooms[room1].leftCol > rooms[room2].rightCol &&
+      _onSameRow(room1, room2)) {
     dir1 = Direction.left.index;
     dir2 = Direction.right.index;
   } else if (rooms[room2].leftCol > rooms[room1].rightCol &&
-      onSameRow(room1, room2)) {
+      _onSameRow(room1, room2)) {
     dir1 = Direction.right.index;
     dir2 = Direction.left.index;
   } else if (rooms[room1].topRow > rooms[room2].bottomRow &&
-      onSameCol(room1, room2)) {
+      _onSameCol(room1, room2)) {
     dir1 = Direction.up.index;
     dir2 = Direction.down.index;
   } else if (rooms[room2].topRow > rooms[room1].bottomRow &&
-      onSameCol(room1, room2)) {
+      _onSameCol(room1, room2)) {
     dir1 = Direction.down.index;
     dir2 = Direction.up.index;
   } else {
     return;
   }
 
-  final (row1, col1) = putDoor(room1, dir1);
+  final (row1, col1) = _putDoor(room1, dir1);
 
-  final (row2, col2) = putDoor(room2, dir2);
+  final (row2, col2) = _putDoor(room2, dir2);
 
-  drawSimplePassage(row1, col1, row2, col2, dir1);
+  _drawSimplePassage(row1, col1, row2, col2, dir1);
 
   if (randPercent(10)) {
-    drawSimplePassage(row1, col1, row2, col2, dir1);
+    _drawSimplePassage(row1, col1, row2, col2, dir1);
   }
 
   rooms[room1].doors[dir1 ~/ 2].otherRoom = room2;
@@ -257,7 +236,7 @@ void removeMask(int row, int col, int mask) {
   screen[row][col] &= ~mask;
 }
 
-bool adjascent(int room1, int room2) {
+bool _adjascent(int room1, int room2) {
   if (!rooms[room1].isRoom || !rooms[room2].isRoom) {
     return false;
   }
@@ -268,11 +247,11 @@ bool adjascent(int room1, int room2) {
     room2 = temp;
   }
 
-  return (onSameCol(room1, room2) || onSameRow(room1, room2)) &&
+  return (_onSameCol(room1, room2) || _onSameRow(room1, room2)) &&
       (room2 - room1 == 1 || room2 - room1 == 3);
 }
 
-(int, int) putDoor(int rn, int dir) {
+(int, int) _putDoor(int rn, int dir) {
   int row, col;
 
   if (dir == Direction.up.index || dir == Direction.down.index) {
@@ -289,7 +268,7 @@ bool adjascent(int room1, int room2) {
   return (row, col);
 }
 
-void drawSimplePassage(int row1, int col1, int row2, int col2, int dir) {
+void _drawSimplePassage(int row1, int col1, int row2, int col2, int dir) {
   if (dir == Direction.left.index || dir == Direction.right.index) {
     if (col2 < col1) {
       // Swap points
@@ -344,15 +323,15 @@ void drawSimplePassage(int row1, int col1, int row2, int col2, int dir) {
   }
 }
 
-bool onSameRow(int room1, int room2) {
+bool _onSameRow(int room1, int room2) {
   return room1 ~/ 3 == room2 ~/ 3;
 }
 
-bool onSameCol(int room1, int room2) {
+bool _onSameCol(int room1, int room2) {
   return room1 % 3 == room2 % 3;
 }
 
-void addDeadEnds() {
+void _addDeadEnds() {
   if (currentLevel <= 2) return;
 
   int start = getRand(0, maxRooms - 1);
@@ -387,7 +366,7 @@ void addDeadEnds() {
 
         if (screen[row][col] & (Cell.vertWall | Cell.horWall | Cell.door) !=
             0) {
-          breakIn(row, col, screen[row][col], dir);
+          _breakIn(row, col, screen[row][col], dir);
           found = true;
         } else {
           addMask(row, col, Cell.tunnel);
@@ -399,7 +378,7 @@ void addDeadEnds() {
   }
 }
 
-void breakIn(int row, int col, int ch, int dir) {
+void _breakIn(int row, int col, int ch, int dir) {
   if (ch & Cell.door != 0) {
     return;
   }
@@ -409,7 +388,7 @@ void breakIn(int row, int col, int ch, int dir) {
   if (ch & Cell.vertWall != 0) {
     if (col == rooms[rn].leftCol) {
       if (rooms[rn].doors[Direction.left.index ~/ 2].otherRoom != noRoom) {
-        int drow = doorRow(rn, Direction.left.index);
+        int drow = _doorRow(rn, Direction.left.index);
         for (int i = row; i != drow; i += (drow > row) ? 1 : -1) {
           addMask(i, col - 1, Cell.tunnel);
         }
@@ -420,7 +399,7 @@ void breakIn(int row, int col, int ch, int dir) {
     } else {
       // rightCol
       if (rooms[rn].doors[Direction.right.index ~/ 2].otherRoom != noRoom) {
-        int drow = doorRow(rn, Direction.right.index);
+        int drow = _doorRow(rn, Direction.right.index);
         for (int i = row; i != drow; i += (drow > row) ? 1 : -1) {
           addMask(i, col + 1, Cell.tunnel);
         }
@@ -433,7 +412,7 @@ void breakIn(int row, int col, int ch, int dir) {
     // HORWALL
     if (row == rooms[rn].topRow) {
       if (rooms[rn].doors[Direction.up.index ~/ 2].otherRoom != noRoom) {
-        int dcol = doorCol(rn, Direction.up.index);
+        int dcol = _doorCol(rn, Direction.up.index);
         for (int i = col; i != dcol; i += (dcol < col) ? -1 : 1) {
           addMask(row - 1, i, Cell.tunnel);
         }
@@ -444,7 +423,7 @@ void breakIn(int row, int col, int ch, int dir) {
     } else {
       // bottomRow
       if (rooms[rn].doors[Direction.down.index ~/ 2].otherRoom != noRoom) {
-        int dcol = doorCol(rn, Direction.down.index);
+        int dcol = _doorCol(rn, Direction.down.index);
         for (int i = col; i != dcol; i += (dcol < col) ? -1 : 1) {
           addMask(row + 1, i, Cell.tunnel);
         }
@@ -456,7 +435,7 @@ void breakIn(int row, int col, int ch, int dir) {
   }
 }
 
-int doorRow(int rn, int dir) {
+int _doorRow(int rn, int dir) {
   if (rooms[rn].doors[dir ~/ 2].otherRoom == noRoom) {
     return -1;
   }
@@ -479,7 +458,7 @@ int doorRow(int rn, int dir) {
   return -1;
 }
 
-int doorCol(int rn, int dir) {
+int _doorCol(int rn, int dir) {
   if (rooms[rn].doors[dir ~/ 2].otherRoom == noRoom) {
     return -1;
   }
@@ -547,7 +526,7 @@ Future<void> addExp(int e) async {
   rogue.expPoints += e;
 
   if (rogue.expPoints >= levelPoints[rogue.exp - 1]) {
-    int newExp = getExpLevel(rogue.expPoints);
+    int newExp = _getExpLevel(rogue.expPoints);
     for (int i = rogue.exp + 1; i <= newExp; i++) {
       await message("welcome to level $i");
       int hp = getRand(3, 10);
@@ -561,7 +540,7 @@ Future<void> addExp(int e) async {
   printStats();
 }
 
-int getExpLevel(int e) {
+int _getExpLevel(int e) {
   for (int i = 0; i < 50; i++) {
     if (levelPoints[i] > e) {
       return i + 1;
@@ -570,10 +549,10 @@ int getExpLevel(int e) {
   return 50; // Max level
 }
 
-void tryRooms(int r1, int r2, int r3) {
+void _tryRooms(int r1, int r2, int r3) {
   if (rooms[r1].isRoom && !rooms[r2].isRoom && rooms[r3].isRoom) {
     if (randPercent(75)) {
-      doConnect(r1, r3);
+      _doConnect(r1, r3);
     }
   }
 }

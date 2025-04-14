@@ -16,19 +16,19 @@ void putObjects() {
   }
 
   if (randPercent(5)) {
-    makeParty();
+    _makeParty();
   }
 
   for (int i = 0; i < n; i++) {
     GameObject obj = getRandObject();
-    putObjectRandLocation(obj);
+    _putObjectRandLocation(obj);
     addToPack(obj, levelObjects, false);
   }
 
-  putGold();
+  _putGold();
 }
 
-void putGold() {
+void _putGold() {
   for (int i = 0; i < maxRooms; i++) {
     Room r = rooms[i];
     if (r.isRoom && randPercent(goldPercent)) {
@@ -37,7 +37,7 @@ void putGold() {
         int col = getRand(r.leftCol + 1, r.rightCol - 1);
 
         if (screen[row][col] == Cell.floor || screen[row][col] == passage) {
-          putGoldAt(row, col);
+          _putGoldAt(row, col);
           break;
         }
       }
@@ -45,7 +45,7 @@ void putGold() {
   }
 }
 
-void putGoldAt(int row, int col) {
+void _putGoldAt(int row, int col) {
   GameObject obj = getAnObject();
   obj.row = row;
   obj.col = col;
@@ -129,22 +129,22 @@ GameObject getRandObject() {
   if (foods < currentLevel ~/ 2) {
     obj.whatIs = Cell.food;
   } else {
-    obj.whatIs = getRandWhatIs();
+    obj.whatIs = _getRandWhatIs();
   }
 
   obj.identified = 0;
 
   int w = obj.whatIs;
   if (w == Cell.scroll) {
-    getRandScroll(obj);
+    _getRandScroll(obj);
   } else if (w == Cell.potion) {
-    getRandPotion(obj);
+    _getRandPotion(obj);
   } else if (w == Cell.weapon) {
-    getRandWeapon(obj);
+    _getRandWeapon(obj);
   } else if (w == Cell.armor) {
-    getRandArmor(obj);
+    _getRandArmor(obj);
   } else if (w == Cell.wand) {
-    getRandWand(obj);
+    _getRandWand(obj);
   } else if (w == Cell.food) {
     foods += 1;
     getFood(obj);
@@ -153,7 +153,7 @@ GameObject getRandObject() {
   return obj;
 }
 
-int getRandWhatIs() {
+int _getRandWhatIs() {
   int percent = getRand(1, 92);
 
   if (percent <= 30) return Cell.scroll;
@@ -164,7 +164,7 @@ int getRandWhatIs() {
   return Cell.food;
 }
 
-void getRandScroll(GameObject obj) {
+void _getRandScroll(GameObject obj) {
   int percent = getRand(0, 85);
 
   if (percent <= 5) {
@@ -194,7 +194,7 @@ void getRandScroll(GameObject obj) {
   }
 }
 
-void getRandPotion(GameObject obj) {
+void _getRandPotion(GameObject obj) {
   int percent = getRand(1, 105);
 
   if (percent <= 5) {
@@ -222,7 +222,7 @@ void getRandPotion(GameObject obj) {
   }
 }
 
-void getRandWeapon(GameObject obj) {
+void _getRandWeapon(GameObject obj) {
   obj.whichKind = getRand(0, WeaponType.values.length - 1);
 
   if (obj.whichKind == WeaponType.arrow.index ||
@@ -282,7 +282,7 @@ void getRandWeapon(GameObject obj) {
   }
 }
 
-void getRandArmor(GameObject obj) {
+void _getRandArmor(GameObject obj) {
   obj.whichKind = getRand(0, ArmorType.values.length - 1);
   obj.clasz = obj.whichKind + 2;
 
@@ -306,7 +306,7 @@ void getRandArmor(GameObject obj) {
   }
 }
 
-void getRandWand(GameObject obj) {
+void _getRandWand(GameObject obj) {
   obj.whichKind = getRand(0, WandType.values.length - 1);
   obj.clasz = getRand(3, 7);
 }
@@ -332,9 +332,9 @@ GameObject getAnObject() {
   return GameObject(0, "", 1, 'L', 0, 0, 0, 0, 0, 0);
 }
 
-void makeParty() {
+void _makeParty() {
   partyRoom = getRandRoom();
-  fillRoomWithMonsters(partyRoom, fillRoomWithObjects(partyRoom));
+  fillRoomWithMonsters(partyRoom, _fillRoomWithObjects(partyRoom));
 }
 
 void showObjects() {
@@ -347,11 +347,11 @@ void showObjects() {
 void putAmulet() {
   GameObject obj = getAnObject();
   obj.whatIs = Cell.amulet;
-  putObjectRandLocation(obj);
+  _putObjectRandLocation(obj);
   addToPack(obj, levelObjects, false);
 }
 
-void putObjectRandLocation(GameObject obj) {
+void _putObjectRandLocation(GameObject obj) {
   var pos = getRandRowCol(Cell.floor | Cell.tunnel);
   addMask(pos.$1, pos.$2, obj.whatIs);
   obj.row = pos.$1;
@@ -484,7 +484,7 @@ List<Identity> getIdTable(GameObject obj) {
   throw Exception("Unknown object type");
 }
 
-int fillRoomWithObjects(int rn) {
+int _fillRoomWithObjects(int rn) {
   Room r = rooms[rn];
   int N = (r.bottomRow - r.topRow - 1) * (r.rightCol - r.leftCol - 1);
   int n = getRand(5, 10);

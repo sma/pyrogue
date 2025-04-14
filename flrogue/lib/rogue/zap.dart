@@ -50,17 +50,17 @@ Future<void> zapp() async {
   } else {
     wand.clasz -= 1;
 
-    GameObject? monster = getZappedMonster(dir, rogue.row, rogue.col);
+    GameObject? monster = _getZappedMonster(dir, rogue.row, rogue.col);
     if (monster != null) {
       wakeUp(monster);
-      await zapMonster(monster, wand.whichKind);
+      await _zapMonster(monster, wand.whichKind);
     }
   }
 
   await registerMove();
 }
 
-GameObject? getZappedMonster(String dir, int row, int col) {
+GameObject? _getZappedMonster(String dir, int row, int col) {
   while (true) {
     var (r, c) = getDirRc(dir, row, col);
 
@@ -81,7 +81,7 @@ GameObject? getZappedMonster(String dir, int row, int col) {
   }
 }
 
-Future<void> zapMonster(GameObject monster, int kind) async {
+Future<void> _zapMonster(GameObject monster, int kind) async {
   int row = monster.row;
   int col = monster.col;
 
@@ -99,7 +99,7 @@ Future<void> zapMonster(GameObject monster, int kind) async {
       monster.mFlags |= MonsterFlags.hasted;
     }
   } else if (kind == WandType.teleportAway.index) {
-    teleportAway(monster);
+    _teleportAway(monster);
   } else if (kind == WandType.killMonster.index) {
     rogue.expPoints -= monster.killExp;
     await monsterDamage(monster, monster.quantity);
@@ -146,7 +146,7 @@ Future<void> zapMonster(GameObject monster, int kind) async {
   }
 }
 
-void teleportAway(GameObject monster) {
+void _teleportAway(GameObject monster) {
   if (monster.ichar == 'F') {
     beingHeld = false;
   }

@@ -20,10 +20,10 @@ Future<void> init() async {
 
   levelObjects.clear();
   levelMonsters.clear();
-  playerInit();
+  _playerInit();
 }
 
-void playerInit() {
+void _playerInit() {
   rogue.pack.clear();
 
   // Initial food

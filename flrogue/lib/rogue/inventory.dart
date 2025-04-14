@@ -4,7 +4,7 @@ import 'object.dart';
 import 'pack.dart';
 import 'ui.dart';
 
-List<String> metals = [
+List<String> _metals = [
   "steel ",
   "bronze ",
   "gold ",
@@ -22,7 +22,7 @@ List<String> metals = [
   "titanium ",
 ];
 
-List<String> syllables = [
+List<String> _syllables = [
   "blech ",
   "foo ",
   "barf ",
@@ -66,9 +66,9 @@ List<String> syllables = [
 ];
 
 void initItems() {
-  shuffleColors();
-  mixMetals();
-  makeScrollTitles();
+  _shuffleColors();
+  _mixMetals();
+  _makeScrollTitles();
 }
 
 Future<void> inventory(List<GameObject> pack, int mask) async {
@@ -116,7 +116,7 @@ Future<void> inventory(List<GameObject> pack, int mask) async {
   }
 }
 
-void shuffleColors() {
+void _shuffleColors() {
   for (int i = 0; i < PotionType.values.length; i++) {
     int j = getRand(0, PotionType.values.length - 1);
     int k = getRand(0, PotionType.values.length - 1);
@@ -127,13 +127,13 @@ void shuffleColors() {
   }
 }
 
-void makeScrollTitles() {
+void _makeScrollTitles() {
   for (int i = 0; i < ScrollType.values.length; i++) {
     int sylls = getRand(2, 5);
     String title = "'";
 
     for (int j = 0; j < sylls; j++) {
-      title += syllables[getRand(0, maxSyllables - 1)];
+      title += _syllables[getRand(0, maxSyllables - 1)];
     }
 
     title = "${title.substring(0, title.length - 1)}' ";
@@ -141,18 +141,18 @@ void makeScrollTitles() {
   }
 }
 
-void mixMetals() {
+void _mixMetals() {
   for (int i = 0; i < maxMetals; i++) {
     int j = getRand(0, maxMetals - 1);
     int k = getRand(0, maxMetals - 1);
 
-    String temp = metals[j];
-    metals[j] = metals[k];
-    metals[k] = temp;
+    String temp = _metals[j];
+    _metals[j] = _metals[k];
+    _metals[k] = temp;
   }
 
   for (int i = 0; i < WandType.values.length; i++) {
-    idWands[i].title = metals[i];
+    idWands[i].title = _metals[i];
   }
 }
 

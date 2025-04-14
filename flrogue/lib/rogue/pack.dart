@@ -11,11 +11,11 @@ const String curseMessage = "you can't, it appears to be cursed";
 
 GameObject addToPack(GameObject obj, List<GameObject> pack, bool condense) {
   if (condense) {
-    GameObject? op = checkDuplicate(obj, pack);
+    GameObject? op = _checkDuplicate(obj, pack);
     if (op != null) {
       return op;
     } else {
-      obj.ichar = nextAvailIchar();
+      obj.ichar = _nextAvailIchar();
     }
   }
   pack.add(obj);
@@ -49,7 +49,7 @@ Future<(GameObject?, bool)> pickUp(int row, int col) async {
     return (obj, status);
   }
 
-  if (getPackCount(obj) >= maxPackCount) {
+  if (_getPackCount(obj) >= maxPackCount) {
     await message("Pack too full", true);
     return (null, status);
   }
@@ -132,7 +132,7 @@ Future<void> drop() async {
   await registerMove();
 }
 
-GameObject? checkDuplicate(GameObject obj, List<GameObject> pack) {
+GameObject? _checkDuplicate(GameObject obj, List<GameObject> pack) {
   if (!(obj.whatIs & (Cell.weapon | Cell.food | Cell.scroll | Cell.potion) !=
       0)) {
     return null;
@@ -154,7 +154,7 @@ GameObject? checkDuplicate(GameObject obj, List<GameObject> pack) {
   return null;
 }
 
-String nextAvailIchar() {
+String _nextAvailIchar() {
   for (int i = 0; i < 26; i++) {
     if (!ichars[i]) {
       ichars[i] = true;
@@ -308,7 +308,7 @@ Future<void> callIt() async {
   }
 }
 
-int getPackCount(GameObject newObj) {
+int _getPackCount(GameObject newObj) {
   int count = 0;
 
   for (GameObject obj in rogue.pack) {

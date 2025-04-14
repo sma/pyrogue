@@ -56,7 +56,7 @@ Future<void> monsterHit(GameObject monster, String? other) async {
 
   int damage;
   if (monster.ichar != 'F') {
-    damage = getDamage(monster.damage, true);
+    damage = _getDamage(monster.damage, true);
     double minus = (getArmorClass(rogue.armor) * 3.0) / 100.0 * damage;
     damage -= minus.toInt();
   } else {
@@ -65,7 +65,7 @@ Future<void> monsterHit(GameObject monster, String? other) async {
   }
 
   if (damage > 0) {
-    await rogueDamage(damage, monster);
+    await _rogueDamage(damage, monster);
   }
 
   await specialHit(monster);
@@ -98,7 +98,7 @@ Future<void> rogueHit(GameObject monster) async {
   wakeUp(monster);
 }
 
-Future<void> rogueDamage(int d, GameObject monster) async {
+Future<void> _rogueDamage(int d, GameObject monster) async {
   if (d >= rogue.hpCurrent) {
     rogue.hpCurrent = 0;
     printStats();
@@ -108,17 +108,17 @@ Future<void> rogueDamage(int d, GameObject monster) async {
   printStats();
 }
 
-int getDamage(String ds, bool r) {
+int _getDamage(String ds, bool r) {
   int total = 0;
   int i = 0;
 
   while (i < ds.length) {
-    int n = getNumber(ds.substring(i));
+    int n = _getNumber(ds.substring(i));
     while (i < ds.length && ds[i] != 'd') {
       i++;
     }
     i++;
-    int d = getNumber(ds.substring(i));
+    int d = _getNumber(ds.substring(i));
     while (i < ds.length && ds[i] != '/') {
       i++;
     }
@@ -136,12 +136,12 @@ int getDamage(String ds, bool r) {
   return total;
 }
 
-int getWDamage(GameObject? obj) {
+int _getWDamage(GameObject? obj) {
   if (obj == null) {
     return -1;
   }
 
-  int toHit = getNumber(obj.damage) + obj.toHitEnchantment;
+  int toHit = _getNumber(obj.damage) + obj.toHitEnchantment;
   int i = 0;
 
   while (i < obj.damage.length && obj.damage[i] != 'd') {
@@ -149,12 +149,12 @@ int getWDamage(GameObject? obj) {
   }
   i++;
 
-  int damage = getNumber(obj.damage.substring(i)) + obj.damageEnchantment;
+  int damage = _getNumber(obj.damage.substring(i)) + obj.damageEnchantment;
 
-  return getDamage("${toHit}d$damage", true);
+  return _getDamage("${toHit}d$damage", true);
 }
 
-int getNumber(String s) {
+int _getNumber(String s) {
   int total = 0;
   int i = 0;
 
@@ -166,14 +166,14 @@ int getNumber(String s) {
   return total;
 }
 
-int toHit(GameObject? obj) {
+int _toHit(GameObject? obj) {
   if (obj == null) {
     return 1;
   }
-  return getNumber(obj.damage) + obj.toHitEnchantment;
+  return _getNumber(obj.damage) + obj.toHitEnchantment;
 }
 
-int damageForStrength(int s) {
+int _damageForStrength(int s) {
   if (s <= 6) return s - 5;
   if (s <= 14) return 1;
   if (s <= 17) return 3;
@@ -246,7 +246,7 @@ Future<void> fight(bool toTheDeath) async {
     return;
   }
 
-  int possibleDamage = getDamage(fightMonster!.damage, false) * 2 ~/ 3;
+  int possibleDamage = _getDamage(fightMonster!.damage, false) * 2 ~/ 3;
 
   while (fightMonster != null) {
     await singleMoveRogue(ch, false);
@@ -277,15 +277,15 @@ Future<void> fight(bool toTheDeath) async {
 
 int getHitChance(GameObject? weapon) {
   int hitChance = 40;
-  hitChance += 3 * toHit(weapon);
+  hitChance += 3 * _toHit(weapon);
   hitChance += (rogue.exp + rogue.exp);
   if (hitChance > 100) hitChance = 100;
   return hitChance;
 }
 
 int getWeaponDamage(GameObject? weapon) {
-  int damage = getWDamage(weapon);
-  damage += damageForStrength(rogue.strengthCurrent);
+  int damage = _getWDamage(weapon);
+  damage += _damageForStrength(rogue.strengthCurrent);
   damage += (rogue.exp + 1) ~/ 2;
   return damage;
 }

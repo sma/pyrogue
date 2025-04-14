@@ -1,6 +1,6 @@
 import 'globals.dart';
 import 'hit.dart';
-import 'level.dart' hide levelPoints;
+import 'level.dart';
 import 'message.dart';
 import 'monster.dart';
 import 'object.dart';
@@ -13,25 +13,25 @@ import 'use.dart';
 Future<void> specialHit(GameObject monster) async {
   String k = monster.ichar;
   if (k == 'A') {
-    await rust(monster);
+    await _rust(monster);
   } else if (k == 'F') {
     beingHeld = true;
   } else if (k == 'I') {
-    await freeze(monster);
+    await _freeze(monster);
   } else if (k == 'L') {
-    await stealGold(monster);
+    await _stealGold(monster);
   } else if (k == 'N') {
-    await stealItem(monster);
+    await _stealItem(monster);
   } else if (k == 'R') {
-    await sting(monster);
+    await _sting(monster);
   } else if (k == 'V') {
-    await drainLife();
+    await _drainLife();
   } else if (k == 'W') {
-    await drainLevel();
+    await _drainLevel();
   }
 }
 
-Future<void> rust(GameObject monster) async {
+Future<void> _rust(GameObject monster) async {
   if (rogue.armor == null ||
       getArmorClass(rogue.armor) <= 1 ||
       rogue.armor!.whichKind == ArmorType.leather.index) {
@@ -50,7 +50,7 @@ Future<void> rust(GameObject monster) async {
   }
 }
 
-Future<void> freeze(GameObject monster) async {
+Future<void> _freeze(GameObject monster) async {
   if (!randPercent(12)) return;
 
   int freezePercent = 99;
@@ -80,7 +80,7 @@ Future<void> freeze(GameObject monster) async {
   }
 }
 
-Future<void> stealGold(GameObject monster) async {
+Future<void> _stealGold(GameObject monster) async {
   if (!randPercent(15)) return;
 
   int amount;
@@ -103,10 +103,10 @@ Future<void> stealGold(GameObject monster) async {
     printStats();
   }
 
-  disappear(monster);
+  _disappear(monster);
 }
 
-Future<void> stealItem(GameObject monster) async {
+Future<void> _stealItem(GameObject monster) async {
   if (!randPercent(15)) return;
 
   int items = 0;
@@ -137,10 +137,10 @@ Future<void> stealItem(GameObject monster) async {
     await vanish(obj, false);
   }
 
-  disappear(monster);
+  _disappear(monster);
 }
 
-void disappear(GameObject monster) {
+void _disappear(GameObject monster) {
   int row = monster.row;
   int col = monster.col;
 
@@ -175,26 +175,26 @@ void coughUp(GameObject monster) {
 
   for (int n = 0; n < 6; n++) {
     for (int i = -n; i <= n; i++) {
-      if (tryToCough(row + n, col + i, obj)) {
+      if (_tryToCough(row + n, col + i, obj)) {
         return;
       }
-      if (tryToCough(row - n, col + i, obj)) {
+      if (_tryToCough(row - n, col + i, obj)) {
         return;
       }
     }
 
     for (int i = -n; i <= n; i++) {
-      if (tryToCough(row + i, col - n, obj)) {
+      if (_tryToCough(row + i, col - n, obj)) {
         return;
       }
-      if (tryToCough(row + i, col + n, obj)) {
+      if (_tryToCough(row + i, col + n, obj)) {
         return;
       }
     }
   }
 }
 
-bool tryToCough(int row, int col, GameObject obj) {
+bool _tryToCough(int row, int col, GameObject obj) {
   if (row < minRow || row > ui.rows - 2 || col < 0 || col > ui.cols - 1) {
     return false;
   }
@@ -284,7 +284,7 @@ bool hidingXeroc(int row, int col) {
   return monster.ichar == 'X' && monster.identified != 0;
 }
 
-Future<void> sting(GameObject monster) async {
+Future<void> _sting(GameObject monster) async {
   if (rogue.strengthCurrent < 5) return;
 
   int stingChance = 35;
@@ -305,7 +305,7 @@ Future<void> sting(GameObject monster) async {
   }
 }
 
-Future<void> drainLevel() async {
+Future<void> _drainLevel() async {
   if (!randPercent(20) || rogue.exp < 8) {
     return;
   }
@@ -315,7 +315,7 @@ Future<void> drainLevel() async {
   await addExp(1);
 }
 
-Future<void> drainLife() async {
+Future<void> _drainLife() async {
   if (!randPercent(25) || rogue.hpMax <= 30 || rogue.hpCurrent < 10) {
     return;
   }
@@ -374,13 +374,13 @@ Future<bool> flameBroil(GameObject monster) async {
   }
 
   if (!rogueIsAround(row, col)) {
-    (row, col) = getCloser(row, col, rogue.row, rogue.col);
+    (row, col) = _getCloser(row, col, rogue.row, rogue.col);
 
     ui.move(row, col);
     ui.write('*', inverse: true);
 
     while (row != rogue.row || col != rogue.col) {
-      (row, col) = getCloser(row, col, rogue.row, rogue.col);
+      (row, col) = _getCloser(row, col, rogue.row, rogue.col);
 
       if (row == rogue.row && col == rogue.col) break;
 
@@ -391,14 +391,14 @@ Future<bool> flameBroil(GameObject monster) async {
 
     row = monster.row;
     col = monster.col;
-    (row, col) = getCloser(row, col, rogue.row, rogue.col);
+    (row, col) = _getCloser(row, col, rogue.row, rogue.col);
 
     while (row != rogue.row || col != rogue.col) {
       ui.move(row, col);
       ui.write(getRoomChar(screen[row][col], row, col));
       ui.refresh();
 
-      (row, col) = getCloser(row, col, rogue.row, rogue.col);
+      (row, col) = _getCloser(row, col, rogue.row, rogue.col);
 
       if (row == rogue.row && col == rogue.col) break;
     }
@@ -408,7 +408,7 @@ Future<bool> flameBroil(GameObject monster) async {
   return true;
 }
 
-(int, int) getCloser(int row, int col, int trow, int tcol) {
+(int, int) _getCloser(int row, int col, int trow, int tcol) {
   if (row < trow) {
     row += 1;
   } else if (row > trow) {

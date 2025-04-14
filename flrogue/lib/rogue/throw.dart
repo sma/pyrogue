@@ -59,7 +59,11 @@ Future<void> throwItem() async {
     return;
   }
 
-  var (monster, row, col) = await getThrownAtMonster(dir, rogue.row, rogue.col);
+  var (monster, row, col) = await _getThrownAtMonster(
+    dir,
+    rogue.row,
+    rogue.col,
+  );
 
   ui.move(rogue.row, rogue.col);
   ui.write(rogue.fchar);
@@ -74,17 +78,17 @@ Future<void> throwItem() async {
     wakeUp(monster);
     checkOrc(monster);
 
-    if (!await throwAtMonster(monster, weapon)) {
-      await flopWeapon(weapon, row, col);
+    if (!await _throwAtMonster(monster, weapon)) {
+      await _flopWeapon(weapon, row, col);
     }
   } else {
-    await flopWeapon(weapon, row, col);
+    await _flopWeapon(weapon, row, col);
   }
 
   await vanish(weapon, true);
 }
 
-Future<bool> throwAtMonster(GameObject monster, GameObject weapon) async {
+Future<bool> _throwAtMonster(GameObject monster, GameObject weapon) async {
   int hitChance = getHitChance(weapon);
   int t = weapon.quantity;
   weapon.quantity = 1;
@@ -112,7 +116,7 @@ Future<bool> throwAtMonster(GameObject monster, GameObject weapon) async {
   return true;
 }
 
-Future<(GameObject?, int, int)> getThrownAtMonster(
+Future<(GameObject?, int, int)> _getThrownAtMonster(
   String dir,
   int row,
   int col,
@@ -161,7 +165,7 @@ Future<(GameObject?, int, int)> getThrownAtMonster(
   return (null, row, col);
 }
 
-Future<bool> flopWeapon(GameObject weapon, int row, int col) async {
+Future<bool> _flopWeapon(GameObject weapon, int row, int col) async {
   int inc1 = getRand(0, 1) != 0 ? 1 : -1;
   int inc2 = getRand(0, 1) != 0 ? 1 : -1;
 

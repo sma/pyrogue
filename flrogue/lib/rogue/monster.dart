@@ -13,16 +13,16 @@ void putMonsters() {
   int n = getRand(3, 7);
 
   for (int i = 0; i < n; i++) {
-    GameObject monster = getRandMonster();
+    GameObject monster = _getRandMonster();
     if (monster.mFlags & MonsterFlags.wanders != 0 && randPercent(50)) {
       wakeUp(monster);
     }
-    putMonsterRandLocation(monster);
+    _putMonsterRandLocation(monster);
     addToPack(monster, levelMonsters, false);
   }
 }
 
-GameObject getRandMonster() {
+GameObject _getRandMonster() {
   GameObject monster = getAnObject();
 
   int mn;
@@ -86,7 +86,7 @@ void fillRoomWithMonsters(int rn, int n) {
       if (!(screen[row][col] & Cell.monster != 0)) break;
     }
 
-    putMonsterAt(row, col, getRandMonster());
+    _putMonsterAt(row, col, _getRandMonster());
   }
 }
 
@@ -132,7 +132,7 @@ Future<void> mvMonster(GameObject monster, int row, int col) async {
     return;
   }
 
-  if (monster.mFlags & MonsterFlags.flits != 0 && flit(monster)) {
+  if (monster.mFlags & MonsterFlags.flits != 0 && _flit(monster)) {
     return;
   }
 
@@ -175,7 +175,7 @@ Future<void> mvMonster(GameObject monster, int row, int col) async {
   }
 
   if (screen[row][monster.col] & Cell.door != 0 &&
-      mtry(monster, row, monster.col)) {
+      _mtry(monster, row, monster.col)) {
     return;
   }
 
@@ -186,11 +186,11 @@ Future<void> mvMonster(GameObject monster, int row, int col) async {
   }
 
   if (screen[monster.row][col] & Cell.door != 0 &&
-      mtry(monster, monster.row, col)) {
+      _mtry(monster, monster.row, col)) {
     return;
   }
 
-  if (mtry(monster, row, col)) {
+  if (_mtry(monster, row, col)) {
     return;
   }
 
@@ -198,27 +198,27 @@ Future<void> mvMonster(GameObject monster, int row, int col) async {
   for (int i = 0; i < 6; i++) {
     int n = getRand(0, 5);
     if (n == 0) {
-      if (!tried[n] && mtry(monster, row, monster.col - 1)) {
+      if (!tried[n] && _mtry(monster, row, monster.col - 1)) {
         return;
       }
     } else if (n == 1) {
-      if (!tried[n] && mtry(monster, row, monster.col)) {
+      if (!tried[n] && _mtry(monster, row, monster.col)) {
         return;
       }
     } else if (n == 2) {
-      if (!tried[n] && mtry(monster, row, monster.col + 1)) {
+      if (!tried[n] && _mtry(monster, row, monster.col + 1)) {
         return;
       }
     } else if (n == 3) {
-      if (!tried[n] && mtry(monster, monster.row - 1, col)) {
+      if (!tried[n] && _mtry(monster, monster.row - 1, col)) {
         return;
       }
     } else if (n == 4) {
-      if (!tried[n] && mtry(monster, monster.row, col)) {
+      if (!tried[n] && _mtry(monster, monster.row, col)) {
         return;
       }
     } else if (n == 5) {
-      if (!tried[n] && mtry(monster, monster.row + 1, col)) {
+      if (!tried[n] && _mtry(monster, monster.row + 1, col)) {
         return;
       }
     }
@@ -226,7 +226,7 @@ Future<void> mvMonster(GameObject monster, int row, int col) async {
   }
 }
 
-bool mtry(GameObject monster, int row, int col) {
+bool _mtry(GameObject monster, int row, int col) {
   if (monsterCanGo(monster, row, col)) {
     moveMonsterTo(monster, row, col);
     return true;
@@ -371,7 +371,7 @@ void startWanderer() {
   GameObject monster;
 
   while (true) {
-    monster = getRandMonster();
+    monster = _getRandMonster();
     if (monster.mFlags & MonsterFlags.wakens != 0 ||
         monster.mFlags & MonsterFlags.wanders != 0) {
       break;
@@ -384,7 +384,7 @@ void startWanderer() {
     var (row, col) = getRandRowCol(Cell.floor | Cell.tunnel | Cell.isObject);
 
     if (!canSee(row, col)) {
-      putMonsterAt(row, col, monster);
+      _putMonsterAt(row, col, monster);
       return;
     }
   }
@@ -431,8 +431,8 @@ Future<void> createMonster() async {
   }
 
   if (found) {
-    GameObject monster = getRandMonster();
-    putMonsterAt(row, col, monster);
+    GameObject monster = _getRandMonster();
+    _putMonsterAt(row, col, monster);
 
     ui.move(row, col);
     ui.write(getMonsterChar(monster));
@@ -445,7 +445,7 @@ Future<void> createMonster() async {
   }
 }
 
-void putMonsterAt(int row, int col, GameObject monster) {
+void _putMonsterAt(int row, int col, GameObject monster) {
   monster.row = row;
   monster.col = col;
   addMask(row, col, Cell.monster);
@@ -457,7 +457,7 @@ bool canSee(int row, int col) {
       (getRoomNumber(row, col) == currentRoom || rogueIsAround(row, col));
 }
 
-bool flit(GameObject monster) {
+bool _flit(GameObject monster) {
   if (!randPercent(flitPercent)) {
     return false;
   }
@@ -478,7 +478,7 @@ bool flit(GameObject monster) {
         continue;
       }
 
-      if (mtry(monster, row, col)) {
+      if (_mtry(monster, row, col)) {
         return true;
       }
     }
@@ -487,7 +487,7 @@ bool flit(GameObject monster) {
   return true;
 }
 
-void putMonsterRandLocation(GameObject monster) {
+void _putMonsterRandLocation(GameObject monster) {
   var (row, col) = getRandRowCol(Cell.floor | Cell.tunnel | Cell.isObject);
 
   addMask(row, col, Cell.monster);

@@ -38,7 +38,7 @@ Future<int> singleMoveRogue(String dirch, bool pickup) async {
   col = rogue.col;
 
   if (confused != 0) {
-    dirch = getRandDir();
+    dirch = _getRandDir();
   }
 
   (row, col) = getDirRc(dirch, row, col);
@@ -49,7 +49,7 @@ Future<int> singleMoveRogue(String dirch, bool pickup) async {
     return moveFailed;
   }
 
-  if (!canMove(rogue.row, rogue.col, row, col)) {
+  if (!_canMove(rogue.row, rogue.col, row, col)) {
     return moveFailed;
   }
 
@@ -141,7 +141,7 @@ Future<void> multipleMoveRogue(String dirch) async {
         break;
       }
 
-      if (nextToSomething(row, col)) {
+      if (_nextToSomething(row, col)) {
         break;
       }
     }
@@ -163,7 +163,7 @@ bool isPassable(int row, int col) {
       0;
 }
 
-bool nextToSomething(int drow, int dcol) {
+bool _nextToSomething(int drow, int dcol) {
   if (confused != 0) {
     return true;
   }
@@ -206,7 +206,7 @@ bool nextToSomething(int drow, int dcol) {
   return false;
 }
 
-bool canMove(int row1, int col1, int row2, int col2) {
+bool _canMove(int row1, int col1, int row2, int col2) {
   if (!isPassable(row2, col2)) {
     return false;
   }
@@ -252,7 +252,7 @@ bool isPackLetter(String c) {
   return c.between('a', 'z') || c == cancel || c == list;
 }
 
-Future<bool> checkHunger() async {
+Future<bool> _checkHunger() async {
   bool fainted = false;
 
   if (rogue.movesLeft == hungry) {
@@ -302,7 +302,7 @@ Future<bool> registerMove() async {
   bool fainted = false;
 
   if (rogue.movesLeft <= hungry && !hasAmulet) {
-    fainted = checkHunger() as bool;
+    fainted = _checkHunger() as bool;
   }
 
   await moveMonsters();
@@ -336,7 +336,7 @@ Future<bool> registerMove() async {
     }
   }
 
-  heal();
+  _heal();
 
   return fainted;
 }
@@ -350,11 +350,11 @@ Future<void> rest(int count) async {
   }
 }
 
-String getRandDir() {
+String _getRandDir() {
   return "hjklyubn"[getRand(0, 7)];
 }
 
-void heal() {
+void _heal() {
   if (rogue.exp != _hExp) {
     _hExp = rogue.exp;
 
